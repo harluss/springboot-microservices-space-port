@@ -1,6 +1,5 @@
 package com.project.hangar.controller;
 
-import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.dto.SpaceshipResponse;
 import com.project.hangar.service.SpaceshipMapper;
 import com.project.hangar.service.SpaceshipService;
@@ -12,39 +11,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @Log4j2
 @RestController
 @RequestMapping("api/spaceships")
 public class SpaceshipController {
 
-  private final SpaceshipService spaceshipService;
+  private final SpaceshipService service;
 
-  private final SpaceshipMapper spaceshipMapper;
+  private final SpaceshipMapper mapper;
 
   public SpaceshipController(final SpaceshipService spaceshipService, final SpaceshipMapper spaceshipMapper) {
-    this.spaceshipService = spaceshipService;
-    this.spaceshipMapper = spaceshipMapper;
+    this.service = spaceshipService;
+    this.mapper = spaceshipMapper;
   }
 
   @GetMapping
   public ResponseEntity<List<SpaceshipResponse>> getSpaceships() {
     log.info("getting spaceships");
 
-    final List<SpaceshipResponse> spaceshipResponses = spaceshipService.getSpaceships()
+    final List<SpaceshipResponse> spaceshipResponses = service.getSpaceships()
         .stream()
-        .map(spaceshipMapper::spaceshipDtoToResponse)
+        .map(mapper::spaceshipDtoToResponse)
         .toList();
 
     return ResponseEntity.ok(spaceshipResponses);
   }
 
   @GetMapping("{spaceshipId}")
-  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@PathVariable("spaceshipId") final Integer spaceshipId) {
+  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@PathVariable("spaceshipId") final UUID spaceshipId) {
     log.info("getting spaceship no. {}", spaceshipId);
 
-    final SpaceshipDto spaceshipDto = spaceshipService.getSpaceshipById(spaceshipId);
-    final SpaceshipResponse spaceshipResponse = spaceshipMapper.spaceshipDtoToResponse(spaceshipDto);
+    final SpaceshipResponse spaceshipResponse = mapper.spaceshipDtoToResponse(service.getSpaceshipById(spaceshipId));
 
     return ResponseEntity.ok(spaceshipResponse);
   }

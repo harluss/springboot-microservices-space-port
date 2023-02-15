@@ -17,6 +17,10 @@ spring:
         format_sql: true
     open-in-view: false
 
+  sql:
+    init:
+      mode: always
+
 springdoc:
   swagger-ui:
     path: /

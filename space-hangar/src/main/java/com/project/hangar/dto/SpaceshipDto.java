@@ -3,11 +3,13 @@ package com.project.hangar.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Builder
 public class SpaceshipDto {
 
-  private Integer id;
+  private UUID id;
 
   private String name;
 
