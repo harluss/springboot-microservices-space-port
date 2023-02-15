@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: hangar
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/space_port_db
+    username: postgres
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false
+
+springdoc:
+  swagger-ui:
+    path: /
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: ${TEST_CONTAINER_DB_URL}
+    username: ${TEST_CONTAINER_DB_USERNAME}
+    password: ${TEST_CONTAINER_DB_PASSWORD}
+
+  jpa:
+    show-sql: false
