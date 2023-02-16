@@ -39,7 +39,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     return repository.findById(spaceshipId)
         .map(mapper::spaceshipEntityToDto)
         .orElseThrow(() -> {
-          log.info("Spaceship no. {} not found!", spaceshipId);
+          log.info("Spaceship no. {} not found", spaceshipId);
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Spaceship not found");
         });
   }
@@ -54,7 +54,21 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     final SpaceshipEntity savedSpaceship = repository.save(mapper.spaceshipDtoToEntity(spaceshipDto));
+    log.info("Spaceship added: {}", savedSpaceship);
 
     return mapper.spaceshipEntityToDto(savedSpaceship);
+  }
+
+  @Override
+  public void deleteSpaceshipById(final UUID spaceshipId) {
+
+    final Optional<SpaceshipEntity> existingSpaceship = repository.findById(spaceshipId);
+
+    if (existingSpaceship.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Spaceship not found");
+    }
+
+    repository.deleteById(spaceshipId);
+    log.info("Spaceship no. {} deleted!", spaceshipId);
   }
 }

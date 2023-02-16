@@ -12,4 +12,6 @@ public interface SpaceshipService {
   SpaceshipDto getSpaceshipById(final UUID spaceshipId);
 
   SpaceshipDto addSpaceship(SpaceshipDto spaceshipDto);
+
+  void deleteSpaceshipById(final UUID spaceshipId);
 }

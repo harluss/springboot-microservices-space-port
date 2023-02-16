@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,8 +49,8 @@ public class SpaceshipController {
     return ResponseEntity.ok(spaceshipResponses);
   }
 
-  @GetMapping("{spaceshipId}")
-  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@PathVariable("spaceshipId") final UUID spaceshipId) {
+  @GetMapping("{id}")
+  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
     log.info("getting spaceship no. {}", spaceshipId);
 
     final SpaceshipResponse spaceshipResponse = mapper.spaceshipDtoToResponse(service.getSpaceshipById(spaceshipId));
@@ -65,5 +66,14 @@ public class SpaceshipController {
     final SpaceshipResponse spaceshipResponse = mapper.spaceshipDtoToResponse(service.addSpaceship(spaceshipDto));
 
     return ResponseEntity.ok(spaceshipResponse);
+  }
+
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
+    log.info("deleting spaceship no. {}", spaceshipId);
+
+    service.deleteSpaceshipById(spaceshipId);
+
+    return ResponseEntity.noContent().build();
   }
 }
