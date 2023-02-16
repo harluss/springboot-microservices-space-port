@@ -1,12 +1,12 @@
-package com.project.hangar.service;
+package com.project.hangar.mapper;
 
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.dto.SpaceshipResponse;
 import com.project.hangar.entity.SpaceshipEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class SpaceshipMapperImpl implements SpaceshipMapper {
 
   @Override

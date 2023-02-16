@@ -2,6 +2,7 @@ package com.project.hangar.service;
 
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.entity.SpaceshipEntity;
+import com.project.hangar.mapper.SpaceshipMapper;
 import com.project.hangar.repository.SpaceshipRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

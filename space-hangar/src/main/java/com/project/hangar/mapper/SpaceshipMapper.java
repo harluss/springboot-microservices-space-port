@@ -1,4 +1,4 @@
-package com.project.hangar.service;
+package com.project.hangar.mapper;
 
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.dto.SpaceshipRequest;

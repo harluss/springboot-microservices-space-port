@@ -3,7 +3,7 @@ package com.project.hangar.controller;
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.dto.SpaceshipResponse;
-import com.project.hangar.service.SpaceshipMapper;
+import com.project.hangar.mapper.SpaceshipMapper;
 import com.project.hangar.service.SpaceshipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,6 +35,7 @@ public class SpaceshipController {
   // todo: add readme
   // todo: fix CVEs
   // todo: add exception handling?
+  // todo: add tests
 
   @Operation(summary = "Get all spaceships",
       description = "Retrieves all spaceships",
