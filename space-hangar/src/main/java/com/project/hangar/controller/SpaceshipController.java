@@ -30,11 +30,8 @@ public class SpaceshipController {
     this.spaceshipMapper = spaceshipMapper;
   }
 
-  // todo: add request validation
-  // todo: add entity / db validation
   // todo: add readme
   // todo: fix CVEs
-  // todo: add exception handling?
   // todo: add tests
 
   @Operation(summary = "Get all spaceships",
@@ -91,11 +88,13 @@ public class SpaceshipController {
   @PutMapping("{id}")
   public ResponseEntity<SpaceshipResponse> updateSpaceshipById(
       @NotBlank @PathVariable final UUID id,
-      @Valid @RequestBody final SpaceshipRequest spaceshipRequest) {
+      @Valid @RequestBody final SpaceshipRequest spaceshipRequest
+  ) {
 
     final SpaceshipDto spaceshipDtoUpdate = spaceshipMapper.requestToDto(spaceshipRequest);
     final SpaceshipResponse updatedSpaceshipResponse = spaceshipMapper.dtoToResponse(
-        spaceshipService.updateById(spaceshipDtoUpdate, id));
+        spaceshipService.updateById(spaceshipDtoUpdate, id)
+    );
 
     return ResponseEntity.ok(updatedSpaceshipResponse);
   }
