@@ -1,16 +1,12 @@
 package com.project.hangar.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Data
@@ -25,8 +21,12 @@ public class SpaceshipEntity {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  @Column(name = "name", nullable = false, columnDefinition = "text")
+  @Column(name = "name", unique = true, nullable = false, columnDefinition = "text")
   private String name;
+
+  @Column(name = "class", nullable = false, columnDefinition = "text")
+  @JsonProperty("class")
+  private String classType;
 
   @Column(name = "payload", nullable = false, columnDefinition = "text")
   private Integer payload;

@@ -1,23 +1,24 @@
 package com.project.hangar.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Value;
 
-import java.util.UUID;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Value
-@Builder
-public class SpaceshipResponse {
+public class SpaceshipRequest {
 
-  private UUID id;
-
+  @NotBlank
   private String name;
 
+  @NotBlank
   @JsonProperty("class")
   private String classType;
 
+  @NotNull
   private Integer payload;
 
+  @NotNull
   private Integer crew;
 }

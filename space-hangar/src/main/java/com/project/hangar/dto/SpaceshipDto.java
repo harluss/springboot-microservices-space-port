@@ -13,6 +13,8 @@ public class SpaceshipDto {
 
   private String name;
 
+  private String classType;
+
   private Integer payload;
 
   private Integer crew;

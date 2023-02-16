@@ -21,6 +21,10 @@ spring:
     init:
       mode: always
 
+server:
+  error:
+    include-message: always
+
 springdoc:
   swagger-ui:
     path: /

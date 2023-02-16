@@ -10,4 +10,6 @@ public interface SpaceshipService {
   List<SpaceshipDto> getSpaceships();
 
   SpaceshipDto getSpaceshipById(final UUID spaceshipId);
+
+  SpaceshipDto addSpaceship(SpaceshipDto spaceshipDto);
 }
