@@ -13,5 +13,7 @@ public interface SpaceshipService {
 
   SpaceshipDto addSpaceship(SpaceshipDto spaceshipDto);
 
+  SpaceshipDto updateSpaceshipById(SpaceshipDto spaceshipDto, UUID spaceshipId);
+
   void deleteSpaceshipById(final UUID spaceshipId);
 }

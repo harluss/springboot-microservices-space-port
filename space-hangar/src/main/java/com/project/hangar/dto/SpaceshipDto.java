@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class SpaceshipDto {
 
   private UUID id;

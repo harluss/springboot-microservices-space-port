@@ -50,4 +50,12 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .crew(spaceshipDto.getCrew())
         .build();
   }
+
+  @Override
+  public void spaceshipEntityUpdateWithDto(final SpaceshipEntity spaceshipEntity, final SpaceshipDto spaceshipDto) {
+    spaceshipEntity.setName(spaceshipDto.getName());
+    spaceshipEntity.setClassType(spaceshipDto.getClassType());
+    spaceshipEntity.setPayload(spaceshipDto.getPayload());
+    spaceshipEntity.setCrew(spaceshipDto.getCrew());
+  }
 }

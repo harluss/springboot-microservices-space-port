@@ -29,11 +29,9 @@ public class SpaceshipController {
   }
 
   // todo: update swagger details
-  // todo: add post, put, delete
   // todo: add request validation
   // todo: add entity / db validation
   // todo: add readme
-  // todo: fix schema formatting
   // todo: fix CVEs
   // todo: add exception handling?
 
@@ -66,6 +64,17 @@ public class SpaceshipController {
     final SpaceshipResponse spaceshipResponse = mapper.spaceshipDtoToResponse(service.addSpaceship(spaceshipDto));
 
     return ResponseEntity.ok(spaceshipResponse);
+  }
+
+  @PutMapping("{id}")
+  public ResponseEntity<SpaceshipResponse> updateSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId,
+                                                               @Valid @RequestBody final SpaceshipRequest spaceshipRequest) {
+    log.info("updating spaceship: {}", spaceshipRequest);
+
+    final SpaceshipDto spaceshipDtoUpdate = mapper.spaceshipRequestToDto(spaceshipRequest);
+    final SpaceshipResponse updatedSpaceshipResponse = mapper.spaceshipDtoToResponse(service.updateSpaceshipById(spaceshipDtoUpdate, spaceshipId));
+
+    return ResponseEntity.ok(updatedSpaceshipResponse);
   }
 
   @DeleteMapping("{id}")

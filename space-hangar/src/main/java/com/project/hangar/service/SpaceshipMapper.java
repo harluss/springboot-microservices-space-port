@@ -14,4 +14,6 @@ public interface SpaceshipMapper {
   SpaceshipDto spaceshipEntityToDto(SpaceshipEntity spaceshipEntity);
 
   SpaceshipEntity spaceshipDtoToEntity(SpaceshipDto spaceshipDto);
+
+  void spaceshipEntityUpdateWithDto(SpaceshipEntity spaceshipEntity, SpaceshipDto spaceshipDto);
 }

@@ -6,6 +6,7 @@ import com.project.hangar.repository.SpaceshipRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -57,6 +58,22 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     log.info("Spaceship added: {}", savedSpaceship);
 
     return mapper.spaceshipEntityToDto(savedSpaceship);
+  }
+
+  @Override
+  @Transactional
+  public SpaceshipDto updateSpaceshipById(final SpaceshipDto spaceshipDtoUpdate, final UUID spaceshipId) {
+
+    final SpaceshipEntity existingSpaceshipEntity = repository.findById(spaceshipId)
+        .orElseThrow(() -> {
+          log.info("Spaceship no. {} not found", spaceshipId);
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Spaceship not found");
+        });
+
+    mapper.spaceshipEntityUpdateWithDto(existingSpaceshipEntity, spaceshipDtoUpdate);
+    final SpaceshipEntity updatedSpaceshipEntity = repository.save(existingSpaceshipEntity);
+
+    return mapper.spaceshipEntityToDto(updatedSpaceshipEntity);
   }
 
   @Override
