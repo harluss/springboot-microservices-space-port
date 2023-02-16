@@ -5,7 +5,9 @@ import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.dto.SpaceshipResponse;
 import com.project.hangar.service.SpaceshipMapper;
 import com.project.hangar.service.SpaceshipService;
-import lombok.extern.log4j.Log4j2;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,74 +16,99 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
-@Log4j2
+@Tag(name = "spaceships", description = "spaceships operations")
 @RestController
 @RequestMapping("api/spaceships")
 public class SpaceshipController {
 
-  private final SpaceshipService service;
+  private final SpaceshipService spaceshipService;
 
-  private final SpaceshipMapper mapper;
+  private final SpaceshipMapper spaceshipMapper;
 
   public SpaceshipController(final SpaceshipService spaceshipService, final SpaceshipMapper spaceshipMapper) {
-    this.service = spaceshipService;
-    this.mapper = spaceshipMapper;
+    this.spaceshipService = spaceshipService;
+    this.spaceshipMapper = spaceshipMapper;
   }
 
-  // todo: update swagger details
   // todo: add request validation
   // todo: add entity / db validation
   // todo: add readme
   // todo: fix CVEs
   // todo: add exception handling?
 
+  @Operation(summary = "Get all spaceships",
+      description = "Retrieves all spaceships",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully retrieved list of spaceships")
+      })
   @GetMapping
   public ResponseEntity<List<SpaceshipResponse>> getSpaceships() {
-    log.info("getting spaceships");
 
-    final List<SpaceshipResponse> spaceshipResponses = service.getSpaceships()
+    final List<SpaceshipResponse> spaceshipResponses = spaceshipService.getAll()
         .stream()
-        .map(mapper::spaceshipDtoToResponse)
+        .map(spaceshipMapper::dtoToResponse)
         .toList();
 
     return ResponseEntity.ok(spaceshipResponses);
   }
 
+  @Operation(summary = "Get spaceship by Id",
+      description = "Retrieves a single spaceship based on given Id",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully retrieved the requested spaceship"),
+          @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
+      })
   @GetMapping("{id}")
-  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
-    log.info("getting spaceship no. {}", spaceshipId);
+  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable final UUID id) {
 
-    final SpaceshipResponse spaceshipResponse = mapper.spaceshipDtoToResponse(service.getSpaceshipById(spaceshipId));
+    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.getById(id));
 
     return ResponseEntity.ok(spaceshipResponse);
   }
 
+  @Operation(summary = "Add new spaceship",
+      description = "Adds a new spaceship to the hangar",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully added a new spaceship"),
+          @ApiResponse(responseCode = "400", description = "Spaceship with provided name already exists")
+      })
   @PostMapping
   public ResponseEntity<SpaceshipResponse> addSpaceship(@Valid @RequestBody final SpaceshipRequest spaceshipRequest) {
-    log.info("adding spaceship: {}", spaceshipRequest);
 
-    final SpaceshipDto spaceshipDto = mapper.spaceshipRequestToDto(spaceshipRequest);
-    final SpaceshipResponse spaceshipResponse = mapper.spaceshipDtoToResponse(service.addSpaceship(spaceshipDto));
+    final SpaceshipDto spaceshipDto = spaceshipMapper.requestToDto(spaceshipRequest);
+    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.add(spaceshipDto));
 
     return ResponseEntity.ok(spaceshipResponse);
   }
 
+  @Operation(summary = "Update spaceship",
+      description = "Updates details of existing spaceship based on given Id",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully updated the requested spaceship"),
+          @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
+      })
   @PutMapping("{id}")
-  public ResponseEntity<SpaceshipResponse> updateSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId,
-                                                               @Valid @RequestBody final SpaceshipRequest spaceshipRequest) {
-    log.info("updating spaceship: {}", spaceshipRequest);
+  public ResponseEntity<SpaceshipResponse> updateSpaceshipById(
+      @NotBlank @PathVariable final UUID id,
+      @Valid @RequestBody final SpaceshipRequest spaceshipRequest) {
 
-    final SpaceshipDto spaceshipDtoUpdate = mapper.spaceshipRequestToDto(spaceshipRequest);
-    final SpaceshipResponse updatedSpaceshipResponse = mapper.spaceshipDtoToResponse(service.updateSpaceshipById(spaceshipDtoUpdate, spaceshipId));
+    final SpaceshipDto spaceshipDtoUpdate = spaceshipMapper.requestToDto(spaceshipRequest);
+    final SpaceshipResponse updatedSpaceshipResponse = spaceshipMapper.dtoToResponse(
+        spaceshipService.updateById(spaceshipDtoUpdate, id));
 
     return ResponseEntity.ok(updatedSpaceshipResponse);
   }
 
+  @Operation(summary = "Delete spaceship",
+      description = "Deletes existing spaceship based on given Id",
+      responses = {
+          @ApiResponse(responseCode = "204", description = "Successfully deleted the requested spaceship"),
+          @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
+      })
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
-    log.info("deleting spaceship no. {}", spaceshipId);
+  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable final UUID id) {
 
-    service.deleteSpaceshipById(spaceshipId);
+    spaceshipService.deleteById(id);
 
     return ResponseEntity.noContent().build();
   }

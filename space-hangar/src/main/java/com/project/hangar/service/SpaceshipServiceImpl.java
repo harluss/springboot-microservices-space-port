@@ -17,75 +17,77 @@ import java.util.UUID;
 @Service
 public class SpaceshipServiceImpl implements SpaceshipService {
 
-  private final SpaceshipRepository repository;
+  private final SpaceshipRepository spaceshipRepository;
 
-  private final SpaceshipMapper mapper;
+  private final SpaceshipMapper spaceshipMapper;
 
-  public SpaceshipServiceImpl(final SpaceshipRepository repository, final SpaceshipMapper mapper) {
-    this.repository = repository;
-    this.mapper = mapper;
+  public SpaceshipServiceImpl(final SpaceshipRepository spaceshipRepository, final SpaceshipMapper spaceshipMapper) {
+    this.spaceshipRepository = spaceshipRepository;
+    this.spaceshipMapper = spaceshipMapper;
   }
 
   @Override
-  public List<SpaceshipDto> getSpaceships() {
+  public List<SpaceshipDto> getAll() {
 
-    return repository.findAll().stream()
-        .map(mapper::spaceshipEntityToDto)
+    return spaceshipRepository.findAll().stream()
+        .map(spaceshipMapper::entityToDto)
         .toList();
   }
 
   @Override
-  public SpaceshipDto getSpaceshipById(final UUID spaceshipId) {
+  public SpaceshipDto getById(final UUID id) {
 
-    return repository.findById(spaceshipId)
-        .map(mapper::spaceshipEntityToDto)
+    return spaceshipRepository.findById(id)
+        .map(spaceshipMapper::entityToDto)
         .orElseThrow(() -> {
-          log.info("Spaceship no. {} not found", spaceshipId);
+          log.info("Spaceship with id {} not found", id);
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Spaceship not found");
         });
   }
 
   @Override
-  public SpaceshipDto addSpaceship(final SpaceshipDto spaceshipDto) {
+  public SpaceshipDto add(final SpaceshipDto spaceshipDto) {
 
-    final Optional<SpaceshipEntity> existingSpaceship = repository.findByName(spaceshipDto.getName());
+    final Optional<SpaceshipEntity> existingSpaceship = spaceshipRepository.findByName(spaceshipDto.getName());
 
     if (existingSpaceship.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Spaceship already exists");
+      log.info("Spaceship with name {} already exists", spaceshipDto.getName());
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Spaceship with this name already exists");
     }
 
-    final SpaceshipEntity savedSpaceship = repository.save(mapper.spaceshipDtoToEntity(spaceshipDto));
+    final SpaceshipEntity savedSpaceship = spaceshipRepository.save(spaceshipMapper.dtoToEntity(spaceshipDto));
     log.info("Spaceship added: {}", savedSpaceship);
 
-    return mapper.spaceshipEntityToDto(savedSpaceship);
+    return spaceshipMapper.entityToDto(savedSpaceship);
   }
 
   @Override
   @Transactional
-  public SpaceshipDto updateSpaceshipById(final SpaceshipDto spaceshipDtoUpdate, final UUID spaceshipId) {
+  public SpaceshipDto updateById(final SpaceshipDto spaceshipDtoUpdate, final UUID id) {
 
-    final SpaceshipEntity existingSpaceshipEntity = repository.findById(spaceshipId)
+    final SpaceshipEntity existingSpaceshipEntity = spaceshipRepository.findById(id)
         .orElseThrow(() -> {
-          log.info("Spaceship no. {} not found", spaceshipId);
+          log.info("Spaceship with id {} not found", id);
           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Spaceship not found");
         });
 
-    mapper.spaceshipEntityUpdateWithDto(existingSpaceshipEntity, spaceshipDtoUpdate);
-    final SpaceshipEntity updatedSpaceshipEntity = repository.save(existingSpaceshipEntity);
+    spaceshipMapper.updateEntityWithDto(existingSpaceshipEntity, spaceshipDtoUpdate);
+    final SpaceshipEntity updatedSpaceshipEntity = spaceshipRepository.save(existingSpaceshipEntity);
 
-    return mapper.spaceshipEntityToDto(updatedSpaceshipEntity);
+    return spaceshipMapper.entityToDto(updatedSpaceshipEntity);
   }
 
   @Override
-  public void deleteSpaceshipById(final UUID spaceshipId) {
+  public void deleteById(final UUID id) {
 
-    final Optional<SpaceshipEntity> existingSpaceship = repository.findById(spaceshipId);
+    final Optional<SpaceshipEntity> existingSpaceship = spaceshipRepository.findById(id);
 
     if (existingSpaceship.isEmpty()) {
+      log.info("Spaceship with id {} not found", id);
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Spaceship not found");
     }
 
-    repository.deleteById(spaceshipId);
-    log.info("Spaceship no. {} deleted!", spaceshipId);
+    spaceshipRepository.deleteById(id);
+    log.info("Spaceship with id {} deleted!", id);
   }
 }

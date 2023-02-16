@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public interface SpaceshipService {
 
-  List<SpaceshipDto> getSpaceships();
+  List<SpaceshipDto> getAll();
 
-  SpaceshipDto getSpaceshipById(final UUID spaceshipId);
+  SpaceshipDto getById(final UUID spaceshipId);
 
-  SpaceshipDto addSpaceship(SpaceshipDto spaceshipDto);
+  SpaceshipDto add(SpaceshipDto spaceshipDto);
 
-  SpaceshipDto updateSpaceshipById(SpaceshipDto spaceshipDto, UUID spaceshipId);
+  SpaceshipDto updateById(SpaceshipDto spaceshipDto, UUID spaceshipId);
 
-  void deleteSpaceshipById(final UUID spaceshipId);
+  void deleteById(final UUID spaceshipId);
 }

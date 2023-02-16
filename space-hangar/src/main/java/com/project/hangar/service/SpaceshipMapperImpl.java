@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 public class SpaceshipMapperImpl implements SpaceshipMapper {
 
   @Override
-  public SpaceshipResponse spaceshipDtoToResponse(final SpaceshipDto spaceshipDto) {
+  public SpaceshipResponse dtoToResponse(final SpaceshipDto spaceshipDto) {
+
     return SpaceshipResponse.builder()
         .id(spaceshipDto.getId())
         .name(spaceshipDto.getName())
@@ -21,7 +22,8 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
   }
 
   @Override
-  public SpaceshipDto spaceshipRequestToDto(final SpaceshipRequest spaceshipRequest) {
+  public SpaceshipDto requestToDto(final SpaceshipRequest spaceshipRequest) {
+
     return SpaceshipDto.builder()
         .name(spaceshipRequest.getName())
         .classType(spaceshipRequest.getClassType())
@@ -31,7 +33,8 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
   }
 
   @Override
-  public SpaceshipDto spaceshipEntityToDto(final SpaceshipEntity spaceshipEntity) {
+  public SpaceshipDto entityToDto(final SpaceshipEntity spaceshipEntity) {
+
     return SpaceshipDto.builder()
         .id(spaceshipEntity.getId())
         .name(spaceshipEntity.getName())
@@ -42,7 +45,8 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
   }
 
   @Override
-  public SpaceshipEntity spaceshipDtoToEntity(final SpaceshipDto spaceshipDto) {
+  public SpaceshipEntity dtoToEntity(final SpaceshipDto spaceshipDto) {
+
     return SpaceshipEntity.builder()
         .name(spaceshipDto.getName())
         .classType(spaceshipDto.getClassType())
@@ -52,7 +56,8 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
   }
 
   @Override
-  public void spaceshipEntityUpdateWithDto(final SpaceshipEntity spaceshipEntity, final SpaceshipDto spaceshipDto) {
+  public void updateEntityWithDto(final SpaceshipEntity spaceshipEntity, final SpaceshipDto spaceshipDto) {
+
     spaceshipEntity.setName(spaceshipDto.getName());
     spaceshipEntity.setClassType(spaceshipDto.getClassType());
     spaceshipEntity.setPayload(spaceshipDto.getPayload());
