@@ -7,7 +7,7 @@ import com.project.hangar.entity.SpaceshipEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.project.hangar.common.Constant.*;
+import static com.project.hangar.common.Constants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class SpaceshipMapperImplTest {

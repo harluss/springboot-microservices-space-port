@@ -1,4 +1,4 @@
-package com.project.hangar.exceptions;
+package com.project.hangar.exception;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,15 +25,6 @@ class GlobalExceptionHandlerTest {
     final ResponseEntity<ErrorResponse> errorResponse = globalExceptionHandler.handleNotFound(notFoundException);
 
     assertExceptionHandledCorrectly(errorResponse, ERROR_MESSAGE, HttpStatus.NOT_FOUND);
-  }
-
-  @Test
-  void handleAlreadyExists() {
-    final AlreadyExistsException alreadyExistsException = new AlreadyExistsException(ERROR_MESSAGE);
-
-    final ResponseEntity<ErrorResponse> errorResponse = globalExceptionHandler.handleAlreadyExists(alreadyExistsException);
-
-    assertExceptionHandledCorrectly(errorResponse, ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
   }
 
   @Test

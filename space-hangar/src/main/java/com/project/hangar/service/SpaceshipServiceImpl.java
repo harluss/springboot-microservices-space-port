@@ -2,8 +2,7 @@ package com.project.hangar.service;
 
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.entity.SpaceshipEntity;
-import com.project.hangar.exceptions.AlreadyExistsException;
-import com.project.hangar.exceptions.NotFoundException;
+import com.project.hangar.exception.NotFoundException;
 import com.project.hangar.mapper.SpaceshipMapper;
 import com.project.hangar.repository.SpaceshipRepository;
 import lombok.extern.log4j.Log4j2;
@@ -59,13 +58,6 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   @Override
   public SpaceshipDto add(final SpaceshipDto spaceshipDto) {
 
-    final Optional<SpaceshipEntity> existingSpaceship = spaceshipRepository.findByName(spaceshipDto.getName());
-
-    if (existingSpaceship.isPresent()) {
-      log.info("Spaceship with name {} already exists", spaceshipDto.getName());
-      throw new AlreadyExistsException("Spaceship with this name already exists");
-    }
-
     final SpaceshipEntity savedSpaceship = spaceshipRepository.save(spaceshipMapper.dtoToEntity(spaceshipDto));
     log.info("Spaceship added: {}", savedSpaceship);
 
@@ -76,14 +68,14 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   @Transactional
   public SpaceshipDto updateById(final SpaceshipDto spaceshipDtoUpdate, final UUID id) {
 
-    final SpaceshipEntity existingSpaceshipEntity = spaceshipRepository.findById(id)
+    final SpaceshipEntity spaceshipToBeUpdated = spaceshipRepository.findById(id)
         .orElseThrow(() -> {
           log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, id);
           throw new NotFoundException(NOT_FOUND_MESSAGE);
         });
 
-    spaceshipMapper.updateEntityWithDto(existingSpaceshipEntity, spaceshipDtoUpdate);
-    final SpaceshipEntity updatedSpaceshipEntity = spaceshipRepository.save(existingSpaceshipEntity);
+    spaceshipMapper.updateEntityWithDto(spaceshipToBeUpdated, spaceshipDtoUpdate);
+    final SpaceshipEntity updatedSpaceshipEntity = spaceshipRepository.save(spaceshipToBeUpdated);
     final SpaceshipDto updatedSpaceshipDto = spaceshipMapper.entityToDto(updatedSpaceshipEntity);
     log.info("Spaceship updated: {}", updatedSpaceshipDto);
 
@@ -93,9 +85,9 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   @Override
   public void deleteById(final UUID id) {
 
-    final Optional<SpaceshipEntity> existingSpaceship = spaceshipRepository.findById(id);
+    final Optional<SpaceshipEntity> spaceshipToBeDeleted = spaceshipRepository.findById(id);
 
-    if (existingSpaceship.isEmpty()) {
+    if (spaceshipToBeDeleted.isEmpty()) {
       log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, id);
       throw new NotFoundException(NOT_FOUND_MESSAGE);
     }

@@ -21,7 +21,7 @@ public class SpaceshipEntity {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  @Column(name = "name", unique = true, nullable = false, columnDefinition = "text")
+  @Column(name = "name", nullable = false, columnDefinition = "text")
   private String name;
 
   @Column(name = "class", nullable = false, columnDefinition = "text")

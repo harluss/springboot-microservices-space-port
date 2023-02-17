@@ -1,4 +1,4 @@
-package com.project.hangar.exceptions;
+package com.project.hangar.exception;
 
 public class NotFoundException extends RuntimeException {
 

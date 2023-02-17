@@ -1,4 +1,4 @@
-package com.project.hangar.exceptions;
+package com.project.hangar.exception;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -21,15 +21,6 @@ public class GlobalExceptionHandler {
     final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage());
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-  }
-
-  @ExceptionHandler(AlreadyExistsException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  protected ResponseEntity<ErrorResponse> handleAlreadyExists(final AlreadyExistsException exception) {
-
-    final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

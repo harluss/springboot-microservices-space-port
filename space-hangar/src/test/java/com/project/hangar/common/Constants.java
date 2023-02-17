@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
 import java.util.UUID;
 
 @UtilityClass
-public class Constant {
+public class Constants {
 
   public static final UUID ID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
@@ -58,5 +58,9 @@ public class Constant {
         .crew(CREW)
         .payload(PAYLOAD)
         .build();
+  }
+
+  public static UUID getRandomUUID() {
+    return UUID.randomUUID();
   }
 }
