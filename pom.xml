@@ -23,6 +23,8 @@
     <java.version>17</java.version>
     <springdoc-openapi-ui.version>1.6.14</springdoc-openapi-ui.version>
     <testcontainers.version>1.17.6</testcontainers.version>
+    <!-- Fix for snakeyaml:1.30 CVE-2022-25857. Can be removed once Spring Boot version is bumped to 3.0.0+ -->
+    <snakeyaml.version>1.33</snakeyaml.version>
   </properties>
 
   <dependencyManagement>
@@ -38,6 +40,8 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- CVE-2016-1000027 | org.springframework:spring-web (spring-web-5.3.24.jar) | fixed in 6.0.0 |
+    potentially false flag: https://github.com/spring-projects/spring-framework/issues/24434#issuecomment-744519525 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
