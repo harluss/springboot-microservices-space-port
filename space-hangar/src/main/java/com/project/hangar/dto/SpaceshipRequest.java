@@ -1,11 +1,13 @@
 package com.project.hangar.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Value;
 
 import javax.validation.constraints.*;
 
 @Value
+@Builder
 public class SpaceshipRequest {
 
   @NotBlank
