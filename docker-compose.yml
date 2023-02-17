@@ -4,10 +4,12 @@ services:
   database:
     container_name: space_port_postgres
     image: postgres:15-alpine
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: space_port_db
     ports:
       - 5432:5432
+    volumes:
+      - ./space-hangar/src/test/resources:/docker-entrypoint-initdb.d
