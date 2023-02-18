@@ -11,4 +11,4 @@ INSERT INTO spaceships (name, class, payload, crew)
 VALUES ('Razor Crest', 'Gunship', 70, 1),
        ('Slave I', 'Starfighter', 40, 1),
        ('Millenium Falcon', 'Light freighter', 100, 3),
-       ('TIE Fighter', 'Starfighter', 10, 1);
+       ('X-wing', 'Starfighter', 10, 2);

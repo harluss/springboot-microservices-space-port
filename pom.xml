@@ -26,6 +26,8 @@
     <testcontainers.version>1.17.6</testcontainers.version>
     <!-- Fix for snakeyaml:1.30 CVE-2022-25857. Can be removed once Spring Boot version is bumped to 3.0.0+ -->
     <snakeyaml.version>1.33</snakeyaml.version>
+    <!-- plugins -->
+    <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -131,6 +133,20 @@
             </exclude>
           </excludes>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven-failsafe-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

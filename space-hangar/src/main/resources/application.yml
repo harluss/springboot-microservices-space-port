@@ -20,18 +20,3 @@ spring:
 springdoc:
   swagger-ui:
     path: /
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: test
-
-  datasource:
-    url: ${TEST_CONTAINER_DB_URL}
-    username: ${TEST_CONTAINER_DB_USERNAME}
-    password: ${TEST_CONTAINER_DB_PASSWORD}
-
-  jpa:
-    show-sql: false

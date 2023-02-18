@@ -31,7 +31,6 @@ public class SpaceshipController {
   }
 
   // todo: add readme
-  // todo: add tests
 
   @Operation(summary = "Get all spaceships",
       description = "Retrieves all spaceships",

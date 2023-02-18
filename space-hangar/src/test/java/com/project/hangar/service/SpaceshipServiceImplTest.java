@@ -59,9 +59,9 @@ class SpaceshipServiceImplTest {
     when(repositoryMock.findAll()).thenReturn(List.of(spaceshipEntity));
     when(mapperMock.entityToDto(spaceshipEntity)).thenReturn(spaceshipDto);
 
-    final List<SpaceshipDto> results = spaceshipService.getAll();
+    final List<SpaceshipDto> actual = spaceshipService.getAll();
 
-    assertThat(results)
+    assertThat(actual)
         .hasSize(1)
         .containsExactly(spaceshipDto);
     verify(repositoryMock).findAll();
@@ -73,9 +73,9 @@ class SpaceshipServiceImplTest {
     when(repositoryMock.findById(spaceshipDto.getId())).thenReturn(Optional.of(spaceshipEntity));
     when(mapperMock.entityToDto(spaceshipEntity)).thenReturn(spaceshipDto);
 
-    final SpaceshipDto result = spaceshipService.getById(spaceshipDto.getId());
+    final SpaceshipDto actual = spaceshipService.getById(spaceshipDto.getId());
 
-    assertThat(result).isEqualTo(spaceshipDto);
+    assertThat(actual).isEqualTo(spaceshipDto);
     verify(repositoryMock).findById(spaceshipDto.getId());
     verify(mapperMock).entityToDto(spaceshipEntity);
   }
@@ -96,9 +96,9 @@ class SpaceshipServiceImplTest {
     when(repositoryMock.save(spaceshipEntity)).thenReturn(spaceshipEntity);
     when(mapperMock.entityToDto(spaceshipEntity)).thenReturn(spaceshipDto);
 
-    final SpaceshipDto result = spaceshipService.add(spaceshipDto);
+    final SpaceshipDto actual = spaceshipService.add(spaceshipDto);
 
-    assertThat(result).isEqualTo(spaceshipDto);
+    assertThat(actual).isEqualTo(spaceshipDto);
     verify(repositoryMock).save(spaceshipEntity);
     verify(mapperMock).entityToDto(spaceshipEntity);
     verify(mapperMock).dtoToEntity(spaceshipDto);
@@ -110,9 +110,9 @@ class SpaceshipServiceImplTest {
     when(repositoryMock.save(spaceshipEntity)).thenReturn(spaceshipEntity);
     when(mapperMock.entityToDto(spaceshipEntity)).thenReturn(spaceshipDto);
 
-    final SpaceshipDto result = spaceshipService.updateById(spaceshipDto, spaceshipDto.getId());
+    final SpaceshipDto actual = spaceshipService.updateById(spaceshipDto, spaceshipDto.getId());
 
-    assertThat(result).isEqualTo(spaceshipDto);
+    assertThat(actual).isEqualTo(spaceshipDto);
     verify(repositoryMock).findById(spaceshipDto.getId());
     verify(repositoryMock).save(spaceshipEntity);
     verify(mapperMock).updateEntityWithDto(spaceshipEntity, spaceshipDto);

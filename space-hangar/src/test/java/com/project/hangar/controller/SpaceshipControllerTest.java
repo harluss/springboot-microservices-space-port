@@ -182,10 +182,10 @@ class SpaceshipControllerTest {
         .asString();
 
     final ErrorResponse actualErrorResponse = toObject(responseBody, ErrorResponse.class);
-    assertThat(actualErrorResponse.getError()).isEqualTo(expectedErrorResponse.getError());
-    assertThat(actualErrorResponse.getStatus()).isEqualTo(expectedErrorResponse.getStatus());
-    assertThat(actualErrorResponse.getMessage()).isEqualTo(expectedErrorResponse.getMessage());
-    assertThat(actualErrorResponse.getErrors()).containsAll(expectedErrorResponse.getErrors());
+
+    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
+    verifyNoInteractions(spaceshipMapperMock);
+    verifyNoInteractions(spaceshipServiceMock);
   }
 
   @Test
