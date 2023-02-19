@@ -1,6 +1,7 @@
 package com.project.cantina.service;
 
 import com.project.cantina.dto.PilotDto;
+import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.repository.PilotRepository;
@@ -14,9 +15,9 @@ import java.util.UUID;
 @Service
 public class PilotServiceImpl implements PilotService {
 
-  public static final String NOT_FOUND_MESSAGE = "Spaceship not found";
+  public static final String NOT_FOUND_MESSAGE = "Pilot not found";
 
-  public static final String NOT_FOUND_ID_PROVIDED_MESSAGE = "Spaceship with id {} not found";
+  public static final String NOT_FOUND_ID_PROVIDED_MESSAGE = "Pilot with id {} not found";
 
   private final PilotRepository pilotRepository;
 
@@ -47,8 +48,16 @@ public class PilotServiceImpl implements PilotService {
           log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, id);
           throw new NotFoundException(NOT_FOUND_MESSAGE);
         });
-    log.info("Spaceship with id {} found", id);
+    log.info("Pilot with id {} found", id);
 
     return pilotDto;
+  }
+
+  @Override
+  public PilotDto add(final PilotDto pilotDto) {
+    final PilotEntity savedPilot = pilotRepository.save(pilotMapper.dtoToEntity(pilotDto));
+    log.info("Pilot added: {}", savedPilot);
+
+    return pilotMapper.entityToDto(savedPilot);
   }
 }

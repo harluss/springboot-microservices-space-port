@@ -64,7 +64,7 @@ public class SpaceshipController {
       description = "Adds a new spaceship to the hangar",
       responses = {
           @ApiResponse(responseCode = "200", description = "Successfully added a new spaceship"),
-          @ApiResponse(responseCode = "400", description = "Spaceship with provided name already exists")
+          @ApiResponse(responseCode = "400", description = "Request data validation failed")
       })
   @PostMapping
   public ResponseEntity<SpaceshipResponse> addSpaceship(@Valid @RequestBody final SpaceshipRequest spaceshipRequest) {

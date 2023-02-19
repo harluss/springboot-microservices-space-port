@@ -9,5 +9,7 @@ public interface PilotService {
 
   List<PilotDto> getAll();
 
-  PilotDto getById(UUID id);
+  PilotDto getById(UUID pilotId);
+
+  PilotDto add(PilotDto pilotDto);
 }

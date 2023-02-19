@@ -89,4 +89,18 @@ class PilotServiceImplTest {
     verify(pilotRepositoryMock).findById(randomId);
     verifyNoInteractions(pilotMapperMock);
   }
+
+  @Test
+  void add() {
+    when(pilotMapperMock.dtoToEntity(pilotDto)).thenReturn(pilotEntity);
+    when(pilotRepositoryMock.save(pilotEntity)).thenReturn(pilotEntity);
+    when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);
+
+    final PilotDto actual = pilotService.add(pilotDto);
+
+    assertThat(actual).isEqualTo(pilotDto);
+    verify(pilotRepositoryMock).save(pilotEntity);
+    verify(pilotMapperMock).entityToDto(pilotEntity);
+    verify(pilotMapperMock).dtoToEntity(pilotDto);
+  }
 }

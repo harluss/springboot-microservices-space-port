@@ -1,5 +1,7 @@
 package com.project.cantina.controller;
 
+import com.project.cantina.dto.PilotDto;
+import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.service.PilotService;
@@ -7,11 +9,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +55,21 @@ public class PilotController {
   public ResponseEntity<PilotResponse> getPilotById(@NotBlank @PathVariable final UUID id) {
 
     final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.getById(id));
+
+    return ResponseEntity.ok(pilotResponse);
+  }
+
+  @Operation(summary = "Add new pilot",
+      description = "Adds a new pilot to the cantina",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully added a new pilot"),
+          @ApiResponse(responseCode = "400", description = "Request data validation failed")
+      })
+  @PostMapping
+  public ResponseEntity<PilotResponse> addPilot(@Valid @RequestBody final PilotRequest pilotRequest) {
+
+    final PilotDto pilotDto = pilotMapper.requestToDto(pilotRequest);
+    final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.add(pilotDto));
 
     return ResponseEntity.ok(pilotResponse);
   }
