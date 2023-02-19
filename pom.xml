@@ -17,6 +17,7 @@
 
   <modules>
     <module>space-hangar</module>
+      <module>space-cantina</module>
   </modules>
 
   <properties>

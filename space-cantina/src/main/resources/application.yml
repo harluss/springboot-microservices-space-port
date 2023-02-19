@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: cantina
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/space_port_db
+    username: postgres
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false
+
+springdoc:
+  swagger-ui:
+    path: /
