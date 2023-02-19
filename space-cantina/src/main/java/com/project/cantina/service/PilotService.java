@@ -14,4 +14,6 @@ public interface PilotService {
   PilotDto add(PilotDto pilotDto);
 
   PilotDto updateById(PilotDto pilotDto, UUID pilotId);
+
+  void deleteById(final UUID pilotId);
 }

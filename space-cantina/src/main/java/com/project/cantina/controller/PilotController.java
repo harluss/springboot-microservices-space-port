@@ -82,7 +82,7 @@ public class PilotController {
           @ApiResponse(responseCode = "404", description = "Could not find the requested pilot")
       })
   @PutMapping("{id}")
-  public ResponseEntity<PilotResponse> updateSpaceshipById(
+  public ResponseEntity<PilotResponse> updatePilotById(
       @NotBlank @PathVariable("id") final UUID pilotId,
       @Valid @RequestBody final PilotRequest pilotRequest
   ) {
@@ -93,5 +93,19 @@ public class PilotController {
     );
 
     return ResponseEntity.ok(updatedPilotResponse);
+  }
+
+  @Operation(summary = "Delete pilot",
+      description = "Deletes existing pilot based on given Id",
+      responses = {
+          @ApiResponse(responseCode = "204", description = "Successfully deleted the requested pilot"),
+          @ApiResponse(responseCode = "404", description = "Could not find the requested pilot")
+      })
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> deletePilotById(@NotBlank @PathVariable("id") final UUID pilotId) {
+
+    pilotService.deleteById(pilotId);
+
+    return ResponseEntity.noContent().build();
   }
 }

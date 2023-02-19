@@ -189,7 +189,7 @@ class PilotControllerTest {
   }
 
   @Test
-  void updateSpaceshipById() {
+  void updatePilotById() {
     final UUID reqId = pilotResponse.getId();
     when(pilotMapperMock.requestToDto(pilotRequest)).thenReturn(pilotDto);
     when(pilotServiceMock.updateById(pilotDto, reqId)).thenReturn(pilotDto);
@@ -212,7 +212,7 @@ class PilotControllerTest {
   }
 
   @Test
-  void updateSpaceshipById_notFound() {
+  void updatePilotById_notFound() {
     final UUID reqId = pilotResponse.getId();
     final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
     when(pilotMapperMock.requestToDto(pilotRequest)).thenReturn(pilotDto);
@@ -235,7 +235,7 @@ class PilotControllerTest {
   }
 
   @Test
-  void updateSpaceshipById_invalidRequestBody() {
+  void updatePilotById_invalidRequestBody() {
     final UUID reqId = pilotResponse.getId();
     final PilotRequest invalidPilotRequest = buildInvalidRequest();
     final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
@@ -258,6 +258,39 @@ class PilotControllerTest {
     assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
     verifyNoInteractions(pilotMapperMock);
     verifyNoInteractions(pilotServiceMock);
+  }
+
+  @Test
+  void deletePilotById() {
+    final UUID reqId = pilotResponse.getId();
+
+    given()
+        .when()
+        .delete(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.NO_CONTENT.value());
+
+    verify(pilotServiceMock).deleteById(reqId);
+  }
+
+  @Test
+  void deletePilotById_notFound() {
+    final UUID reqId = pilotResponse.getId();
+    final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
+    doThrow(new NotFoundException(expectedErrorResponse.getMessage())).when(pilotServiceMock).deleteById(reqId);
+
+    given()
+        .when()
+        .delete(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body(equalTo(toJsonString(expectedErrorResponse)));
+
+    verify(pilotServiceMock).deleteById(reqId);
   }
 
   @SneakyThrows

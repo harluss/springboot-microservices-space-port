@@ -129,4 +129,23 @@ class PilotServiceImplTest {
     verify(pilotRepositoryMock, times(0)).save(any());
     verifyNoInteractions(pilotMapperMock);
   }
+
+  @Test
+  void deleteById() {
+    when(pilotRepositoryMock.findById(randomId)).thenReturn(Optional.of(pilotEntity));
+
+    pilotService.deleteById(randomId);
+
+    verify(pilotRepositoryMock).findById(randomId);
+    verify(pilotRepositoryMock).deleteById(randomId);
+  }
+
+  @Test
+  void deleteById_notFound() {
+    when(pilotRepositoryMock.findById(randomId)).thenReturn(Optional.empty());
+
+    assertThrows(NotFoundException.class, () -> pilotService.deleteById(randomId));
+
+    verify(pilotRepositoryMock).findById(randomId);
+  }
 }

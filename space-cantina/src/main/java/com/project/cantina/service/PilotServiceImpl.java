@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -78,5 +79,19 @@ public class PilotServiceImpl implements PilotService {
     log.info("Pilot updated: {}", updatedPilotDto);
 
     return updatedPilotDto;
+  }
+
+  @Override
+  public void deleteById(final UUID pilotId) {
+
+    final Optional<PilotEntity> pilotToBeDeleted = pilotRepository.findById(pilotId);
+
+    if (pilotToBeDeleted.isEmpty()) {
+      log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, pilotId);
+      throw new NotFoundException(NOT_FOUND_MESSAGE);
+    }
+
+    pilotRepository.deleteById(pilotId);
+    log.info("Pilot with id {} deleted", pilotId);
   }
 }

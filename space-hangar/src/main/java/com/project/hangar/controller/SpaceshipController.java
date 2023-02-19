@@ -53,9 +53,9 @@ public class SpaceshipController {
           @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
       })
   @GetMapping("{id}")
-  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable final UUID id) {
+  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
 
-    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.getById(id));
+    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.getById(spaceshipId));
 
     return ResponseEntity.ok(spaceshipResponse);
   }
@@ -84,14 +84,13 @@ public class SpaceshipController {
       })
   @PutMapping("{id}")
   public ResponseEntity<SpaceshipResponse> updateSpaceshipById(
-      @NotBlank @PathVariable final UUID id,
+      @NotBlank @PathVariable("id") final UUID spaceshipId,
       @Valid @RequestBody final SpaceshipRequest spaceshipRequest
   ) {
 
     final SpaceshipDto spaceshipDtoUpdate = spaceshipMapper.requestToDto(spaceshipRequest);
     final SpaceshipResponse updatedSpaceshipResponse = spaceshipMapper.dtoToResponse(
-        spaceshipService.updateById(spaceshipDtoUpdate, id)
-    );
+        spaceshipService.updateById(spaceshipDtoUpdate, spaceshipId));
 
     return ResponseEntity.ok(updatedSpaceshipResponse);
   }
@@ -103,9 +102,9 @@ public class SpaceshipController {
           @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
       })
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable final UUID id) {
+  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
 
-    spaceshipService.deleteById(id);
+    spaceshipService.deleteById(spaceshipId);
 
     return ResponseEntity.noContent().build();
   }
