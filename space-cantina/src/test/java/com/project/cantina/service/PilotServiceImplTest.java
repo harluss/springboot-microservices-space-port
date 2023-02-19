@@ -103,4 +103,30 @@ class PilotServiceImplTest {
     verify(pilotMapperMock).entityToDto(pilotEntity);
     verify(pilotMapperMock).dtoToEntity(pilotDto);
   }
+
+  @Test
+  void updateById() {
+    when(pilotRepositoryMock.findById(pilotDto.getId())).thenReturn(Optional.of(pilotEntity));
+    when(pilotRepositoryMock.save(pilotEntity)).thenReturn(pilotEntity);
+    when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);
+
+    final PilotDto actual = pilotService.updateById(pilotDto, pilotDto.getId());
+
+    assertThat(actual).isEqualTo(pilotDto);
+    verify(pilotRepositoryMock).findById(pilotDto.getId());
+    verify(pilotRepositoryMock).save(pilotEntity);
+    verify(pilotMapperMock).updateEntityWithDto(pilotEntity, pilotDto);
+    verify(pilotMapperMock).entityToDto(pilotEntity);
+  }
+
+  @Test
+  void updateById_notFound() {
+    when(pilotRepositoryMock.findById(randomId)).thenReturn(Optional.empty());
+
+    assertThrows(NotFoundException.class, () -> pilotService.updateById(pilotDto, randomId));
+
+    verify(pilotRepositoryMock).findById(randomId);
+    verify(pilotRepositoryMock, times(0)).save(any());
+    verifyNoInteractions(pilotMapperMock);
+  }
 }

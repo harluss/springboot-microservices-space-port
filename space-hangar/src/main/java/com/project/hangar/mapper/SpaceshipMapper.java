@@ -7,13 +7,13 @@ import com.project.hangar.entity.SpaceshipEntity;
 
 public interface SpaceshipMapper {
 
-  SpaceshipResponse dtoToResponse(SpaceshipDto spaceshipDto);
+  SpaceshipResponse dtoToResponse(SpaceshipDto dto);
 
-  SpaceshipDto requestToDto(SpaceshipRequest spaceshipRequest);
+  SpaceshipDto requestToDto(SpaceshipRequest request);
 
-  SpaceshipDto entityToDto(SpaceshipEntity spaceshipEntity);
+  SpaceshipDto entityToDto(SpaceshipEntity entity);
 
-  SpaceshipEntity dtoToEntity(SpaceshipDto spaceshipDto);
+  SpaceshipEntity dtoToEntity(SpaceshipDto dto);
 
-  void updateEntityWithDto(SpaceshipEntity spaceshipEntity, SpaceshipDto spaceshipDto);
+  void updateEntityWithDto(SpaceshipEntity entity, SpaceshipDto dto);
 }

@@ -79,6 +79,7 @@ public class SpaceshipController {
       description = "Updates details of existing spaceship based on given Id",
       responses = {
           @ApiResponse(responseCode = "200", description = "Successfully updated the requested spaceship"),
+          @ApiResponse(responseCode = "400", description = "Request data validation failed"),
           @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
       })
   @PutMapping("{id}")

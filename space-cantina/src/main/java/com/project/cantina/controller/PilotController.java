@@ -52,9 +52,9 @@ public class PilotController {
           @ApiResponse(responseCode = "404", description = "Could not find the requested pilot")
       })
   @GetMapping("{id}")
-  public ResponseEntity<PilotResponse> getPilotById(@NotBlank @PathVariable final UUID id) {
+  public ResponseEntity<PilotResponse> getPilotById(@NotBlank @PathVariable("id") final UUID pilotId) {
 
-    final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.getById(id));
+    final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.getById(pilotId));
 
     return ResponseEntity.ok(pilotResponse);
   }
@@ -72,5 +72,26 @@ public class PilotController {
     final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.add(pilotDto));
 
     return ResponseEntity.ok(pilotResponse);
+  }
+
+  @Operation(summary = "Update pilot",
+      description = "Updates details of existing pilot based on given Id",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully updated the requested pilot"),
+          @ApiResponse(responseCode = "400", description = "Request data validation failed"),
+          @ApiResponse(responseCode = "404", description = "Could not find the requested pilot")
+      })
+  @PutMapping("{id}")
+  public ResponseEntity<PilotResponse> updateSpaceshipById(
+      @NotBlank @PathVariable("id") final UUID pilotId,
+      @Valid @RequestBody final PilotRequest pilotRequest
+  ) {
+
+    final PilotDto pilotDtoUpdate = pilotMapper.requestToDto(pilotRequest);
+    final PilotResponse updatedPilotResponse = pilotMapper.dtoToResponse(
+        pilotService.updateById(pilotDtoUpdate, pilotId)
+    );
+
+    return ResponseEntity.ok(updatedPilotResponse);
   }
 }

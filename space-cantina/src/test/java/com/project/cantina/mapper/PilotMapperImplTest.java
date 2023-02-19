@@ -8,6 +8,8 @@ import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+
 import static com.project.cantina.common.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,5 +66,26 @@ class PilotMapperImplTest {
     final PilotDto actual = pilotMapper.requestToDto(request);
 
     AssertionsForClassTypes.assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void updateEntityWithDto() {
+    final PilotEntity entity = buildEntity().toBuilder()
+        .id(null)
+        .build();
+    final PilotDto updateDto = buildDto().toBuilder()
+        .id(null)
+        .name("Yoda")
+        .species("Unknown")
+        .profession("Jedi Master")
+        .weapons(Collections.emptyList())
+        .build();
+
+    pilotMapper.updateEntityWithDto(entity, updateDto);
+
+    AssertionsForClassTypes.assertThat(entity.getName()).isEqualTo(updateDto.getName());
+    AssertionsForClassTypes.assertThat(entity.getSpecies()).isEqualTo(updateDto.getSpecies());
+    AssertionsForClassTypes.assertThat(entity.getProfession()).isEqualTo(updateDto.getProfession());
+    AssertionsForClassTypes.assertThat(entity.getWeapons()).isEqualTo(updateDto.getWeapons());
   }
 }

@@ -50,4 +50,12 @@ public class PilotMapperImpl implements PilotMapper {
         .weapons(request.getWeapons())
         .build();
   }
+
+  @Override
+  public void updateEntityWithDto(final PilotEntity entity, final PilotDto dto) {
+    entity.setName(dto.getName());
+    entity.setSpecies(dto.getSpecies());
+    entity.setProfession(dto.getProfession());
+    entity.setWeapons(dto.getWeapons());
+  }
 }

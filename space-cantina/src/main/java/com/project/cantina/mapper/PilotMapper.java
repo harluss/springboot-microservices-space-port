@@ -14,4 +14,6 @@ public interface PilotMapper {
   PilotResponse dtoToResponse(PilotDto dto);
 
   PilotDto requestToDto(PilotRequest request);
+
+  void updateEntityWithDto(PilotEntity entity, PilotDto dto);
 }

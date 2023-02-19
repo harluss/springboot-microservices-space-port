@@ -66,7 +66,7 @@ public class Constants {
     return UUID.randomUUID();
   }
 
-  public static SpaceshipRequest buildInvalidSpaceshipRequest() {
+  public static SpaceshipRequest buildInvalidRequest() {
     return SpaceshipRequest.builder()
         .name(null)
         .crew(-5)

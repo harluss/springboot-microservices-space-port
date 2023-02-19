@@ -165,7 +165,7 @@ class SpaceshipControllerTest {
 
   @Test
   void addSpaceship_invalidRequestBody() {
-    final SpaceshipRequest invalidSpaceshipRequest = buildInvalidSpaceshipRequest();
+    final SpaceshipRequest invalidSpaceshipRequest = buildInvalidRequest();
     final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
 
     final String responseBody = given()
@@ -232,6 +232,32 @@ class SpaceshipControllerTest {
 
     verify(spaceshipMapperMock).requestToDto(spaceshipRequest);
     verify(spaceshipServiceMock).updateById(spaceshipDto, reqId);
+  }
+
+  @Test
+  void updateSpaceshipById_invalidRequestBody() {
+    final UUID reqId = spaceshipResponse.getId();
+    final SpaceshipRequest invalidPilotRequest = buildInvalidRequest();
+    final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
+
+    final String responseBody = given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(toJsonString(invalidPilotRequest))
+        .when()
+        .put(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .extract()
+        .body()
+        .asString();
+
+    final ErrorResponse actualErrorResponse = toObject(responseBody, ErrorResponse.class);
+
+    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
+    verifyNoInteractions(spaceshipMapperMock);
+    verifyNoInteractions(spaceshipServiceMock);
   }
 
   @Test

@@ -188,6 +188,78 @@ class PilotControllerTest {
     verifyNoInteractions(pilotServiceMock);
   }
 
+  @Test
+  void updateSpaceshipById() {
+    final UUID reqId = pilotResponse.getId();
+    when(pilotMapperMock.requestToDto(pilotRequest)).thenReturn(pilotDto);
+    when(pilotServiceMock.updateById(pilotDto, reqId)).thenReturn(pilotDto);
+    when(pilotMapperMock.dtoToResponse(pilotDto)).thenReturn(pilotResponse);
+
+    given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(toJsonString(pilotRequest))
+        .when()
+        .put(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+        .body(equalTo(toJsonString(pilotResponse)));
+
+    verify(pilotMapperMock).requestToDto(pilotRequest);
+    verify(pilotMapperMock).dtoToResponse(pilotDto);
+    verify(pilotServiceMock).updateById(pilotDto, reqId);
+  }
+
+  @Test
+  void updateSpaceshipById_notFound() {
+    final UUID reqId = pilotResponse.getId();
+    final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
+    when(pilotMapperMock.requestToDto(pilotRequest)).thenReturn(pilotDto);
+    doThrow(new NotFoundException(expectedErrorResponse.getMessage()))
+        .when(pilotServiceMock).updateById(pilotDto, reqId);
+
+    given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(toJsonString(pilotRequest))
+        .when()
+        .put(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body(equalTo(toJsonString(expectedErrorResponse)));
+
+    verify(pilotMapperMock).requestToDto(pilotRequest);
+    verify(pilotServiceMock).updateById(pilotDto, reqId);
+  }
+
+  @Test
+  void updateSpaceshipById_invalidRequestBody() {
+    final UUID reqId = pilotResponse.getId();
+    final PilotRequest invalidPilotRequest = buildInvalidRequest();
+    final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
+
+    final String responseBody = given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(toJsonString(invalidPilotRequest))
+        .when()
+        .put(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .extract()
+        .body()
+        .asString();
+
+    final ErrorResponse actualErrorResponse = toObject(responseBody, ErrorResponse.class);
+
+    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
+    verifyNoInteractions(pilotMapperMock);
+    verifyNoInteractions(pilotServiceMock);
+  }
+
   @SneakyThrows
   private String toJsonString(final Object object) {
     return objectMapper.writeValueAsString(object);
