@@ -1,9 +1,12 @@
 package com.project.cantina.entity;
 
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "pilots")
+@TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class PilotEntity {
 
   @Id
@@ -31,6 +35,6 @@ public class PilotEntity {
   private String profession;
 
   @Column(name = "weapons", nullable = true, columnDefinition = "text[]")
-  @ElementCollection
+  @Type(type = "list-array")
   private List<String> weapons;
 }

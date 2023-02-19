@@ -30,8 +30,6 @@ public class SpaceshipController {
     this.spaceshipMapper = spaceshipMapper;
   }
 
-  // todo: add readme
-
   @Operation(summary = "Get all spaceships",
       description = "Retrieves all spaceships",
       responses = {
