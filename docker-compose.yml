@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   database:
-    container_name: space_port_postgres
+    container_name: space_port_hangar_postgres
     image: postgres:15-alpine
     restart: unless-stopped
     environment:
