@@ -3,7 +3,9 @@ package com.project.cantina.common;
 import com.project.cantina.dto.PilotDto;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.entity.PilotEntity;
+import com.project.cantina.exception.ErrorResponse;
 import lombok.experimental.UtilityClass;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +50,20 @@ public class Constants {
         .species(SPECIES)
         .profession(PROFESSION)
         .weapons(WEAPONS)
+        .build();
+  }
+
+  public static UUID getRandomUUID() {
+    return UUID.randomUUID();
+  }
+
+  public static ErrorResponse buildNotFoundErrorResponse() {
+    final HttpStatus status = HttpStatus.NOT_FOUND;
+
+    return ErrorResponse.builder()
+        .status(status.value())
+        .error(status.name())
+        .message("Spaceship not found")
         .build();
   }
 }

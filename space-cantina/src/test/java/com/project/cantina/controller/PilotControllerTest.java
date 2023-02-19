@@ -3,6 +3,8 @@ package com.project.cantina.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.cantina.dto.PilotDto;
 import com.project.cantina.dto.PilotResponse;
+import com.project.cantina.exception.ErrorResponse;
+import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.service.PilotService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -18,9 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
-import static com.project.cantina.common.Constants.buildDto;
-import static com.project.cantina.common.Constants.buildResponse;
+import static com.project.cantina.common.Constants.*;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
@@ -29,6 +31,8 @@ import static org.mockito.Mockito.*;
 class PilotControllerTest {
 
   private static final String TEST_API = "/api/pilots";
+
+  private static final String TEST_API_WITH_ID = "/api/pilots/{id}";
 
   @Autowired
   private MockMvc mockMvc;
@@ -90,6 +94,44 @@ class PilotControllerTest {
         .body(equalTo(toJsonString(Collections.emptyList())));
 
     verify(pilotServiceMock).getAll();
+    verifyNoInteractions(pilotMapperMock);
+  }
+
+  @Test
+  void getPilotById() {
+    final UUID reqId = pilotResponse.getId();
+    when(pilotServiceMock.getById(reqId)).thenReturn(pilotDto);
+    when(pilotMapperMock.dtoToResponse(pilotDto)).thenReturn(pilotResponse);
+
+    given()
+        .when()
+        .get(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+        .body(equalTo(toJsonString(pilotResponse)));
+
+    verify(pilotServiceMock).getById(reqId);
+    verify(pilotMapperMock).dtoToResponse(pilotDto);
+  }
+
+  @Test
+  void getPilotById_notFound() {
+    final UUID reqId = pilotResponse.getId();
+    final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
+    when(pilotServiceMock.getById(reqId)).thenThrow(new NotFoundException(expectedErrorResponse.getMessage()));
+
+    given()
+        .when()
+        .get(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body(equalTo(toJsonString(expectedErrorResponse)));
+
+    verify(pilotServiceMock).getById(reqId);
     verifyNoInteractions(pilotMapperMock);
   }
 

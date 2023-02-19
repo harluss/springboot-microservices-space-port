@@ -8,10 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "pilots", description = "pilot operations")
 @RestController
@@ -40,5 +43,19 @@ public class PilotController {
         .toList();
 
     return ResponseEntity.ok(pilotResponses);
+  }
+
+  @Operation(summary = "Get pilot by Id",
+      description = "Retrieves a single pilot based on given Id",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully retrieved the requested pilot"),
+          @ApiResponse(responseCode = "404", description = "Could not find the requested pilot")
+      })
+  @GetMapping("{id}")
+  public ResponseEntity<PilotResponse> getPilotById(@NotBlank @PathVariable final UUID id) {
+
+    final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.getById(id));
+
+    return ResponseEntity.ok(pilotResponse);
   }
 }
