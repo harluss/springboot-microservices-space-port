@@ -1,13 +1,11 @@
 package com.project.hangar.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.hangar.common.BaseIT;
 import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.entity.SpaceshipEntity;
 import com.project.hangar.repository.SpaceshipRepository;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +33,6 @@ class SpaceshipIT extends BaseIT {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @Autowired
   private SpaceshipRepository spaceshipRepository;
@@ -91,7 +86,7 @@ class SpaceshipIT extends BaseIT {
 
     final SpaceshipEntity actual = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(request))
+        .body(objectToJsonString(request))
         .when()
         .post(TEST_API)
         .then()
@@ -119,7 +114,7 @@ class SpaceshipIT extends BaseIT {
 
     final SpaceshipEntity actual = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(request))
+        .body(objectToJsonString(request))
         .when()
         .put(TEST_API_WITH_ID, toBeUpdated.getId())
         .then()
@@ -159,10 +154,5 @@ class SpaceshipIT extends BaseIT {
     assertThat(spaceshipsAfter)
         .doesNotContain(toBeDeleted)
         .hasSize(spaceshipsBefore.size() - 1);
-  }
-
-  @SneakyThrows
-  private String toJsonString(final Object object) {
-    return objectMapper.writeValueAsString(object);
   }
 }

@@ -1,12 +1,11 @@
 package com.project.cantina.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.cantina.common.BaseIT;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.repository.PilotRepository;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class PilotIT {
+class PilotIT extends BaseIT {
 
   private static final String TEST_API = "/api/pilots";
 
@@ -34,9 +33,6 @@ class PilotIT {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @Autowired
   private PilotRepository pilotRepository;
@@ -90,7 +86,7 @@ class PilotIT {
 
     final PilotEntity actual = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(request))
+        .body(objectToJsonString(request))
         .when()
         .post(TEST_API)
         .then()
@@ -118,7 +114,7 @@ class PilotIT {
 
     final PilotEntity actual = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(request))
+        .body(objectToJsonString(request))
         .when()
         .put(TEST_API_WITH_ID, toBeUpdated.getId())
         .then()
@@ -158,10 +154,5 @@ class PilotIT {
     assertThat(spaceshipsAfter)
         .doesNotContain(toBeDeleted)
         .hasSize(pilotsBefore.size() - 1);
-  }
-
-  @SneakyThrows
-  private String toJsonString(final Object object) {
-    return objectMapper.writeValueAsString(object);
   }
 }

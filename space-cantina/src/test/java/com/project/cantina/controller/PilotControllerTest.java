@@ -1,6 +1,6 @@
 package com.project.cantina.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.cantina.common.TestUtil;
 import com.project.cantina.dto.PilotDto;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
@@ -9,7 +9,6 @@ import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.service.PilotService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(PilotController.class)
-class PilotControllerTest {
+class PilotControllerTest extends TestUtil {
 
   private static final String TEST_API = "/api/pilots";
 
@@ -39,9 +38,6 @@ class PilotControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @MockBean
   private PilotService pilotServiceMock;
@@ -80,7 +76,7 @@ class PilotControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(List.of(pilotResponse))));
+        .body(equalTo(objectToJsonString(List.of(pilotResponse))));
 
     verify(pilotServiceMock).getAll();
     verify(pilotMapperMock).dtoToResponse(pilotDto);
@@ -97,7 +93,7 @@ class PilotControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(Collections.emptyList())));
+        .body(equalTo(objectToJsonString(Collections.emptyList())));
 
     verify(pilotServiceMock).getAll();
     verifyNoInteractions(pilotMapperMock);
@@ -116,7 +112,7 @@ class PilotControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(pilotResponse)));
+        .body(equalTo(objectToJsonString(pilotResponse)));
 
     verify(pilotServiceMock).getById(reqId);
     verify(pilotMapperMock).dtoToResponse(pilotDto);
@@ -135,7 +131,7 @@ class PilotControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(equalTo(toJsonString(expectedErrorResponse)));
+        .body(equalTo(objectToJsonString(expectedErrorResponse)));
 
     verify(pilotServiceMock).getById(reqId);
     verifyNoInteractions(pilotMapperMock);
@@ -149,14 +145,14 @@ class PilotControllerTest {
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(pilotRequest))
+        .body(objectToJsonString(pilotRequest))
         .when()
         .post(TEST_API)
         .then()
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(pilotResponse)));
+        .body(equalTo(objectToJsonString(pilotResponse)));
 
     verify(pilotMapperMock).requestToDto(pilotRequest);
     verify(pilotMapperMock).dtoToResponse(pilotDto);
@@ -170,7 +166,7 @@ class PilotControllerTest {
 
     final String responseBody = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(invalidPilotRequest))
+        .body(objectToJsonString(invalidPilotRequest))
         .when()
         .post(TEST_API)
         .then()
@@ -181,7 +177,7 @@ class PilotControllerTest {
         .body()
         .asString();
 
-    final ErrorResponse actualErrorResponse = toObject(responseBody, ErrorResponse.class);
+    final ErrorResponse actualErrorResponse = jsonStringToObject(responseBody, ErrorResponse.class);
 
     assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
     verifyNoInteractions(pilotMapperMock);
@@ -197,14 +193,14 @@ class PilotControllerTest {
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(pilotRequest))
+        .body(objectToJsonString(pilotRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(pilotResponse)));
+        .body(equalTo(objectToJsonString(pilotResponse)));
 
     verify(pilotMapperMock).requestToDto(pilotRequest);
     verify(pilotMapperMock).dtoToResponse(pilotDto);
@@ -221,14 +217,14 @@ class PilotControllerTest {
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(pilotRequest))
+        .body(objectToJsonString(pilotRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(equalTo(toJsonString(expectedErrorResponse)));
+        .body(equalTo(objectToJsonString(expectedErrorResponse)));
 
     verify(pilotMapperMock).requestToDto(pilotRequest);
     verify(pilotServiceMock).updateById(pilotDto, reqId);
@@ -242,7 +238,7 @@ class PilotControllerTest {
 
     final String responseBody = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(invalidPilotRequest))
+        .body(objectToJsonString(invalidPilotRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
@@ -253,7 +249,7 @@ class PilotControllerTest {
         .body()
         .asString();
 
-    final ErrorResponse actualErrorResponse = toObject(responseBody, ErrorResponse.class);
+    final ErrorResponse actualErrorResponse = jsonStringToObject(responseBody, ErrorResponse.class);
 
     assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
     verifyNoInteractions(pilotMapperMock);
@@ -288,18 +284,8 @@ class PilotControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(equalTo(toJsonString(expectedErrorResponse)));
+        .body(equalTo(objectToJsonString(expectedErrorResponse)));
 
     verify(pilotServiceMock).deleteById(reqId);
-  }
-
-  @SneakyThrows
-  private String toJsonString(final Object object) {
-    return objectMapper.writeValueAsString(object);
-  }
-
-  @SneakyThrows
-  private <T> T toObject(final String json, final Class<T> clazz) {
-    return objectMapper.readValue(json, clazz);
   }
 }

@@ -8,7 +8,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
-public class BaseIT {
+public class BaseIT extends TestUtil {
 
   private static final String POSTGRES_IMAGE = "postgres:15-alpine";
 
