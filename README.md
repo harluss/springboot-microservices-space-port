@@ -38,11 +38,16 @@ to store information about Pilots.
 
 ```json
 {
-  "id": "f7d78abd-c9b3-41ab-bb90-e16ac4a15ce7",
-  "name": "Millenium Falcon",
-  "payload": 100,
-  "crew": 3,
-  "class": "Light freighter"
+  "id": "9a6a679d-d580-4a08-923b-90da3533874d",
+  "name": "Razor Crest",
+  "maxSpeed": 800,
+  "payload": 70,
+  "crew": 2,
+  "crewList": [],
+  "armament": [
+    "Heavy laser cannons"
+  ],
+  "class": "Gunship"
 }
 ```
 

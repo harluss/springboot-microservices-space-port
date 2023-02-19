@@ -1,12 +1,16 @@
 package com.project.hangar.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -15,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "spaceships")
+@TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class SpaceshipEntity {
 
   @Id
@@ -28,9 +33,20 @@ public class SpaceshipEntity {
   @JsonProperty("class")
   private String classType;
 
-  @Column(name = "payload", nullable = false, columnDefinition = "text")
+  @Column(name = "max_speed", nullable = false, columnDefinition = "integer")
+  private Integer maxSpeed;
+
+  @Column(name = "payload", nullable = false, columnDefinition = "integer")
   private Integer payload;
 
-  @Column(name = "crew", nullable = false, columnDefinition = "text")
+  @Column(name = "crew", nullable = false, columnDefinition = "integer")
   private Integer crew;
+
+  @Column(name = "crew_list", nullable = true, columnDefinition = "uuid[]")
+  @Type(type = "list-array")
+  private List<UUID> crewList;
+
+  @Column(name = "armament", nullable = true, columnDefinition = "text[]")
+  @Type(type = "list-array")
+  private List<String> armament;
 }
