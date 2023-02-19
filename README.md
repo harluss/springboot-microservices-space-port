@@ -7,10 +7,15 @@ Microservices Architecture Assignment 2023
 This is part 1 of the assignment - single microservice that communicates with database container to store information
 about Spaceships.
 
+*UPDATE:*
+Second microservice was added for part 2 - similarly to the first one, it communicates with its own database container
+to store information about Pilots.
+
 ## Table of Contents
 
 * [Features](#features)
   * [Sample spaceship JSON](#sample-spaceship-json)
+  * [Sample pilot JSON](#sample-pilot-json)
   * [Sample error JSON](#sample-error)
 * [Setup](#setup)
   * [Run locally](#run-locally)
@@ -41,6 +46,22 @@ about Spaceships.
 }
 ```
 
+### Sample pilot JSON:
+
+```json
+{
+  "id": "c77821c7-6b82-4d43-9837-2f7768610f45",
+  "name": "Mando",
+  "species": "Human",
+  "profession": "Bounty hunter",
+  "weapons": [
+    "IB-94 blaster pistol",
+    "Beskar spear",
+    "Darksaber"
+  ]
+}
+```
+
 ### Sample error JSON:
 
 ```json
@@ -65,17 +86,17 @@ about Spaceships.
 
 ### Run locally
 
-1. Start Postgres container (it will create required table and seed dummy data):
+Start 2 Postgres containers, one for each service (it will create required table and seed dummy data):
 
 ```bash
 docker compose up -d
 ```
 
-2. Start the application in your IDE.
+Start the application in your IDE.
 
 ### APIs and Swagger
 
-APIs are exposed at:
+Spaceship APIs are exposed at:
 
 ```
 http://localhost:8080/api/spaceships
@@ -85,6 +106,18 @@ Swagger UI is available at:
 
 ```
 http://localhost:8080
+```
+
+Pilot APIs are exposed at:
+
+```
+http://localhost:8081/api/pilots
+```
+
+Swagger UI is available at:
+
+```
+http://localhost:8081
 ```
 
 ### Tests
