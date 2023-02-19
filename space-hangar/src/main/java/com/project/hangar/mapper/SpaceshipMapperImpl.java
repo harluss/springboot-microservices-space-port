@@ -10,57 +10,52 @@ import org.springframework.stereotype.Component;
 public class SpaceshipMapperImpl implements SpaceshipMapper {
 
   @Override
-  public SpaceshipResponse dtoToResponse(final SpaceshipDto spaceshipDto) {
-
+  public SpaceshipResponse dtoToResponse(final SpaceshipDto dto) {
     return SpaceshipResponse.builder()
-        .id(spaceshipDto.getId())
-        .name(spaceshipDto.getName())
-        .classType(spaceshipDto.getClassType())
-        .crew(spaceshipDto.getCrew())
-        .payload(spaceshipDto.getPayload())
+        .id(dto.getId())
+        .name(dto.getName())
+        .classType(dto.getClassType())
+        .crew(dto.getCrew())
+        .payload(dto.getPayload())
         .build();
   }
 
   @Override
-  public SpaceshipDto requestToDto(final SpaceshipRequest spaceshipRequest) {
-
+  public SpaceshipDto requestToDto(final SpaceshipRequest request) {
     return SpaceshipDto.builder()
-        .name(spaceshipRequest.getName())
-        .classType(spaceshipRequest.getClassType())
-        .payload(spaceshipRequest.getPayload())
-        .crew(spaceshipRequest.getCrew())
+        .name(request.getName())
+        .classType(request.getClassType())
+        .payload(request.getPayload())
+        .crew(request.getCrew())
         .build();
   }
 
   @Override
-  public SpaceshipDto entityToDto(final SpaceshipEntity spaceshipEntity) {
-
+  public SpaceshipDto entityToDto(final SpaceshipEntity entity) {
     return SpaceshipDto.builder()
-        .id(spaceshipEntity.getId())
-        .name(spaceshipEntity.getName())
-        .classType(spaceshipEntity.getClassType())
-        .payload(spaceshipEntity.getPayload())
-        .crew(spaceshipEntity.getCrew())
+        .id(entity.getId())
+        .name(entity.getName())
+        .classType(entity.getClassType())
+        .payload(entity.getPayload())
+        .crew(entity.getCrew())
         .build();
   }
 
   @Override
-  public SpaceshipEntity dtoToEntity(final SpaceshipDto spaceshipDto) {
-
+  public SpaceshipEntity dtoToEntity(final SpaceshipDto dto) {
     return SpaceshipEntity.builder()
-        .name(spaceshipDto.getName())
-        .classType(spaceshipDto.getClassType())
-        .payload(spaceshipDto.getPayload())
-        .crew(spaceshipDto.getCrew())
+        .name(dto.getName())
+        .classType(dto.getClassType())
+        .payload(dto.getPayload())
+        .crew(dto.getCrew())
         .build();
   }
 
   @Override
-  public void updateEntityWithDto(final SpaceshipEntity spaceshipEntity, final SpaceshipDto spaceshipDto) {
-
-    spaceshipEntity.setName(spaceshipDto.getName());
-    spaceshipEntity.setClassType(spaceshipDto.getClassType());
-    spaceshipEntity.setPayload(spaceshipDto.getPayload());
-    spaceshipEntity.setCrew(spaceshipDto.getCrew());
+  public void updateEntityWithDto(final SpaceshipEntity entity, final SpaceshipDto dto) {
+    entity.setName(dto.getName());
+    entity.setClassType(dto.getClassType());
+    entity.setPayload(dto.getPayload());
+    entity.setCrew(dto.getCrew());
   }
 }

@@ -1,4 +1,4 @@
-package com.project.hangar.exception;
+package com.project.cantina.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

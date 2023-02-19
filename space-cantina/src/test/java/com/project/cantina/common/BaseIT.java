@@ -1,4 +1,4 @@
-package com.project.hangar.common;
+package com.project.cantina.common;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;

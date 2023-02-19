@@ -1,6 +1,6 @@
 package com.project.hangar.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.hangar.common.TestUtil;
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.dto.SpaceshipResponse;
@@ -9,7 +9,6 @@ import com.project.hangar.exception.NotFoundException;
 import com.project.hangar.mapper.SpaceshipMapper;
 import com.project.hangar.service.SpaceshipService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(SpaceshipController.class)
-class SpaceshipControllerTest {
+class SpaceshipControllerTest extends TestUtil {
 
   private static final String TEST_API = "/api/spaceships";
 
@@ -39,9 +38,6 @@ class SpaceshipControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @MockBean
   private SpaceshipService spaceshipServiceMock;
@@ -80,7 +76,7 @@ class SpaceshipControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(List.of(spaceshipResponse))));
+        .body(equalTo(objectToJsonString(List.of(spaceshipResponse))));
 
     verify(spaceshipMapperMock).dtoToResponse(spaceshipDto);
     verify(spaceshipServiceMock).getAll();
@@ -97,7 +93,7 @@ class SpaceshipControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(Collections.emptyList())));
+        .body(equalTo(objectToJsonString(Collections.emptyList())));
 
     verify(spaceshipServiceMock).getAll();
     verifyNoInteractions(spaceshipMapperMock);
@@ -116,7 +112,7 @@ class SpaceshipControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(spaceshipResponse)));
+        .body(equalTo(objectToJsonString(spaceshipResponse)));
 
     verify(spaceshipMapperMock).dtoToResponse(spaceshipDto);
     verify(spaceshipServiceMock).getById(reqId);
@@ -135,7 +131,7 @@ class SpaceshipControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(equalTo(toJsonString(expectedErrorResponse)));
+        .body(equalTo(objectToJsonString(expectedErrorResponse)));
 
     verify(spaceshipServiceMock).getById(reqId);
     verifyNoInteractions(spaceshipMapperMock);
@@ -149,14 +145,14 @@ class SpaceshipControllerTest {
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(spaceshipRequest))
+        .body(objectToJsonString(spaceshipRequest))
         .when()
         .post(TEST_API)
         .then()
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(spaceshipResponse)));
+        .body(equalTo(objectToJsonString(spaceshipResponse)));
 
     verify(spaceshipMapperMock).requestToDto(spaceshipRequest);
     verify(spaceshipMapperMock).dtoToResponse(spaceshipDto);
@@ -165,12 +161,12 @@ class SpaceshipControllerTest {
 
   @Test
   void addSpaceship_invalidRequestBody() {
-    final SpaceshipRequest invalidSpaceshipRequest = buildInvalidSpaceshipRequest();
+    final SpaceshipRequest invalidSpaceshipRequest = buildInvalidRequest();
     final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
 
     final String responseBody = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(invalidSpaceshipRequest))
+        .body(objectToJsonString(invalidSpaceshipRequest))
         .when()
         .post(TEST_API)
         .then()
@@ -181,7 +177,7 @@ class SpaceshipControllerTest {
         .body()
         .asString();
 
-    final ErrorResponse actualErrorResponse = toObject(responseBody, ErrorResponse.class);
+    final ErrorResponse actualErrorResponse = jsonStringToObject(responseBody, ErrorResponse.class);
 
     assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
     verifyNoInteractions(spaceshipMapperMock);
@@ -197,14 +193,14 @@ class SpaceshipControllerTest {
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(spaceshipRequest))
+        .body(objectToJsonString(spaceshipRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body(equalTo(toJsonString(spaceshipResponse)));
+        .body(equalTo(objectToJsonString(spaceshipResponse)));
 
     verify(spaceshipMapperMock).requestToDto(spaceshipRequest);
     verify(spaceshipMapperMock).dtoToResponse(spaceshipDto);
@@ -221,17 +217,43 @@ class SpaceshipControllerTest {
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(toJsonString(spaceshipRequest))
+        .body(objectToJsonString(spaceshipRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(equalTo(toJsonString(expectedErrorResponse)));
+        .body(equalTo(objectToJsonString(expectedErrorResponse)));
 
     verify(spaceshipMapperMock).requestToDto(spaceshipRequest);
     verify(spaceshipServiceMock).updateById(spaceshipDto, reqId);
+  }
+
+  @Test
+  void updateSpaceshipById_invalidRequestBody() {
+    final UUID reqId = spaceshipResponse.getId();
+    final SpaceshipRequest invalidPilotRequest = buildInvalidRequest();
+    final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
+
+    final String responseBody = given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(objectToJsonString(invalidPilotRequest))
+        .when()
+        .put(TEST_API_WITH_ID, reqId)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .extract()
+        .body()
+        .asString();
+
+    final ErrorResponse actualErrorResponse = jsonStringToObject(responseBody, ErrorResponse.class);
+
+    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
+    verifyNoInteractions(spaceshipMapperMock);
+    verifyNoInteractions(spaceshipServiceMock);
   }
 
   @Test
@@ -262,18 +284,8 @@ class SpaceshipControllerTest {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(equalTo(toJsonString(expectedErrorResponse)));
+        .body(equalTo(objectToJsonString(expectedErrorResponse)));
 
     verify(spaceshipServiceMock).deleteById(reqId);
-  }
-
-  @SneakyThrows
-  private String toJsonString(final Object object) {
-    return objectMapper.writeValueAsString(object);
-  }
-
-  @SneakyThrows
-  private <T> T toObject(final String json, final Class<T> clazz) {
-    return objectMapper.readValue(json, clazz);
   }
 }

@@ -30,8 +30,6 @@ public class SpaceshipController {
     this.spaceshipMapper = spaceshipMapper;
   }
 
-  // todo: add readme
-
   @Operation(summary = "Get all spaceships",
       description = "Retrieves all spaceships",
       responses = {
@@ -55,9 +53,9 @@ public class SpaceshipController {
           @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
       })
   @GetMapping("{id}")
-  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable final UUID id) {
+  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
 
-    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.getById(id));
+    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.getById(spaceshipId));
 
     return ResponseEntity.ok(spaceshipResponse);
   }
@@ -66,7 +64,7 @@ public class SpaceshipController {
       description = "Adds a new spaceship to the hangar",
       responses = {
           @ApiResponse(responseCode = "200", description = "Successfully added a new spaceship"),
-          @ApiResponse(responseCode = "400", description = "Spaceship with provided name already exists")
+          @ApiResponse(responseCode = "400", description = "Request data validation failed")
       })
   @PostMapping
   public ResponseEntity<SpaceshipResponse> addSpaceship(@Valid @RequestBody final SpaceshipRequest spaceshipRequest) {
@@ -81,18 +79,18 @@ public class SpaceshipController {
       description = "Updates details of existing spaceship based on given Id",
       responses = {
           @ApiResponse(responseCode = "200", description = "Successfully updated the requested spaceship"),
+          @ApiResponse(responseCode = "400", description = "Request data validation failed"),
           @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
       })
   @PutMapping("{id}")
   public ResponseEntity<SpaceshipResponse> updateSpaceshipById(
-      @NotBlank @PathVariable final UUID id,
+      @NotBlank @PathVariable("id") final UUID spaceshipId,
       @Valid @RequestBody final SpaceshipRequest spaceshipRequest
   ) {
 
     final SpaceshipDto spaceshipDtoUpdate = spaceshipMapper.requestToDto(spaceshipRequest);
     final SpaceshipResponse updatedSpaceshipResponse = spaceshipMapper.dtoToResponse(
-        spaceshipService.updateById(spaceshipDtoUpdate, id)
-    );
+        spaceshipService.updateById(spaceshipDtoUpdate, spaceshipId));
 
     return ResponseEntity.ok(updatedSpaceshipResponse);
   }
@@ -104,9 +102,9 @@ public class SpaceshipController {
           @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
       })
   @DeleteMapping("{id}")
-  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable final UUID id) {
+  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
 
-    spaceshipService.deleteById(id);
+    spaceshipService.deleteById(spaceshipId);
 
     return ResponseEntity.noContent().build();
   }

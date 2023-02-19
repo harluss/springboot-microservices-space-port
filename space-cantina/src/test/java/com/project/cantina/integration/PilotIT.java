@@ -1,9 +1,9 @@
-package com.project.hangar.integration;
+package com.project.cantina.integration;
 
-import com.project.hangar.common.BaseIT;
-import com.project.hangar.dto.SpaceshipRequest;
-import com.project.hangar.entity.SpaceshipEntity;
-import com.project.hangar.repository.SpaceshipRepository;
+import com.project.cantina.common.BaseIT;
+import com.project.cantina.dto.PilotRequest;
+import com.project.cantina.entity.PilotEntity;
+import com.project.cantina.repository.PilotRepository;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,36 +17,36 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static com.project.hangar.common.Constants.buildRequest;
+import static com.project.cantina.common.Constants.buildRequest;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SpaceshipIT extends BaseIT {
+class PilotIT extends BaseIT {
 
-  private static final String TEST_API = "/api/spaceships";
+  private static final String TEST_API = "/api/pilots";
 
-  private static final String TEST_API_WITH_ID = "/api/spaceships/{id}";
+  private static final String TEST_API_WITH_ID = "/api/pilots/{id}";
 
-  private List<SpaceshipEntity> spaceshipsBefore;
+  private List<PilotEntity> pilotsBefore;
 
   @Autowired
   private MockMvc mockMvc;
 
   @Autowired
-  private SpaceshipRepository spaceshipRepository;
+  private PilotRepository pilotRepository;
 
   @BeforeEach
   void setUp() {
     RestAssuredMockMvc.mockMvc(mockMvc);
-    spaceshipsBefore = spaceshipRepository.findAll();
+    pilotsBefore = pilotRepository.findAll();
   }
 
   @Test
   void getSpaceships_happyPath() {
 
-    final List<SpaceshipEntity> actual = given()
+    final List<PilotEntity> actual = given()
         .when()
         .get(TEST_API)
         .then()
@@ -58,14 +58,14 @@ class SpaceshipIT extends BaseIT {
         .as(new TypeRef<>() {
         });
 
-    assertThat(actual).hasSize(spaceshipsBefore.size());
+    assertThat(actual).hasSize(pilotsBefore.size());
   }
 
   @Test
   void getSpaceshipById_happyPath() {
-    final SpaceshipEntity expected = spaceshipsBefore.get(0);
+    final PilotEntity expected = pilotsBefore.get(0);
 
-    final SpaceshipEntity actual = given()
+    final PilotEntity actual = given()
         .when()
         .get(TEST_API_WITH_ID, expected.getId())
         .then()
@@ -82,9 +82,9 @@ class SpaceshipIT extends BaseIT {
 
   @Test
   void addSpaceship_happyPath() {
-    final SpaceshipRequest request = buildRequest();
+    final PilotRequest request = buildRequest();
 
-    final SpaceshipEntity actual = given()
+    final PilotEntity actual = given()
         .contentType(MediaType.APPLICATION_JSON)
         .body(objectToJsonString(request))
         .when()
@@ -98,21 +98,21 @@ class SpaceshipIT extends BaseIT {
         .as(new TypeRef<>() {
         });
 
-    final List<SpaceshipEntity> spaceshipsAfter = spaceshipRepository.findAll();
+    final List<PilotEntity> spaceshipsAfter = pilotRepository.findAll();
 
-    assertThat(spaceshipsBefore).doesNotContain(actual);
+    assertThat(pilotsBefore).doesNotContain(actual);
     assertThat(spaceshipsAfter)
         .contains(actual)
-        .hasSize(spaceshipsBefore.size() + 1);
+        .hasSize(pilotsBefore.size() + 1);
     assertThat(request).usingRecursiveComparison().isEqualTo(actual);
   }
 
   @Test
   void updateSpaceshipById_happyPath() {
-    final SpaceshipRequest request = buildRequest();
-    final SpaceshipEntity toBeUpdated = spaceshipsBefore.get(0);
+    final PilotRequest request = buildRequest();
+    final PilotEntity toBeUpdated = pilotsBefore.get(0);
 
-    final SpaceshipEntity actual = given()
+    final PilotEntity actual = given()
         .contentType(MediaType.APPLICATION_JSON)
         .body(objectToJsonString(request))
         .when()
@@ -126,10 +126,10 @@ class SpaceshipIT extends BaseIT {
         .as(new TypeRef<>() {
         });
 
-    final List<SpaceshipEntity> spaceshipsAfter = spaceshipRepository.findAll();
+    final List<PilotEntity> spaceshipsAfter = pilotRepository.findAll();
 
     assertThat(toBeUpdated.getId()).isEqualTo(actual.getId());
-    assertThat(spaceshipsBefore)
+    assertThat(pilotsBefore)
         .contains(toBeUpdated)
         .doesNotContain(actual);
     assertThat(spaceshipsAfter)
@@ -139,7 +139,7 @@ class SpaceshipIT extends BaseIT {
 
   @Test
   void deleteSpaceshipById_happyPath() {
-    final SpaceshipEntity toBeDeleted = spaceshipsBefore.get(0);
+    final PilotEntity toBeDeleted = pilotsBefore.get(0);
 
     given()
         .when()
@@ -149,10 +149,10 @@ class SpaceshipIT extends BaseIT {
         .assertThat()
         .statusCode(HttpStatus.NO_CONTENT.value());
 
-    final List<SpaceshipEntity> spaceshipsAfter = spaceshipRepository.findAll();
+    final List<PilotEntity> spaceshipsAfter = pilotRepository.findAll();
 
     assertThat(spaceshipsAfter)
         .doesNotContain(toBeDeleted)
-        .hasSize(spaceshipsBefore.size() - 1);
+        .hasSize(pilotsBefore.size() - 1);
   }
 }
