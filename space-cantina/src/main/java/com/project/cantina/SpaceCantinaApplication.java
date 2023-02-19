@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "Space Port - Cantina API", version = "1.0",
-    description = "Information about spaceships' crews currently enjoying (or not) their downtime in the cantina"))
+    description = "Information about spaceships' pilots currently enjoying (or not) their downtime in the cantina"))
 public class SpaceCantinaApplication {
 
   public static void main(final String[] args) {

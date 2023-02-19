@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS crewmen
+CREATE TABLE IF NOT EXISTS pilots
 (
   id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name       text NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS crewmen
   weapons    text[]
 );
 
-INSERT INTO crewmen (name, species, profession, weapons)
+INSERT INTO pilots (name, species, profession, weapons)
 VALUES ('Han Solo', 'Human', 'Smuggler', ARRAY ['Blaster pistol']),
        ('Chewbacca', 'Wookiee', 'Smuggler', ARRAY ['Bowcaster']),
        ('Boba Fett', 'Human', 'Bounty hunter', ARRAY ['Blaster', 'Flame thrower']),
