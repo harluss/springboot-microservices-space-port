@@ -20,8 +20,8 @@ class SpaceshipMapperImplTest {
 
   @Test
   void clientResponseToDto() {
-    final SpaceshipClientResponse clientResponse = buildClientResponse();
-    final SpaceshipDto expected = buildDto();
+    final SpaceshipClientResponse clientResponse = buildSpaceshipClientResponse();
+    final SpaceshipDto expected = buildSpaceshipDto();
 
     final SpaceshipDto actual = spaceshipMapper.clientResponseToDto(clientResponse);
 
@@ -30,8 +30,8 @@ class SpaceshipMapperImplTest {
 
   @Test
   void dtoToResponse() {
-    final SpaceshipDto dto = buildDto();
-    final SpaceshipResponse expected = buildResponse();
+    final SpaceshipDto dto = buildSpaceshipDto();
+    final SpaceshipResponse expected = buildSpaceshipResponse();
 
     final SpaceshipResponse actual = spaceshipMapper.dtoToResponse(dto);
 

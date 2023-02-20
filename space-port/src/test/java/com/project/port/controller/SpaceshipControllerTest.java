@@ -20,8 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.List;
 
-import static com.project.port.common.Constant.buildDto;
-import static com.project.port.common.Constant.buildResponse;
+import static com.project.port.common.Constant.buildSpaceshipDto;
+import static com.project.port.common.Constant.buildSpaceshipResponse;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
@@ -48,8 +48,8 @@ class SpaceshipControllerTest extends TestUtil {
   @BeforeEach
   void setUp() {
     RestAssuredMockMvc.mockMvc(mockMvc);
-    spaceshipDto = buildDto();
-    spaceshipResponse = buildResponse();
+    spaceshipDto = buildSpaceshipDto();
+    spaceshipResponse = buildSpaceshipResponse();
   }
 
   @AfterEach

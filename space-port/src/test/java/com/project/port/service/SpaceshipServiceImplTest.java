@@ -1,8 +1,10 @@
 package com.project.port.service;
 
+import com.project.port.client.PilotClient;
 import com.project.port.client.SpaceshipClient;
 import com.project.port.dto.SpaceshipClientResponse;
 import com.project.port.dto.SpaceshipDto;
+import com.project.port.mapper.PilotMapper;
 import com.project.port.mapper.SpaceshipMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +17,8 @@ import org.mockito.quality.Strictness;
 
 import java.util.List;
 
-import static com.project.port.common.Constant.buildClientResponse;
-import static com.project.port.common.Constant.buildDto;
+import static com.project.port.common.Constant.buildSpaceshipClientResponse;
+import static com.project.port.common.Constant.buildSpaceshipDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -30,6 +32,12 @@ class SpaceshipServiceImplTest {
   @Mock
   private SpaceshipMapper spaceshipMapperMock;
 
+  @Mock
+  private PilotClient pilotClientMock;
+
+  @Mock
+  private PilotMapper pilotMapperMock;
+
   private SpaceshipServiceImpl spaceshipService;
 
   private SpaceshipDto spaceshipDto;
@@ -38,9 +46,9 @@ class SpaceshipServiceImplTest {
 
   @BeforeEach
   void setUp() {
-    spaceshipService = new SpaceshipServiceImpl(spaceshipClientMock, spaceshipMapperMock);
-    spaceshipDto = buildDto();
-    spaceshipClientResponse = buildClientResponse();
+    spaceshipService = new SpaceshipServiceImpl(spaceshipClientMock, spaceshipMapperMock, pilotClientMock, pilotMapperMock);
+    spaceshipDto = buildSpaceshipDto();
+    spaceshipClientResponse = buildSpaceshipClientResponse();
   }
 
   @AfterEach
