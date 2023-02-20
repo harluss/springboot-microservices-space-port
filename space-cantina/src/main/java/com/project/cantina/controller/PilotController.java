@@ -9,6 +9,7 @@ import com.project.cantina.service.PilotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Log4j2
+@RequiredArgsConstructor
 @Tag(name = "pilots", description = "pilot operations")
 @RestController
 @RequestMapping("api/pilots")
@@ -27,11 +29,6 @@ public class PilotController {
   private final PilotService pilotService;
 
   private final PilotMapper pilotMapper;
-
-  public PilotController(final PilotService pilotService, final PilotMapper pilotMapper) {
-    this.pilotService = pilotService;
-    this.pilotMapper = pilotMapper;
-  }
 
   @Operation(summary = "Get all pilots",
       description = "Retrieves all pilots",
@@ -106,9 +103,7 @@ public class PilotController {
   ) {
 
     final PilotDto pilotDtoUpdate = pilotMapper.requestToDto(pilotRequest);
-    final PilotResponse updatedPilotResponse = pilotMapper.dtoToResponse(
-        pilotService.updateById(pilotDtoUpdate, pilotId)
-    );
+    final PilotResponse updatedPilotResponse = pilotMapper.dtoToResponse(pilotService.updateById(pilotDtoUpdate, pilotId));
 
     return ResponseEntity.ok(updatedPilotResponse);
   }
