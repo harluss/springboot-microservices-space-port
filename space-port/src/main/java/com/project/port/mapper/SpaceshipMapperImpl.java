@@ -21,8 +21,7 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .classType(response.getClassType())
         .maxSpeed(response.getMaxSpeed())
         .payload(response.getPayload())
-        .crew(response.getCrew())
-        .crewList(response.getCrewList())
+        .crewIds(response.getCrew())
         .armament(response.getArmament())
         .build();
   }
@@ -35,8 +34,7 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .classType(dto.getClassType())
         .maxSpeed(dto.getMaxSpeed())
         .payload(dto.getPayload())
-        .crew(dto.getCrew())
-        .crewList(dto.getCrewListDetails().stream()
+        .crew(dto.getCrew().stream()
             .map(pilotMapper::dtoToResponse)
             .toList())
         .armament(dto.getArmament())

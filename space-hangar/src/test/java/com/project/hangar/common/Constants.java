@@ -27,14 +27,14 @@ public class Constants {
 
   private static final List<String> ARMAMENT = List.of("Laser cannons");
 
-  private static final List<UUID> CREW = Collections.emptyList();
+  private static final List<UUID> CREW_IDS = Collections.emptyList();
 
   public static SpaceshipDto buildDto() {
     return SpaceshipDto.builder()
         .id(ID)
         .name(NAME)
         .classType(CLASS_TYPE)
-        .crew(CREW)
+        .crewIds(CREW_IDS)
         .payload(PAYLOAD)
         .maxSpeed(MAX_SPEED)
         .armament(ARMAMENT)
@@ -46,7 +46,7 @@ public class Constants {
         .id(ID)
         .name(NAME)
         .classType(CLASS_TYPE)
-        .crew(CREW)
+        .crewIds(CREW_IDS)
         .payload(PAYLOAD)
         .maxSpeed(MAX_SPEED)
         .armament(ARMAMENT)
@@ -58,7 +58,7 @@ public class Constants {
         .id(ID)
         .name(NAME)
         .classType(CLASS_TYPE)
-        .crew(CREW)
+        .crewIds(CREW_IDS)
         .payload(PAYLOAD)
         .maxSpeed(MAX_SPEED)
         .armament(ARMAMENT)
@@ -69,7 +69,7 @@ public class Constants {
     return SpaceshipRequest.builder()
         .name(NAME)
         .classType(CLASS_TYPE)
-        .crew(CREW)
+        .crewIds(CREW_IDS)
         .payload(PAYLOAD)
         .maxSpeed(MAX_SPEED)
         .armament(ARMAMENT)
@@ -87,7 +87,7 @@ public class Constants {
         .classType(" ")
         .maxSpeed(20000)
         .armament(List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"))
-        .crew(List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()))
+        .crewIds(List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()))
         .build();
   }
 
@@ -112,7 +112,7 @@ public class Constants {
     errorResponse.addValidationError("payload", "must be less than or equal to 10000");
     errorResponse.addValidationError("classType", "must not be blank");
     errorResponse.addValidationError("name", "must not be blank");
-    errorResponse.addValidationError("crew", "size must be between 0 and 5");
+    errorResponse.addValidationError("crewIds", "size must be between 0 and 5");
     errorResponse.addValidationError("armament", "size must be between 0 and 10");
     errorResponse.addValidationError("maxSpeed", "must be less than or equal to 10000");
 

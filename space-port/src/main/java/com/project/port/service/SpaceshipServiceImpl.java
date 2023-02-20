@@ -36,7 +36,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     log.info(spaceshipDtos.isEmpty() ? "No spaceshipDtos found" : "Spaceships found");
 
     final List<UUID> pilotIds = spaceshipDtos.stream()
-        .map(SpaceshipDto::getCrewList)
+        .map(SpaceshipDto::getCrewIds)
         .flatMap(Collection::stream)
         .toList();
 
@@ -44,7 +44,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
         .map(pilotMapper::clientResponseToDto)
         .toList();
 
-    spaceshipDtos.forEach(s -> s.setCrewListDetails(getCrew(s.getCrewList(), pilotDtos)));
+    spaceshipDtos.forEach(s -> s.setCrew(getCrew(s.getCrewIds(), pilotDtos)));
 
     return spaceshipDtos;
   }

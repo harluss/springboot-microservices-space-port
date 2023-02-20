@@ -32,7 +32,7 @@ public class SpaceshipRequest {
   private Integer maxSpeed;
 
   @Size(max = 5)
-  private List<UUID> crew;
+  private List<UUID> crewIds;
 
   @Size(max = 10)
   private List<String> armament;

@@ -40,7 +40,7 @@ public class Constant {
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
         .crew(SPACESHIP_CREW)
-        .crewList(SPACESHIP_CREW_LIST)
+        .crewIds(SPACESHIP_CREW_LIST)
         .payload(SPACESHIP_PAYLOAD)
         .maxSpeed(SPACESHIP_MAX_SPEED)
         .armament(SPACESHIP_ARMAMENT)

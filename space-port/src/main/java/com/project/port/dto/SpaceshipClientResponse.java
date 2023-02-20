@@ -22,9 +22,7 @@ public class SpaceshipClientResponse {
 
   private Integer payload;
 
-  private Integer crew;
-
-  private List<UUID> crewList;
+  private List<UUID> crew;
 
   private List<String> armament;
 }

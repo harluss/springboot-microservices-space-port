@@ -22,11 +22,9 @@ public class SpaceshipDto {
 
   private Integer payload;
 
-  private Integer crew;
+  private List<UUID> crewIds;
 
-  private List<UUID> crewList;
-
-  private List<PilotDto> crewListDetails;
+  private List<PilotDto> crew;
 
   private List<String> armament;
 }
