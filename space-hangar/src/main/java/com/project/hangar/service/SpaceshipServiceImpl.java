@@ -5,6 +5,7 @@ import com.project.hangar.entity.SpaceshipEntity;
 import com.project.hangar.exception.NotFoundException;
 import com.project.hangar.mapper.SpaceshipMapper;
 import com.project.hangar.repository.SpaceshipRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Log4j2
 @Service
 public class SpaceshipServiceImpl implements SpaceshipService {
@@ -24,11 +26,6 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   private final SpaceshipRepository spaceshipRepository;
 
   private final SpaceshipMapper spaceshipMapper;
-
-  public SpaceshipServiceImpl(final SpaceshipRepository spaceshipRepository, final SpaceshipMapper spaceshipMapper) {
-    this.spaceshipRepository = spaceshipRepository;
-    this.spaceshipMapper = spaceshipMapper;
-  }
 
   @Override
   public List<SpaceshipDto> getAll() {
@@ -59,9 +56,10 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   public SpaceshipDto add(final SpaceshipDto spaceshipDto) {
 
     final SpaceshipEntity savedSpaceship = spaceshipRepository.save(spaceshipMapper.dtoToEntity(spaceshipDto));
-    log.info("Spaceship added: {}", savedSpaceship);
+    final SpaceshipDto savedSpaceshipDto = spaceshipMapper.entityToDto(savedSpaceship);
+    log.info("Spaceship added: {}", savedSpaceshipDto);
 
-    return spaceshipMapper.entityToDto(savedSpaceship);
+    return savedSpaceshipDto;
   }
 
   @Override

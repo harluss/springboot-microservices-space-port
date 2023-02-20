@@ -5,6 +5,7 @@ import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.repository.PilotRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Log4j2
 @Service
 public class PilotServiceImpl implements PilotService {
@@ -24,11 +26,6 @@ public class PilotServiceImpl implements PilotService {
   private final PilotRepository pilotRepository;
 
   private final PilotMapper pilotMapper;
-
-  public PilotServiceImpl(final PilotRepository pilotRepository, final PilotMapper pilotMapper) {
-    this.pilotRepository = pilotRepository;
-    this.pilotMapper = pilotMapper;
-  }
 
   @Override
   public List<PilotDto> getAll() {
@@ -70,9 +67,10 @@ public class PilotServiceImpl implements PilotService {
   public PilotDto add(final PilotDto pilotDto) {
 
     final PilotEntity savedPilot = pilotRepository.save(pilotMapper.dtoToEntity(pilotDto));
-    log.info("Pilot added: {}", savedPilot);
+    final PilotDto savedPilotDto = pilotMapper.entityToDto(savedPilot);
+    log.info("Pilot added: {}", savedPilotDto);
 
-    return pilotMapper.entityToDto(savedPilot);
+    return savedPilotDto;
   }
 
   @Override
