@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Log4j2
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class SpaceshipServiceImpl implements SpaceshipService {
 
   private final SpaceshipClient spaceshipClient;

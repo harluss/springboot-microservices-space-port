@@ -39,12 +39,9 @@ public class SpaceshipEntity {
   @Column(name = "payload", nullable = false, columnDefinition = "integer")
   private Integer payload;
 
-  @Column(name = "crew", nullable = false, columnDefinition = "integer")
-  private Integer crew;
-
-  @Column(name = "crew_list", nullable = true, columnDefinition = "uuid[]")
+  @Column(name = "crew", nullable = true, columnDefinition = "uuid[]")
   @Type(type = "list-array")
-  private List<UUID> crewList;
+  private List<UUID> crew;
 
   @Column(name = "armament", nullable = true, columnDefinition = "text[]")
   @Type(type = "list-array")

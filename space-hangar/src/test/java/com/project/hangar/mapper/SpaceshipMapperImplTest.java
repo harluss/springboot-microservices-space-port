@@ -72,7 +72,7 @@ class SpaceshipMapperImplTest {
         .build();
     final SpaceshipDto updateDto = buildDto().toBuilder()
         .id(null)
-        .crew(5)
+        .maxSpeed(50)
         .payload(100)
         .build();
 
@@ -80,7 +80,7 @@ class SpaceshipMapperImplTest {
 
     assertThat(entity.getName()).isEqualTo(updateDto.getName());
     assertThat(entity.getClassType()).isEqualTo(updateDto.getClassType());
-    assertThat(entity.getCrew()).isEqualTo(updateDto.getCrew());
+    assertThat(entity.getMaxSpeed()).isEqualTo(updateDto.getMaxSpeed());
     assertThat(entity.getPayload()).isEqualTo(updateDto.getPayload());
   }
 }

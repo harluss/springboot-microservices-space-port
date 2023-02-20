@@ -17,7 +17,6 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .classType(dto.getClassType())
         .maxSpeed(dto.getMaxSpeed())
         .crew(dto.getCrew())
-        .crewList(dto.getCrewList())
         .payload(dto.getPayload())
         .armament(dto.getArmament())
         .build();
@@ -31,7 +30,6 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .maxSpeed(request.getMaxSpeed())
         .payload(request.getPayload())
         .crew(request.getCrew())
-        .crewList(request.getCrewList())
         .armament(request.getArmament())
         .build();
   }
@@ -45,7 +43,6 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .payload(entity.getPayload())
         .maxSpeed(entity.getMaxSpeed())
         .crew(entity.getCrew())
-        .crewList(entity.getCrewList())
         .armament(entity.getArmament())
         .build();
   }
@@ -58,7 +55,6 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .payload(dto.getPayload())
         .maxSpeed(dto.getMaxSpeed())
         .crew(dto.getCrew())
-        .crewList(dto.getCrewList())
         .armament(dto.getArmament())
         .build();
   }
@@ -70,7 +66,6 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
     entity.setPayload(dto.getPayload());
     entity.setMaxSpeed(dto.getMaxSpeed());
     entity.setCrew(dto.getCrew());
-    entity.setCrewList(dto.getCrewList());
     entity.setArmament(dto.getArmament());
   }
 }

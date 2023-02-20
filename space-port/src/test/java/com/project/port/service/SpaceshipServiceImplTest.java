@@ -46,7 +46,7 @@ class SpaceshipServiceImplTest {
 
   @BeforeEach
   void setUp() {
-    spaceshipService = new SpaceshipServiceImpl(spaceshipClientMock, spaceshipMapperMock, pilotClientMock, pilotMapperMock);
+    spaceshipService = new SpaceshipServiceImpl(spaceshipClientMock, pilotClientMock, spaceshipMapperMock, pilotMapperMock);
     spaceshipDto = buildSpaceshipDto();
     spaceshipClientResponse = buildSpaceshipClientResponse();
   }
