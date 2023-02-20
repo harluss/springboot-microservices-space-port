@@ -42,6 +42,17 @@ public class PilotServiceImpl implements PilotService {
   }
 
   @Override
+  public List<PilotDto> getAllByIds(final List<UUID> pilotIds) {
+
+    final List<PilotDto> pilotDtos = pilotRepository.findAllByIdIn(pilotIds).stream()
+        .map(pilotMapper::entityToDto)
+        .toList();
+    log.info(pilotDtos.isEmpty() ? "No pilots found" : "Pilots found");
+
+    return pilotDtos;
+  }
+
+  @Override
   public PilotDto getById(final UUID pilotId) {
 
     final PilotDto pilotDto = pilotRepository.findById(pilotId)

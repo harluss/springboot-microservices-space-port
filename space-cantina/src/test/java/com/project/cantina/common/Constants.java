@@ -1,6 +1,7 @@
 package com.project.cantina.common;
 
 import com.project.cantina.dto.PilotDto;
+import com.project.cantina.dto.PilotIdsRequest;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.entity.PilotEntity;
@@ -15,6 +16,8 @@ import java.util.UUID;
 public class Constants {
 
   private static final UUID ID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+
+  private static final UUID ID2 = UUID.fromString("a5eb9b26-3c8e-4f04-8d52-a43871fcc54e");
 
   private static final String NAME = "Darth Vader";
 
@@ -101,5 +104,11 @@ public class Constants {
     errorResponse.addValidationError("weapons", "size must be between 0 and 10");
 
     return errorResponse;
+  }
+
+  public static PilotIdsRequest buildPilotIdsRequest() {
+    return PilotIdsRequest.builder()
+        .pilotUuids(List.of(ID, ID2))
+        .build();
   }
 }

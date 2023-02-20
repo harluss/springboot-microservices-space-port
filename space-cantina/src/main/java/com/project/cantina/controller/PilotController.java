@@ -1,6 +1,7 @@
 package com.project.cantina.controller;
 
 import com.project.cantina.dto.PilotDto;
+import com.project.cantina.dto.PilotIdsRequest;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.mapper.PilotMapper;
@@ -8,6 +9,7 @@ import com.project.cantina.service.PilotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
+@Log4j2
 @Tag(name = "pilots", description = "pilot operations")
 @RestController
 @RequestMapping("api/pilots")
@@ -39,6 +42,21 @@ public class PilotController {
   public ResponseEntity<List<PilotResponse>> getPilots() {
 
     final List<PilotResponse> pilotResponses = pilotService.getAll().stream()
+        .map(pilotMapper::dtoToResponse)
+        .toList();
+
+    return ResponseEntity.ok(pilotResponses);
+  }
+
+  @Operation(summary = "Get all pilots by Ids",
+      description = "Retrieves all pilots based on given Ids",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully retrieved list of pilots")
+      })
+  @PostMapping("/crew")
+  public ResponseEntity<List<PilotResponse>> getPilotsByIds(@Valid @RequestBody final PilotIdsRequest pilotIdsRequest) {
+
+    final List<PilotResponse> pilotResponses = pilotService.getAllByIds(pilotIdsRequest.getPilotUuids()).stream()
         .map(pilotMapper::dtoToResponse)
         .toList();
 

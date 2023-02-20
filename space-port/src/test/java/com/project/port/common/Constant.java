@@ -10,6 +10,8 @@ public class Constant {
 
   private static final UUID ID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
+  private static final UUID ID2 = UUID.fromString("a5eb9b26-3c8e-4f04-8d52-a43871fcc54e");
+
   private static final String SPACESHIP_NAME = "Tie Fighter";
 
   private static final String SPACESHIP_CLASS_TYPE = "Starfighter";
@@ -98,6 +100,12 @@ public class Constant {
         .species(PILOT_SPECIES)
         .profession(PILOT_PROFESSION)
         .weapons(PILOT_WEAPONS)
+        .build();
+  }
+
+  public static PilotClientRequest buildPilotClientRequest() {
+    return PilotClientRequest.builder()
+        .pilotUuids(List.of(ID, ID2))
         .build();
   }
 }

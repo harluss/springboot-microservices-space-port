@@ -26,5 +26,7 @@ public class SpaceshipDto {
 
   private List<UUID> crewList;
 
+  private List<PilotDto> crewListDetails;
+
   private List<String> armament;
 }

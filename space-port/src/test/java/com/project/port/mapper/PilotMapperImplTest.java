@@ -1,10 +1,14 @@
 package com.project.port.mapper;
 
+import com.project.port.dto.PilotClientRequest;
 import com.project.port.dto.PilotClientResponse;
 import com.project.port.dto.PilotDto;
 import com.project.port.dto.PilotResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.UUID;
 
 import static com.project.port.common.Constant.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +38,16 @@ class PilotMapperImplTest {
     final PilotDto dto = buildPilotDto();
 
     final PilotResponse actual = pilotMapper.dtoToResponse(dto);
+
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void uuidsToClientRequest() {
+    final PilotClientRequest expected = buildPilotClientRequest();
+    final List<UUID> uuids = expected.getPilotUuids();
+
+    final PilotClientRequest actual = pilotMapper.uuidsToClientRequest(uuids);
 
     assertThat(actual).isEqualTo(expected);
   }

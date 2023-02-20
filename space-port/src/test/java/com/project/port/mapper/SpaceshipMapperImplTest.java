@@ -5,17 +5,21 @@ import com.project.port.dto.SpaceshipDto;
 import com.project.port.dto.SpaceshipResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static com.project.port.common.Constant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SpaceshipMapperImplTest {
 
+  @Mock
+  private PilotMapper pilotMapperMock;
+
   private SpaceshipMapperImpl spaceshipMapper;
 
   @BeforeEach
   void setUp() {
-    spaceshipMapper = new SpaceshipMapperImpl();
+    spaceshipMapper = new SpaceshipMapperImpl(pilotMapperMock);
   }
 
   @Test

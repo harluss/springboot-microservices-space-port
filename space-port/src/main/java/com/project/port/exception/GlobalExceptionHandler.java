@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   protected ResponseEntity<ErrorResponse> handleUncaught(final Exception exception) {
 
-    log.info(exception.getStackTrace());
+    log.info(exception.getCause());
     final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
 
     return ResponseEntity.internalServerError().body(errorResponse);

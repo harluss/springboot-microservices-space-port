@@ -1,9 +1,13 @@
 package com.project.port.mapper;
 
+import com.project.port.dto.PilotClientRequest;
 import com.project.port.dto.PilotClientResponse;
 import com.project.port.dto.PilotDto;
 import com.project.port.dto.PilotResponse;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public class PilotMapperImpl implements PilotMapper {
@@ -27,6 +31,13 @@ public class PilotMapperImpl implements PilotMapper {
         .species(dto.getSpecies())
         .profession(dto.getProfession())
         .weapons(dto.getWeapons())
+        .build();
+  }
+
+  @Override
+  public PilotClientRequest uuidsToClientRequest(final List<UUID> uuids) {
+    return PilotClientRequest.builder()
+        .pilotUuids(uuids)
         .build();
   }
 }
