@@ -33,7 +33,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     final List<SpaceshipDto> spaceshipDtos = spaceshipRepository.findAll().stream()
         .map(spaceshipMapper::entityToDto)
         .toList();
-    log.info(spaceshipDtos.isEmpty() ? "No spaceships found" : "Spaceships found");
+    log.info("{} Spaceships found", spaceshipDtos.size());
 
     return spaceshipDtos;
   }
@@ -75,7 +75,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     spaceshipMapper.updateEntityWithDto(spaceshipToBeUpdated, spaceshipDtoUpdate);
     final SpaceshipEntity updatedSpaceshipEntity = spaceshipRepository.save(spaceshipToBeUpdated);
     final SpaceshipDto updatedSpaceshipDto = spaceshipMapper.entityToDto(updatedSpaceshipEntity);
-    log.info("Spaceship updated: {}", updatedSpaceshipDto);
+    log.info("Spaceship with id {} updated: {}", updatedSpaceshipDto.getId(), updatedSpaceshipDto);
 
     return updatedSpaceshipDto;
   }

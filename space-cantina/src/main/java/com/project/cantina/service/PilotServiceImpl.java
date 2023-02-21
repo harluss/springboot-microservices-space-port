@@ -33,7 +33,7 @@ public class PilotServiceImpl implements PilotService {
     final List<PilotDto> pilotDtos = pilotRepository.findAll().stream()
         .map(pilotMapper::entityToDto)
         .toList();
-    log.info(pilotDtos.isEmpty() ? "No pilots found" : "Pilots found");
+    log.info("{} Pilots found", pilotDtos.size());
 
     return pilotDtos;
   }
@@ -44,7 +44,7 @@ public class PilotServiceImpl implements PilotService {
     final List<PilotDto> pilotDtos = pilotRepository.findAllByIdIn(pilotIds).stream()
         .map(pilotMapper::entityToDto)
         .toList();
-    log.info(pilotDtos.isEmpty() ? "No pilots found" : "Pilots found");
+    log.info("{} Pilots found", pilotDtos.size());
 
     return pilotDtos;
   }
@@ -85,7 +85,7 @@ public class PilotServiceImpl implements PilotService {
     pilotMapper.updateEntityWithDto(pilotToBeUpdated, pilotDtoUpdate);
     final PilotEntity updatedPilotEntity = pilotRepository.save(pilotToBeUpdated);
     final PilotDto updatedPilotDto = pilotMapper.entityToDto(updatedPilotEntity);
-    log.info("Pilot updated: {}", updatedPilotDto);
+    log.info("Pilot with id {} updated: {}", updatedPilotDto.getId(), updatedPilotDto);
 
     return updatedPilotDto;
   }

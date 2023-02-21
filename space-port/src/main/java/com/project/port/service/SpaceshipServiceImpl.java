@@ -33,27 +33,28 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     final List<SpaceshipDto> spaceshipDtos = spaceshipClient.getSpaceships().stream()
         .map(spaceshipMapper::clientResponseToDto)
         .toList();
-    log.info(spaceshipDtos.isEmpty() ? "No spaceshipDtos found" : "Spaceships found");
+    log.info("{} Spaceships found", spaceshipDtos.size());
 
-    final List<UUID> pilotIds = getPilotIds(spaceshipDtos);
+    final List<UUID> pilotIds = getPilotIdsFromEachSpaceships(spaceshipDtos);
 
     final List<PilotDto> pilotDtos = pilotClient.getPilotsByIds(pilotMapper.idsToClientRequest(pilotIds)).stream()
         .map(pilotMapper::clientResponseToDto)
         .toList();
+    log.info("{} Pilots found", pilotDtos.size());
 
-    spaceshipDtos.forEach(spaceship -> spaceship.setCrew(getCrew(spaceship.getCrewIds(), pilotDtos)));
+    spaceshipDtos.forEach(spaceship -> spaceship.setCrew(getSpaceshipCrewFromListOfPilots(spaceship.getCrewIds(), pilotDtos)));
 
     return spaceshipDtos;
   }
 
-  private List<UUID> getPilotIds(final List<SpaceshipDto> spaceshipDtos) {
+  private List<UUID> getPilotIdsFromEachSpaceships(final List<SpaceshipDto> spaceshipDtos) {
     return spaceshipDtos.stream()
         .map(SpaceshipDto::getCrewIds)
         .flatMap(Collection::stream)
         .toList();
   }
 
-  private List<PilotDto> getCrew(final List<UUID> ids, final List<PilotDto> pilotDtos) {
+  private List<PilotDto> getSpaceshipCrewFromListOfPilots(final List<UUID> ids, final List<PilotDto> pilotDtos) {
     return pilotDtos.stream()
         .filter(pilot -> ids.contains(pilot.getId()))
         .toList();
