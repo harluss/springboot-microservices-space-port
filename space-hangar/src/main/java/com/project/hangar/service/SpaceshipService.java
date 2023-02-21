@@ -6,6 +6,9 @@ import com.project.hangar.exception.NotFoundException;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Provides methods for performing different operations on Spaceship objects.
+ */
 public interface SpaceshipService {
 
   /**

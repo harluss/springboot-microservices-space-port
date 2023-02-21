@@ -6,6 +6,9 @@ import com.project.cantina.exception.NotFoundException;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Provides methods for performing different operations on Pilot objects.
+ */
 public interface PilotService {
 
   /**
