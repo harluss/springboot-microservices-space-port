@@ -3,7 +3,6 @@ package com.project.cantina.common;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
@@ -16,10 +15,15 @@ public class BaseIT extends TestUtil {
 
   private static final String SQL_SCRIPT_FILE = "schema.sql";
 
-  @Container
-  static final PostgreSQLContainer<?> POSTGRES_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse(POSTGRES_IMAGE))
-      .withDatabaseName(DB_NAME)
-      .withInitScript(SQL_SCRIPT_FILE);
+  static final PostgreSQLContainer<?> POSTGRES_CONTAINER;
+
+  static {
+    POSTGRES_CONTAINER = new PostgreSQLContainer<>(DockerImageName.parse(POSTGRES_IMAGE))
+        .withDatabaseName(DB_NAME)
+        .withInitScript(SQL_SCRIPT_FILE);
+
+    POSTGRES_CONTAINER.start();
+  }
 
   @DynamicPropertySource
   static void setDatasourceProperties(final DynamicPropertyRegistry propertyRegistry) {
