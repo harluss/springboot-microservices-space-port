@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PilotMapperImpl implements PilotMapper {
-
+  
   @Override
   public PilotDto entityToDto(final PilotEntity entity) {
     return PilotDto.builder()
