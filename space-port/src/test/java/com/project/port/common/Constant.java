@@ -10,13 +10,9 @@ public class Constant {
 
   private static final UUID ID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
-  private static final UUID ID2 = UUID.fromString("a5eb9b26-3c8e-4f04-8d52-a43871fcc54e");
-
   private static final String SPACESHIP_NAME = "Tie Fighter";
 
   private static final String SPACESHIP_CLASS_TYPE = "Starfighter";
-
-  private static final int SPACESHIP_CREW = 1;
 
   private static final int SPACESHIP_PAYLOAD = 10;
 
@@ -24,7 +20,7 @@ public class Constant {
 
   private static final List<String> SPACESHIP_ARMAMENT = List.of("Laser cannons");
 
-  private static final List<UUID> SPACESHIP_CREW_LIST = Collections.emptyList();
+  private static final List<UUID> SPACESHIP_CREW_IDS = Collections.emptyList();
 
   private static final String PILOT_NAME = "Darth Vader";
 
@@ -39,8 +35,8 @@ public class Constant {
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
-        .crew(SPACESHIP_CREW)
-        .crewIds(SPACESHIP_CREW_LIST)
+        .crew(List.of(buildPilotDto()))
+        .crewIds(List.of(ID))
         .payload(SPACESHIP_PAYLOAD)
         .maxSpeed(SPACESHIP_MAX_SPEED)
         .armament(SPACESHIP_ARMAMENT)
@@ -52,8 +48,7 @@ public class Constant {
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
-        .crew(SPACESHIP_CREW)
-        .crewList(SPACESHIP_CREW_LIST)
+        .crew(List.of(buildPilotResponse()))
         .payload(SPACESHIP_PAYLOAD)
         .maxSpeed(SPACESHIP_MAX_SPEED)
         .armament(SPACESHIP_ARMAMENT)
@@ -65,8 +60,7 @@ public class Constant {
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
-        .crew(SPACESHIP_CREW)
-        .crewList(SPACESHIP_CREW_LIST)
+        .crewIds(List.of(ID))
         .payload(SPACESHIP_PAYLOAD)
         .maxSpeed(SPACESHIP_MAX_SPEED)
         .armament(SPACESHIP_ARMAMENT)
@@ -105,7 +99,7 @@ public class Constant {
 
   public static PilotClientRequest buildPilotClientRequest() {
     return PilotClientRequest.builder()
-        .pilotUuids(List.of(ID, ID2))
+        .pilotIds(List.of(ID))
         .build();
   }
 }

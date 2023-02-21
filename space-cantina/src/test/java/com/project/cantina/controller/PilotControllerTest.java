@@ -105,7 +105,7 @@ class PilotControllerTest extends TestUtil {
   @Test
   void getPilotsByIds() {
     final PilotIdsRequest pilotIdsRequest = buildPilotIdsRequest();
-    when(pilotServiceMock.getAllByIds(pilotIdsRequest.getPilotUuids())).thenReturn(List.of(pilotDto));
+    when(pilotServiceMock.getAllByIds(pilotIdsRequest.getPilotIds())).thenReturn(List.of(pilotDto));
     when(pilotMapperMock.dtoToResponse(pilotDto)).thenReturn(pilotResponse);
 
     given()
@@ -119,7 +119,7 @@ class PilotControllerTest extends TestUtil {
         .statusCode(HttpStatus.OK.value())
         .body(equalTo(objectToJsonString(List.of(pilotDto))));
 
-    verify(pilotServiceMock).getAllByIds(pilotIdsRequest.getPilotUuids());
+    verify(pilotServiceMock).getAllByIds(pilotIdsRequest.getPilotIds());
     verify(pilotMapperMock).dtoToResponse(pilotDto);
   }
 

@@ -14,6 +14,5 @@ public interface PilotMapper {
 
   PilotResponse dtoToResponse(PilotDto dto);
 
-  PilotClientRequest uuidsToClientRequest(List<UUID> uuids);
-
+  PilotClientRequest idsToClientRequest(List<UUID> ids);
 }

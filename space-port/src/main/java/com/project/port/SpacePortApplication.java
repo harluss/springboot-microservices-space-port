@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "Space Port - Port API", version = "1.0",
-    description = "Information about spaceships and their pilots currently enjoying (or not) their downtime in the port"))
+    description = "Information about spaceships and their crews currently enjoying (or not) their downtime at the space port"))
 @EnableFeignClients
 public class SpacePortApplication {
 

@@ -43,11 +43,11 @@ class PilotMapperImplTest {
   }
 
   @Test
-  void uuidsToClientRequest() {
+  void idsToClientRequest() {
     final PilotClientRequest expected = buildPilotClientRequest();
-    final List<UUID> uuids = expected.getPilotUuids();
+    final List<UUID> ids = expected.getPilotIds();
 
-    final PilotClientRequest actual = pilotMapper.uuidsToClientRequest(uuids);
+    final PilotClientRequest actual = pilotMapper.idsToClientRequest(ids);
 
     assertThat(actual).isEqualTo(expected);
   }

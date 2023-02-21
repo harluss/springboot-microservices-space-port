@@ -10,5 +10,5 @@ import java.util.UUID;
 @Builder
 public class PilotClientRequest {
 
-  private List<UUID> pilotUuids;
+  private List<UUID> pilotIds;
 }

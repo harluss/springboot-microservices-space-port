@@ -108,7 +108,7 @@ public class Constants {
 
   public static PilotIdsRequest buildPilotIdsRequest() {
     return PilotIdsRequest.builder()
-        .pilotUuids(List.of(ID, ID2))
+        .pilotIds(List.of(ID, ID2))
         .build();
   }
 }

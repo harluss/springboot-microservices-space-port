@@ -21,7 +21,7 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
         .classType(response.getClassType())
         .maxSpeed(response.getMaxSpeed())
         .payload(response.getPayload())
-        .crewIds(response.getCrew())
+        .crewIds(response.getCrewIds())
         .armament(response.getArmament())
         .build();
   }

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Value
-@Jacksonized
 @Builder
+@Jacksonized
 public class PilotIdsRequest {
 
-  private List<UUID> pilotUuids;
+  private List<UUID> pilotIds;
 }

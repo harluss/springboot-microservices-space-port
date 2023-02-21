@@ -35,9 +35,9 @@ public class PilotMapperImpl implements PilotMapper {
   }
 
   @Override
-  public PilotClientRequest uuidsToClientRequest(final List<UUID> uuids) {
+  public PilotClientRequest idsToClientRequest(final List<UUID> ids) {
     return PilotClientRequest.builder()
-        .pilotUuids(uuids)
+        .pilotIds(ids)
         .build();
   }
 }

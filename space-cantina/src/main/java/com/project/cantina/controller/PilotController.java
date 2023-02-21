@@ -51,7 +51,7 @@ public class PilotController {
   @PostMapping("/crew")
   public ResponseEntity<List<PilotResponse>> getPilotsByIds(@Valid @RequestBody final PilotIdsRequest pilotIdsRequest) {
 
-    final List<PilotResponse> pilotResponses = pilotService.getAllByIds(pilotIdsRequest.getPilotUuids()).stream()
+    final List<PilotResponse> pilotResponses = pilotService.getAllByIds(pilotIdsRequest.getPilotIds()).stream()
         .map(pilotMapper::dtoToResponse)
         .toList();
 
