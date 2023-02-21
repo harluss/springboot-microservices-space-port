@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Provides methods for REST calls to Cantina microservice
  */
-@FeignClient(name = "pilots", url = "localhost:8081")
+@FeignClient(name = "${feign.clients.cantina.name}", path = "${feign.clients.cantina.url}")
 public interface PilotClient {
 
   /**
@@ -20,6 +20,6 @@ public interface PilotClient {
    * @param pilotIClientRequest pilot client request containing list of pilot Ids
    * @return list of pilot responses from a client
    */
-  @PostMapping("/api/v1/pilots/crew")
+  @PostMapping("/crew")
   List<PilotClientResponse> getPilotsByIds(@RequestBody PilotClientRequest pilotIClientRequest);
 }
