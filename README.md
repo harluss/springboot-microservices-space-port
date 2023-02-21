@@ -14,9 +14,17 @@ to store information about Pilots.
 ## Table of Contents
 
 * [Features](#features)
-  * [Sample spaceship JSON](#sample-spaceship-json)
-  * [Sample pilot JSON](#sample-pilot-json)
-  * [Sample error JSON](#sample-error)
+  * [Hangar microservice](#hangar-microservice)
+    * [API](#api)
+    * [Sample spaceship JSON](#sample-spaceship-response)
+  * [Cantina microservice](#cantina-microservice)
+    * [API](#api-1)
+    * [Sample pilot JSON](#sample-pilot-response)
+  * [Port microservice](#port-microservice)
+    * [API](#api-2)
+    * [Sample spaceship JSON](#sample-spaceship-response)
+  * [Common](#common)
+    * [Sample error JSON](#sample-error)
 * [Setup](#setup)
   * [Run locally](#run-locally)
   * [APIs and Swagger](#apis-and-swagger)
@@ -34,40 +42,79 @@ to store information about Pilots.
 - Integration tests with Testcontainers
 - Swagger documentation
 
-### Sample spaceship JSON:
+### Hangar microservice
+
+#### API
+
+```
+GET     /api/v1/spaceships
+GET     /api/v1/spaceships/{id}
+POST    /api/v1/spaceships
+PUT     /api/v1/spaceships/{id}
+DELETE  /api/v1/spaceships/{id}
+```
+
+#### Sample spaceship response
 
 ```json
-{
-  "id": "9a6a679d-d580-4a08-923b-90da3533874d",
-  "name": "Razor Crest",
-  "maxSpeed": 800,
-  "payload": 70,
-  "crew": 2,
-  "crewList": [],
-  "armament": [
-    "Heavy laser cannons"
+ {
+  "id": "9e075e25-3bd8-466e-b978-cf38a07ff85b",
+  "name": "Millennium Falcon",
+  "maxSpeed": 1200,
+  "payload": 100,
+  "crewIds": [
+    "8ed6e335-56cb-4512-b1fb-5a55faa1057c",
+    "e1d4e41b-c72e-4fb7-b3bd-6b86e96b20f1"
   ],
-  "class": "Gunship"
+  "armament": [
+    "Quad laser cannons",
+    "Concussion missile tubes"
+  ],
+  "class": "Light freighter"
 }
 ```
 
-### Sample pilot JSON:
+### Cantina microservice
+
+#### API
+
+```
+GET     /api/v1/pilots
+GET     /api/v1/pilots/{id}
+POST    /api/v1/pilots
+PUT     /api/v1/pilots/{id}
+DELETE  /api/v1/pilots/{id}
+```
+
+#### Sample pilot response
 
 ```json
-{
-  "id": "c77821c7-6b82-4d43-9837-2f7768610f45",
-  "name": "Mando",
-  "species": "Human",
+    {
+  "id": "58ce4ada-ecac-454d-abfe-1a7ed8ae9ccf",
+  "name": "Greedo",
+  "species": "Rodian",
   "profession": "Bounty hunter",
   "weapons": [
-    "IB-94 blaster pistol",
-    "Beskar spear",
-    "Darksaber"
+    "Blaster pistol"
   ]
 }
 ```
 
-### Sample error JSON:
+### Port microservice
+
+#### API
+
+```
+GET     /api/v1/spaceships
+```
+
+#### Sample spaceship response
+
+TBC
+
+### Common
+
+#### Sample error JSON:
 
 ```json
 {
@@ -104,7 +151,7 @@ Start the application in your IDE.
 Spaceship APIs are exposed at:
 
 ```
-http://localhost:8080/api/spaceships
+http://localhost:8080/api/v1/spaceships
 ```
 
 Swagger UI is available at:
@@ -116,7 +163,7 @@ http://localhost:8080
 Pilot APIs are exposed at:
 
 ```
-http://localhost:8081/api/pilots
+http://localhost:8081/api/v1/pilots
 ```
 
 Swagger UI is available at:

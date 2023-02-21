@@ -33,11 +33,11 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(PilotController.class)
 class PilotControllerTest extends TestUtil {
 
-  private static final String TEST_API = "/api/pilots";
+  private static final String TEST_API = "/api/v1/pilots";
 
-  private static final String TEST_API_WITH_ID = "/api/pilots/{id}";
+  private static final String TEST_API_WITH_ID = "/api/v1/pilots/{id}";
 
-  private static final String TEST_API_CREW = "/api/pilots/crew";
+  private static final String TEST_API_CREW = "/api/v1/pilots/crew";
 
   @Autowired
   private MockMvc mockMvc;

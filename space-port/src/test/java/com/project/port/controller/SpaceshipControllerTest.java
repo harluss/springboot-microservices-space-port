@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 @MockitoSettings(strictness = Strictness.WARN)
 class SpaceshipControllerTest extends TestUtil {
 
-  private static final String TEST_API = "/api/spaceships";
+  private static final String TEST_API = "/api/v1/spaceships";
 
   @Autowired
   private MockMvc mockMvc;

@@ -32,9 +32,9 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(SpaceshipController.class)
 class SpaceshipControllerTest extends TestUtil {
 
-  private static final String TEST_API = "/api/spaceships";
+  private static final String TEST_API = "/api/v1/spaceships";
 
-  private static final String TEST_API_WITH_ID = "/api/spaceships/{id}";
+  private static final String TEST_API_WITH_ID = "/api/v1/spaceships/{id}";
 
   @Autowired
   private MockMvc mockMvc;

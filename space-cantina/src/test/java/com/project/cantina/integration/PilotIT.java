@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PilotIT extends BaseIT {
 
-  private static final String TEST_API = "/api/pilots";
+  private static final String TEST_API = "/api/v1/pilots";
 
-  private static final String TEST_API_WITH_ID = "/api/pilots/{id}";
+  private static final String TEST_API_WITH_ID = "/api/v1/pilots/{id}";
 
   private List<PilotEntity> pilotsBefore;
 

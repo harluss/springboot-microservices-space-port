@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SpaceshipIT extends BaseIT {
 
-  private static final String TEST_API = "/api/spaceships";
+  private static final String TEST_API = "/api/v1/spaceships";
 
-  private static final String TEST_API_WITH_ID = "/api/spaceships/{id}";
+  private static final String TEST_API_WITH_ID = "/api/v1/spaceships/{id}";
 
   private List<SpaceshipEntity> spaceshipsBefore;
 

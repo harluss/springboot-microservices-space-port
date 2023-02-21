@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Tag(name = "spaceships", description = "spaceships operations")
 @RestController
-@RequestMapping("api/spaceships")
+@RequestMapping("api/v1/spaceships")
 public class SpaceshipController {
 
   private final SpaceshipService spaceshipService;

@@ -20,6 +20,6 @@ public interface PilotClient {
    * @param pilotIClientRequest pilot client request containing list of pilot Ids
    * @return list of pilot responses from a client
    */
-  @PostMapping("/api/pilots/crew")
+  @PostMapping("/api/v1/pilots/crew")
   List<PilotClientResponse> getPilotsByIds(@RequestBody PilotClientRequest pilotIClientRequest);
 }

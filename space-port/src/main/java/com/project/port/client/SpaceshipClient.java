@@ -17,6 +17,6 @@ public interface SpaceshipClient {
    *
    * @return list of spaceships from a client
    */
-  @GetMapping("/api/spaceships")
+  @GetMapping("/api/v1/spaceships")
   List<SpaceshipClientResponse> getSpaceships();
 }

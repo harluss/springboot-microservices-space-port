@@ -21,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Tag(name = "pilots", description = "pilot operations")
 @RestController
-@RequestMapping("api/pilots")
+@RequestMapping("api/v1/pilots")
 public class PilotController {
 
   private final PilotService pilotService;
