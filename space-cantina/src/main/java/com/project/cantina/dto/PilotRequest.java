@@ -2,6 +2,7 @@ package com.project.cantina.dto;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Value
 @Builder
+@Jacksonized
 public class PilotRequest {
 
   @NotBlank

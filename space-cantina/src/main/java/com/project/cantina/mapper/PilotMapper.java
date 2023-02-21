@@ -5,6 +5,9 @@ import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.entity.PilotEntity;
 
+/**
+ * Provides methods for converting between different types of Pilot objects.
+ */
 public interface PilotMapper {
 
   /**

@@ -5,6 +5,9 @@ import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.dto.SpaceshipResponse;
 import com.project.hangar.entity.SpaceshipEntity;
 
+/**
+ * Provides methods for converting between different types of Spaceship objects.
+ */
 public interface SpaceshipMapper {
 
   /**
