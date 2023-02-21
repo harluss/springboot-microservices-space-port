@@ -11,18 +11,20 @@
   </parent>
 
   <groupId>com.project</groupId>
-  <artifactId>space-port</artifactId>
+  <artifactId>space</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
     <module>space-hangar</module>
     <module>space-cantina</module>
+    <module>space-port</module>
   </modules>
 
   <properties>
     <java.version>17</java.version>
     <hibernate-types-55.version>2.21.1</hibernate-types-55.version>
+    <spring-cloud-dependencies.version>2021.0.5</spring-cloud-dependencies.version>
     <spring-mock-mvc.version>5.3.0</spring-mock-mvc.version>
     <springdoc-openapi-ui.version>1.6.14</springdoc-openapi-ui.version>
     <testcontainers.version>1.17.6</testcontainers.version>
@@ -38,6 +40,14 @@
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers-bom</artifactId>
         <version>${testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud-dependencies.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -74,11 +84,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
     <dependency>

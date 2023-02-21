@@ -8,6 +8,7 @@ import com.project.hangar.service.SpaceshipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Tag(name = "spaceships", description = "spaceships operations")
 @RestController
 @RequestMapping("api/spaceships")
@@ -24,11 +26,6 @@ public class SpaceshipController {
   private final SpaceshipService spaceshipService;
 
   private final SpaceshipMapper spaceshipMapper;
-
-  public SpaceshipController(final SpaceshipService spaceshipService, final SpaceshipMapper spaceshipMapper) {
-    this.spaceshipService = spaceshipService;
-    this.spaceshipMapper = spaceshipMapper;
-  }
 
   @Operation(summary = "Get all spaceships",
       description = "Retrieves all spaceships",

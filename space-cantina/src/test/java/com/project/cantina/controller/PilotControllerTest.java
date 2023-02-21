@@ -2,6 +2,7 @@ package com.project.cantina.controller;
 
 import com.project.cantina.common.TestUtil;
 import com.project.cantina.dto.PilotDto;
+import com.project.cantina.dto.PilotIdsRequest;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.exception.ErrorResponse;
@@ -35,6 +36,8 @@ class PilotControllerTest extends TestUtil {
   private static final String TEST_API = "/api/pilots";
 
   private static final String TEST_API_WITH_ID = "/api/pilots/{id}";
+
+  private static final String TEST_API_CREW = "/api/pilots/crew";
 
   @Autowired
   private MockMvc mockMvc;
@@ -97,6 +100,27 @@ class PilotControllerTest extends TestUtil {
 
     verify(pilotServiceMock).getAll();
     verifyNoInteractions(pilotMapperMock);
+  }
+
+  @Test
+  void getPilotsByIds() {
+    final PilotIdsRequest pilotIdsRequest = buildPilotIdsRequest();
+    when(pilotServiceMock.getAllByIds(pilotIdsRequest.getPilotIds())).thenReturn(List.of(pilotDto));
+    when(pilotMapperMock.dtoToResponse(pilotDto)).thenReturn(pilotResponse);
+
+    given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(objectToJsonString(pilotIdsRequest))
+        .when()
+        .post(TEST_API_CREW)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+        .body(equalTo(objectToJsonString(List.of(pilotDto))));
+
+    verify(pilotServiceMock).getAllByIds(pilotIdsRequest.getPilotIds());
+    verify(pilotMapperMock).dtoToResponse(pilotDto);
   }
 
   @Test
