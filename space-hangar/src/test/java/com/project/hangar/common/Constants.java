@@ -8,7 +8,6 @@ import com.project.hangar.exception.ErrorResponse;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +26,7 @@ public class Constants {
 
   private static final List<String> ARMAMENT = List.of("Laser cannons");
 
-  private static final List<UUID> CREW_IDS = Collections.emptyList();
+  private static final List<UUID> CREW_IDS = List.of(ID);
 
   public static SpaceshipDto buildDto() {
     return SpaceshipDto.builder()
@@ -112,7 +111,7 @@ public class Constants {
     errorResponse.addValidationError("payload", "must be less than or equal to 10000");
     errorResponse.addValidationError("classType", "must not be blank");
     errorResponse.addValidationError("name", "must not be blank");
-    errorResponse.addValidationError("crewIds", "size must be between 0 and 5");
+    errorResponse.addValidationError("crewIds", "size must be between 1 and 5");
     errorResponse.addValidationError("armament", "size must be between 0 and 10");
     errorResponse.addValidationError("maxSpeed", "must be less than or equal to 10000");
 

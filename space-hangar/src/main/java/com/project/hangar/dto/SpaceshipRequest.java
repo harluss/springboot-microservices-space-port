@@ -31,7 +31,7 @@ public class SpaceshipRequest {
   @Max(value = 10000)
   private Integer maxSpeed;
 
-  @Size(max = 5)
+  @Size(min = 1, max = 5)
   private List<UUID> crewIds;
 
   @Size(max = 10)
