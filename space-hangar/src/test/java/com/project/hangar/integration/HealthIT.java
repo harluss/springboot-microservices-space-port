@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HealthIT extends BaseIT {
+class HealthIT extends BaseIT {
 
   private static final String TEST_ACTUATOR_API = "/actuator/health";
 

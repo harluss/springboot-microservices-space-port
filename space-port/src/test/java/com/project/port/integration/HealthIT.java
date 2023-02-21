@@ -1,6 +1,5 @@
-package com.project.cantina.integration;
+package com.project.port.integration;
 
-import com.project.cantina.common.BaseIT;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class HealthIT extends BaseIT {
+class HealthIT {
 
   private static final String TEST_ACTUATOR_API = "/actuator/health";
 
