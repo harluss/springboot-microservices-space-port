@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Provides methods for REST calls to Hangar microservice
  */
-@FeignClient(name = "${feign.clients.hangar.name}", path = "${feign.clients.hangar.url}")
+@FeignClient(name = "${feign.clients.hangar.name}", path = "${feign.clients.hangar.path}")
 public interface SpaceshipClient {
 
   /**

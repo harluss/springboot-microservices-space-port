@@ -14,11 +14,22 @@ feign:
   clients:
     hangar:
       name: hangar
-      url: /api/v1/spaceships
+      path: /api/v1/spaceships
     cantina:
       name: cantina
-      url: /api/v1/pilots
+      path: /api/v1/pilots
 
 springdoc:
   swagger-ui:
     path: /
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+eureka:
+  client:
+    enabled: false

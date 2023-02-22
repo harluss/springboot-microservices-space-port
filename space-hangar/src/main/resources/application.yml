@@ -28,3 +28,14 @@ eureka:
 springdoc:
   swagger-ui:
     path: /
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+eureka:
+  client:
+    enabled: false
