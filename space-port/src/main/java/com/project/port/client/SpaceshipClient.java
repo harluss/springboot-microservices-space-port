@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Provides methods for REST calls to Hangar microservice
  */
-@FeignClient(name = "spaceship", url = "localhost:8082")
+@FeignClient(name = "${feign.clients.hangar.name}", path = "${feign.clients.hangar.path}")
 public interface SpaceshipClient {
 
   /**
@@ -17,6 +17,6 @@ public interface SpaceshipClient {
    *
    * @return list of spaceships from a client
    */
-  @GetMapping("/api/v1/spaceships")
+  @GetMapping
   List<SpaceshipClientResponse> getSpaceships();
 }
