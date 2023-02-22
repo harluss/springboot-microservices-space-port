@@ -21,7 +21,6 @@ about Spaceships.
     * [Error JSON schema](#error-json-schema)
 * [Setup](#setup)
   * [Run locally](#run-locally)
-  * [APIs and Swagger](#apis-and-swagger)
   * [Tests](#tests)
   * [Requirements](#requirements)
 
@@ -112,7 +111,7 @@ DELETE  /api/v1/pilots/{id}
 #### Pilot JSON schema
 
 ```json
-    {
+{
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "name": "string",
   "species": "string",

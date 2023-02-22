@@ -97,6 +97,12 @@
       <artifactId>spring-boot-starter-log4j2</artifactId>
     </dependency>
 
+    <!--  This adds trace and span IDs to the Log4J 2  -->
+    <dependency>
+      <groupId>io.zipkin.brave</groupId>
+      <artifactId>brave-context-log4j2</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
