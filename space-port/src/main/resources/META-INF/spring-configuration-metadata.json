@@ -1,0 +1,29 @@
+{
+  "properties": [
+    {
+      "name": "cors.enable.api-gateway.base-url",
+      "type": "java.lang.String",
+      "description": "Enables CORS for API Gateway for requests done through Swagger UI. Used in SpaceshipController with @CrossOrigin(origins = \"${cors.enable.api-gateway.base-url}\")."
+    },
+    {
+      "name": "feign.clients.hangar.name",
+      "type": "java.lang.String",
+      "description": "Space Hangar microservice name as provided by Service Discovery. Used by OpenFeign in SpaceshipClient with @FeignClient(name = \"${feign.clients.hangar.name}\", path = \"${feign.clients.hangar.path}\")."
+    },
+    {
+      "name": "feign.clients.hangar.path",
+      "type": "java.lang.String",
+      "description": "Space Hangar microservice API path for Feign client. Used by OpenFeign in SpaceshipClient with @FeignClient(name = \"${feign.clients.hangar.name}\", path = \"${feign.clients.hangar.path}\")."
+    },
+    {
+      "name": "feign.clients.cantina.name",
+      "type": "java.lang.String",
+      "description": "Space Cantina microservice name as provided by Service Discovery. Used by OpenFeign in @FeignClient(name = \"${feign.clients.cantina.name}\", path = \"${feign.clients.cantina.path}\")."
+    },
+    {
+      "name": "feign.clients.cantina.path",
+      "type": "java.lang.String",
+      "description": "Space Cantina microservice API path for Feign client. Used by OpenFeign in @FeignClient(name = \"${feign.clients.cantina.name}\", path = \"${feign.clients.cantina.path}\")."
+    }
+  ]
+}

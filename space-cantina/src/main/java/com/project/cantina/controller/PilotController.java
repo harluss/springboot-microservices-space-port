@@ -84,6 +84,11 @@ public class PilotController {
     final PilotDto pilotDto = pilotMapper.requestToDto(pilotRequest);
     final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.add(pilotDto));
 
+//    final URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+//        .buildAndExpand(pilotDto.getId()).toUri();
+//
+//    return ResponseEntity.created(location).body(pilotResponse);
+
     return ResponseEntity.ok(pilotResponse);
   }
 

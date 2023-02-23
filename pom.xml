@@ -20,6 +20,7 @@
     <module>space-cantina</module>
     <module>space-port</module>
     <module>discovery-service</module>
+    <module>api-gateway</module>
   </modules>
 
   <properties>
