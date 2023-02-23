@@ -49,7 +49,7 @@ http://localhost:8080/api/v1/spaceships
 Swagger UI is available at:
 
 ```
-http://localhost:8080
+http://localhost:8080/api/docs
 ```
 
 Available endpoints:
@@ -94,7 +94,7 @@ http://localhost:8081/api/v1/pilots
 Swagger UI is available at:
 
 ```
-http://localhost:8081
+http://localhost:8081/api/docs
 ```
 
 Available endpoints:
@@ -135,7 +135,7 @@ http://localhost:8080/api/v1/spaceships
 Swagger UI is available at:
 
 ```
-http://localhost:8080
+http://localhost:8080/api/docs
 ```
 
 Available endpoints:

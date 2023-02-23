@@ -8,16 +8,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@CrossOrigin(origins = "${cors.enable.api-gateway.base-url}")
 @Tag(name = "spaceships", description = "spaceships operations")
 @RestController
 @RequestMapping("api/v1/spaceships")
+@RequiredArgsConstructor
 public class SpaceshipController {
 
   private final SpaceshipService spaceshipService;
