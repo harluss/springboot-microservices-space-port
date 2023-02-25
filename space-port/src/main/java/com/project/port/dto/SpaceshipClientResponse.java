@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @Jacksonized
 public class SpaceshipClientResponse {
 

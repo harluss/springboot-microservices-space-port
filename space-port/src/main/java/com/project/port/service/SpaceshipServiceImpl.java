@@ -37,6 +37,10 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 
     final List<UUID> pilotIds = getPilotIdsFromEachSpaceship(spaceshipDtos);
 
+    if (spaceshipDtos.isEmpty() || pilotIds.isEmpty()) {
+      return spaceshipDtos;
+    }
+
     final List<PilotDto> pilotDtos = pilotClient.getPilotsByIds(pilotMapper.idsToClientRequest(pilotIds)).stream()
         .map(pilotMapper::clientResponseToDto)
         .toList();
