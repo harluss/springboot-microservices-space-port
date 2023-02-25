@@ -12,6 +12,8 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,6 +32,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(SpaceshipController.class)
+@MockitoSettings(strictness = Strictness.WARN)
 class SpaceshipControllerTest extends TestUtil {
 
   private static final String TEST_API = "/api/v1/spaceships";
@@ -51,12 +54,21 @@ class SpaceshipControllerTest extends TestUtil {
 
   private SpaceshipResponse spaceshipResponse;
 
+  private ErrorResponse expectedErrorResponse;
+
+  private SpaceshipRequest invalidSpaceshipRequest;
+
+  private ErrorResponse expectedValidationErrorResponse;
+
   @BeforeEach
   void setUp() {
     RestAssuredMockMvc.mockMvc(mockMvc);
     spaceshipDto = buildDto();
     spaceshipRequest = buildRequest();
     spaceshipResponse = buildResponse();
+    expectedErrorResponse = buildNotFoundErrorResponse();
+    invalidSpaceshipRequest = buildInvalidRequest();
+    expectedValidationErrorResponse = buildReqValidationFailedErrorResponse();
   }
 
   @AfterEach
@@ -121,7 +133,6 @@ class SpaceshipControllerTest extends TestUtil {
   @Test
   void getSpaceshipById_notFound() {
     final UUID reqId = spaceshipResponse.getId();
-    final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
     when(spaceshipServiceMock.getById(reqId)).thenThrow(new NotFoundException(expectedErrorResponse.getMessage()));
 
     given()
@@ -161,8 +172,6 @@ class SpaceshipControllerTest extends TestUtil {
 
   @Test
   void addSpaceship_invalidRequestBody() {
-    final SpaceshipRequest invalidSpaceshipRequest = buildInvalidRequest();
-    final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
 
     final String responseBody = given()
         .contentType(MediaType.APPLICATION_JSON)
@@ -179,7 +188,7 @@ class SpaceshipControllerTest extends TestUtil {
 
     final ErrorResponse actualErrorResponse = jsonStringToObject(responseBody, ErrorResponse.class);
 
-    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
+    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedValidationErrorResponse);
     verifyNoInteractions(spaceshipMapperMock);
     verifyNoInteractions(spaceshipServiceMock);
   }
@@ -210,7 +219,6 @@ class SpaceshipControllerTest extends TestUtil {
   @Test
   void updateSpaceshipById_notFound() {
     final UUID reqId = spaceshipResponse.getId();
-    final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
     when(spaceshipMapperMock.requestToDto(spaceshipRequest)).thenReturn(spaceshipDto);
     doThrow(new NotFoundException(expectedErrorResponse.getMessage()))
         .when(spaceshipServiceMock).updateById(spaceshipDto, reqId);
@@ -233,12 +241,10 @@ class SpaceshipControllerTest extends TestUtil {
   @Test
   void updateSpaceshipById_invalidRequestBody() {
     final UUID reqId = spaceshipResponse.getId();
-    final SpaceshipRequest invalidPilotRequest = buildInvalidRequest();
-    final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
 
     final String responseBody = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(invalidPilotRequest))
+        .body(objectToJsonString(invalidSpaceshipRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
@@ -251,7 +257,7 @@ class SpaceshipControllerTest extends TestUtil {
 
     final ErrorResponse actualErrorResponse = jsonStringToObject(responseBody, ErrorResponse.class);
 
-    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedErrorResponse);
+    assertThat(actualErrorResponse).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedValidationErrorResponse);
     verifyNoInteractions(spaceshipMapperMock);
     verifyNoInteractions(spaceshipServiceMock);
   }
@@ -274,7 +280,6 @@ class SpaceshipControllerTest extends TestUtil {
   @Test
   void deleteSpaceshipById_notFound() {
     final UUID reqId = spaceshipResponse.getId();
-    final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
     doThrow(new NotFoundException(expectedErrorResponse.getMessage())).when(spaceshipServiceMock).deleteById(reqId);
 
     given()

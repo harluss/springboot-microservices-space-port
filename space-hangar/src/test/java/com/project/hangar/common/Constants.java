@@ -8,6 +8,7 @@ import com.project.hangar.exception.ErrorResponse;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,7 +87,7 @@ public class Constants {
         .classType(" ")
         .maxSpeed(20000)
         .armament(List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"))
-        .crewIds(List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()))
+        .crewIds(Collections.emptyList())
         .build();
   }
 
