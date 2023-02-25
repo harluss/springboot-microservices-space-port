@@ -25,7 +25,7 @@ public class PilotEntity {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  @Column(name = "name", nullable = false, columnDefinition = "text")
+  @Column(name = "name", nullable = false, unique = true, columnDefinition = "text")
   private String name;
 
   @Column(name = "species", nullable = false, columnDefinition = "text")

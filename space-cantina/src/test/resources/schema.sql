@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS pilots
 (
   id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name       text NOT NULL,
-  species    text NOT NULL,
-  profession text NOT NULL,
+  name       text UNIQUE NOT NULL,
+  species    text        NOT NULL,
+  profession text        NOT NULL,
   weapons    text[]
 );
 
@@ -18,4 +18,6 @@ VALUES ('8ed6e335-56cb-4512-b1fb-5a55faa1057c', 'Han Solo', 'Human', 'Smuggler',
        ('e9ae8934-38ba-432b-a1c0-caa03ea73af9', 'Luke Skywalker', 'Human', 'Jedi Master', ARRAY ['Lightsaber']),
        ('58ce4ada-ecac-454d-abfe-1a7ed8ae9ccf', 'Greedo', 'Rodian', 'Bounty hunter', ARRAY ['Blaster pistol']),
        ('b91e6a4a-cfca-4fd3-8495-9701ea916abc', 'IG-11', 'Driod', 'Assassin',
-        ARRAY ['E-11 medium blaster rifle', 'DLT-20A blaster rifle', 'Self-destruct mechanism']);
+        ARRAY ['E-11 medium blaster rifle', 'DLT-20A blaster rifle', 'Self-destruct mechanism'])
+ON CONFLICT (name) DO NOTHING;
+

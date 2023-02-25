@@ -2,6 +2,7 @@ package com.project.cantina.service;
 
 import com.project.cantina.dto.PilotDto;
 import com.project.cantina.entity.PilotEntity;
+import com.project.cantina.exception.AlreadyExistsException;
 import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.repository.PilotRepository;
@@ -66,6 +67,12 @@ public class PilotServiceImpl implements PilotService {
   @Override
   public PilotDto add(final PilotDto pilotDto) {
 
+    pilotRepository.findByName(pilotDto.getName())
+        .ifPresent(pilot -> {
+          log.info("Pilot with name {} already exists", pilot.getName());
+          throw new AlreadyExistsException("Pilot with name " + pilot.getName() + " already exists");
+        });
+
     final PilotEntity savedPilot = pilotRepository.save(pilotMapper.dtoToEntity(pilotDto));
     final PilotDto savedPilotDto = pilotMapper.entityToDto(savedPilot);
     log.info("Pilot added: {}", savedPilotDto);
@@ -76,6 +83,7 @@ public class PilotServiceImpl implements PilotService {
   @Override
   @Transactional
   public PilotDto updateById(final PilotDto pilotDtoUpdate, final UUID pilotId) {
+
     final PilotEntity pilotToBeUpdated = pilotRepository.findById(pilotId)
         .orElseThrow(() -> {
           log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, pilotId);
