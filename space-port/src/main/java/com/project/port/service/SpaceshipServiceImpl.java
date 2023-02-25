@@ -35,7 +35,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
         .toList();
     log.info("{} Spaceships found", spaceshipDtos.size());
 
-    final List<UUID> pilotIds = getPilotIdsFromEachSpaceships(spaceshipDtos);
+    final List<UUID> pilotIds = getPilotIdsFromEachSpaceship(spaceshipDtos);
 
     final List<PilotDto> pilotDtos = pilotClient.getPilotsByIds(pilotMapper.idsToClientRequest(pilotIds)).stream()
         .map(pilotMapper::clientResponseToDto)
@@ -47,7 +47,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     return spaceshipDtos;
   }
 
-  private List<UUID> getPilotIdsFromEachSpaceships(final List<SpaceshipDto> spaceshipDtos) {
+  private List<UUID> getPilotIdsFromEachSpaceship(final List<SpaceshipDto> spaceshipDtos) {
     return spaceshipDtos.stream()
         .map(SpaceshipDto::getCrewIds)
         .flatMap(Collection::stream)

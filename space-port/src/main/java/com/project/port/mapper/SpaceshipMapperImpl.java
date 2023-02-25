@@ -12,7 +12,6 @@ public class SpaceshipMapperImpl implements SpaceshipMapper {
 
   private final PilotMapper pilotMapper;
 
-
   @Override
   public SpaceshipDto clientResponseToDto(final SpaceshipClientResponse response) {
     return SpaceshipDto.builder()
