@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static com.project.cantina.common.Constants.*;
+import static com.project.cantina.common.Constants.buildDto;
+import static com.project.cantina.common.Constants.buildEntity;
+import static com.project.cantina.common.Constants.buildRequest;
+import static com.project.cantina.common.Constants.buildResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PilotMapperImplTest {
@@ -75,7 +78,6 @@ class PilotMapperImplTest {
         .build();
     final PilotDto updateDto = buildDto().toBuilder()
         .id(null)
-        .name("Yoda")
         .species("Unknown")
         .profession("Jedi Master")
         .weapons(Collections.emptyList())
