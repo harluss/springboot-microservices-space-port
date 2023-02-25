@@ -1,5 +1,6 @@
 server:
-  port: 8082
+  port: 0
+  #  port: 8082
   error:
     whitelabel:
       enabled: false
@@ -8,9 +9,9 @@ spring:
   application:
     name: hangar
   datasource:
-    url: jdbc:postgresql://localhost:5432/space_port_db
-    username: postgres
-    password: password
+    url: jdbc:postgresql://${DATABASE_URL:localhost:5432}/${DATABASE_NAME:space_port_db}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASS:password}
   jpa:
     hibernate:
       ddl-auto: none
@@ -21,18 +22,20 @@ spring:
         format_sql: true
     open-in-view: false
   zipkin:
-    base-url: http://localhost:9411
+    base-url: ${ZIPKIN_URL:http://localhost:9411}
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka
+  instance:
+    instance-id: ${spring.application.name}:${random.value}
 
 springdoc:
   swagger-ui:
     path: /api/docs
 
-# Adds trace and span IDs to the Log4J 2
+# Adds trace and span IDs to the Log4J2
 logging:
   pattern:
     level: "%5p [${spring.zipkin.service.name:${spring.application.name:}},%X{traceId},%X{spanId}]"
