@@ -10,10 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "${cors.enable.api-gateway.base-url}")
 @Tag(name = "spaceships", description = "spaceships operations")
@@ -40,5 +43,19 @@ public class SpaceshipController {
         .toList();
 
     return ResponseEntity.ok(spaceshipResponses);
+  }
+
+  @Operation(summary = "Get spaceship and its crew by Id",
+      description = "Retrieves a single spaceship and its crew by a given spaceship Id",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Successfully retrieved the requested spaceship"),
+          @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship")
+      })
+  @GetMapping("{id}")
+  public ResponseEntity<SpaceshipResponse> getSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
+
+    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.getById(spaceshipId));
+
+    return ResponseEntity.ok(spaceshipResponse);
   }
 }

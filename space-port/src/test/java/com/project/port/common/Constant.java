@@ -1,6 +1,14 @@
 package com.project.port.common;
 
-import com.project.port.dto.*;
+import com.project.port.dto.PilotClientRequest;
+import com.project.port.dto.PilotClientResponse;
+import com.project.port.dto.PilotDto;
+import com.project.port.dto.PilotResponse;
+import com.project.port.dto.SpaceshipClientResponse;
+import com.project.port.dto.SpaceshipDto;
+import com.project.port.dto.SpaceshipResponse;
+import com.project.port.exception.ErrorResponse;
+import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,8 +28,6 @@ public class Constant {
 
   private static final List<String> SPACESHIP_ARMAMENT = List.of("Laser cannons");
 
-  private static final List<UUID> SPACESHIP_CREW_IDS = Collections.emptyList();
-
   private static final String PILOT_NAME = "Darth Vader";
 
   private static final String PILOT_SPECIES = "Human";
@@ -37,6 +43,32 @@ public class Constant {
         .classType(SPACESHIP_CLASS_TYPE)
         .crew(List.of(buildPilotDto()))
         .crewIds(List.of(ID))
+        .payload(SPACESHIP_PAYLOAD)
+        .maxSpeed(SPACESHIP_MAX_SPEED)
+        .armament(SPACESHIP_ARMAMENT)
+        .build();
+  }
+
+  public static SpaceshipDto buildSpaceshipDtoWithNoCrewDetails() {
+    return SpaceshipDto.builder()
+        .id(ID)
+        .name(SPACESHIP_NAME)
+        .classType(SPACESHIP_CLASS_TYPE)
+        .crew(Collections.emptyList())
+        .crewIds(List.of(ID))
+        .payload(SPACESHIP_PAYLOAD)
+        .maxSpeed(SPACESHIP_MAX_SPEED)
+        .armament(SPACESHIP_ARMAMENT)
+        .build();
+  }
+
+  public static SpaceshipDto buildSpaceshipDtoWithNoCrewDetailsAndCrewIds() {
+    return SpaceshipDto.builder()
+        .id(ID)
+        .name(SPACESHIP_NAME)
+        .classType(SPACESHIP_CLASS_TYPE)
+        .crew(Collections.emptyList())
+        .crewIds(Collections.emptyList())
         .payload(SPACESHIP_PAYLOAD)
         .maxSpeed(SPACESHIP_MAX_SPEED)
         .armament(SPACESHIP_ARMAMENT)
@@ -61,6 +93,18 @@ public class Constant {
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
         .crewIds(List.of(ID))
+        .payload(SPACESHIP_PAYLOAD)
+        .maxSpeed(SPACESHIP_MAX_SPEED)
+        .armament(SPACESHIP_ARMAMENT)
+        .build();
+  }
+
+  public static SpaceshipClientResponse buildSpaceshipClientResponseWithNoCrewIds() {
+    return SpaceshipClientResponse.builder()
+        .id(ID)
+        .name(SPACESHIP_NAME)
+        .classType(SPACESHIP_CLASS_TYPE)
+        .crewIds(Collections.emptyList())
         .payload(SPACESHIP_PAYLOAD)
         .maxSpeed(SPACESHIP_MAX_SPEED)
         .armament(SPACESHIP_ARMAMENT)
@@ -100,6 +144,16 @@ public class Constant {
   public static PilotClientRequest buildPilotClientRequest() {
     return PilotClientRequest.builder()
         .pilotIds(List.of(ID))
+        .build();
+  }
+
+  public static ErrorResponse buildNotFoundErrorResponse() {
+    final HttpStatus status = HttpStatus.NOT_FOUND;
+
+    return ErrorResponse.builder()
+        .status(status.value())
+        .error(status.name())
+        .message("Spaceship not found")
         .build();
   }
 }
