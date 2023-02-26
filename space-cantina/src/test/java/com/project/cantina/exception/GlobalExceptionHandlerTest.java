@@ -28,6 +28,15 @@ class GlobalExceptionHandlerTest {
   }
 
   @Test
+  void handleAlreadyExists() {
+    final AlreadyExistsException alreadyExistsException = new AlreadyExistsException(ERROR_MESSAGE);
+
+    final ResponseEntity<ErrorResponse> errorResponse = globalExceptionHandler.handleAlreadyExists(alreadyExistsException);
+
+    assertExceptionHandledCorrectly(errorResponse, ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
   void handleUncaught() {
     final RuntimeException runtimeException = new RuntimeException(ERROR_MESSAGE);
 

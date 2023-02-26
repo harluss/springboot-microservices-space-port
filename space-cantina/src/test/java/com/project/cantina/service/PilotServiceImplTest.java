@@ -2,6 +2,7 @@ package com.project.cantina.service;
 
 import com.project.cantina.dto.PilotDto;
 import com.project.cantina.entity.PilotEntity;
+import com.project.cantina.exception.AlreadyExistsException;
 import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.repository.PilotRepository;
@@ -118,13 +119,26 @@ class PilotServiceImplTest {
     when(pilotMapperMock.dtoToEntity(pilotDto)).thenReturn(pilotEntity);
     when(pilotRepositoryMock.save(pilotEntity)).thenReturn(pilotEntity);
     when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);
+    when(pilotRepositoryMock.findByName(pilotDto.getName())).thenReturn(Optional.empty());
 
     final PilotDto actual = pilotService.add(pilotDto);
 
     assertThat(actual).isEqualTo(pilotDto);
     verify(pilotRepositoryMock).save(pilotEntity);
+    verify(pilotRepositoryMock).findByName(pilotDto.getName());
     verify(pilotMapperMock).entityToDto(pilotEntity);
     verify(pilotMapperMock).dtoToEntity(pilotDto);
+  }
+
+  @Test
+  void add_alreadyExists() {
+    when(pilotRepositoryMock.findByName(pilotDto.getName())).thenReturn(Optional.ofNullable(pilotEntity));
+
+    assertThrows(AlreadyExistsException.class, () -> pilotService.add(pilotDto));
+
+    verify(pilotRepositoryMock).findByName(pilotDto.getName());
+    verify(pilotRepositoryMock, times(0)).save(any());
+    verifyNoInteractions(pilotMapperMock);
   }
 
   @Test

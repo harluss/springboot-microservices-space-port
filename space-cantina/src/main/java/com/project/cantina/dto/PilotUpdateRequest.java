@@ -4,21 +4,23 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.UUID;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 @Jacksonized
-public class PilotResponse {
+public class PilotUpdateRequest {
 
-  private UUID id;
-
-  private String name;
-
+  @NotBlank
+  @Size(max = 150)
   private String species;
 
+  @NotBlank
+  @Size(max = 150)
   private String profession;
 
+  @Size(max = 10)
   private List<String> weapons;
 }

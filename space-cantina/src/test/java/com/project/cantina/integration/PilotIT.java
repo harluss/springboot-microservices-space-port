@@ -2,6 +2,7 @@ package com.project.cantina.integration;
 
 import com.project.cantina.common.BaseIT;
 import com.project.cantina.dto.PilotRequest;
+import com.project.cantina.dto.PilotUpdateRequest;
 import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.repository.PilotRepository;
 import io.restassured.common.mapper.TypeRef;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,8 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static com.project.cantina.common.Constants.buildRequest;
+import static com.project.cantina.common.Constants.buildUpdateRequest;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,7 +48,7 @@ class PilotIT extends BaseIT {
   }
 
   @Test
-  void getSpaceships_happyPath() {
+  void getPilots_happyPath() {
 
     final List<PilotEntity> actual = given()
         .when()
@@ -62,7 +66,7 @@ class PilotIT extends BaseIT {
   }
 
   @Test
-  void getSpaceshipById_happyPath() {
+  void getPilotById_happyPath() {
     final PilotEntity expected = pilotsBefore.get(0);
 
     final PilotEntity actual = given()
@@ -81,7 +85,7 @@ class PilotIT extends BaseIT {
   }
 
   @Test
-  void addSpaceship_happyPath() {
+  void addPilot_happyPath() {
     final PilotRequest request = buildRequest();
 
     final PilotEntity actual = given()
@@ -92,7 +96,8 @@ class PilotIT extends BaseIT {
         .then()
         .log().body()
         .assertThat()
-        .statusCode(HttpStatus.OK.value())
+        .statusCode(HttpStatus.CREATED.value())
+        .header(HttpHeaders.LOCATION, notNullValue())
         .extract()
         .body()
         .as(new TypeRef<>() {
@@ -108,8 +113,8 @@ class PilotIT extends BaseIT {
   }
 
   @Test
-  void updateSpaceshipById_happyPath() {
-    final PilotRequest request = buildRequest();
+  void updatePilotById_happyPath() {
+    final PilotUpdateRequest request = buildUpdateRequest();
     final PilotEntity toBeUpdated = pilotsBefore.get(0);
 
     final PilotEntity actual = given()
@@ -138,7 +143,7 @@ class PilotIT extends BaseIT {
   }
 
   @Test
-  void deleteSpaceshipById_happyPath() {
+  void deletePilotById_happyPath() {
     final PilotEntity toBeDeleted = pilotsBefore.get(0);
 
     given()

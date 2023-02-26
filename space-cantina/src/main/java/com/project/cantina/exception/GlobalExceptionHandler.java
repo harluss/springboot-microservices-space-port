@@ -23,6 +23,15 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
   }
 
+  @ExceptionHandler(AlreadyExistsException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  protected ResponseEntity<ErrorResponse> handleAlreadyExists(final AlreadyExistsException exception) {
+
+    final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+
+    return ResponseEntity.badRequest().body(errorResponse);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception) {
@@ -37,7 +46,7 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   protected ResponseEntity<ErrorResponse> handleUncaught(final Exception exception) {
 
-    log.info(exception);
+    log.error("Handle uncaught: ", exception);
     final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
 
     return ResponseEntity.internalServerError().body(errorResponse);
