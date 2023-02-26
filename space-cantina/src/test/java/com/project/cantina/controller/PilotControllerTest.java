@@ -6,6 +6,7 @@ import com.project.cantina.dto.PilotIdsRequest;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.dto.PilotUpdateRequest;
+import com.project.cantina.exception.AlreadyExistsException;
 import com.project.cantina.exception.ErrorResponse;
 import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static com.project.cantina.common.Constants.buildAlreadyExistsErrorResponse;
 import static com.project.cantina.common.Constants.buildDto;
 import static com.project.cantina.common.Constants.buildInvalidRequest;
 import static com.project.cantina.common.Constants.buildInvalidUpdateRequest;
@@ -40,7 +42,9 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -74,7 +78,7 @@ class PilotControllerTest extends TestUtil {
 
   private PilotIdsRequest pilotIdsRequest;
 
-  private ErrorResponse expectedErrorResponse;
+  private ErrorResponse expectedNotFoundErrorResponse;
 
   @BeforeEach
   void setUp() {
@@ -84,7 +88,7 @@ class PilotControllerTest extends TestUtil {
     pilotRequest = buildRequest();
     pilotUpdateRequest = buildUpdateRequest();
     pilotIdsRequest = buildPilotIdsRequest();
-    expectedErrorResponse = buildNotFoundErrorResponse();
+    expectedNotFoundErrorResponse = buildNotFoundErrorResponse();
   }
 
   @AfterEach
@@ -169,7 +173,7 @@ class PilotControllerTest extends TestUtil {
   @Test
   void getPilotById_notFound() {
     final UUID reqId = pilotResponse.getId();
-    when(pilotServiceMock.getById(reqId)).thenThrow(new NotFoundException(expectedErrorResponse.getMessage()));
+    when(pilotServiceMock.getById(reqId)).thenThrow(new NotFoundException(expectedNotFoundErrorResponse.getMessage()));
 
     given()
         .when()
@@ -178,7 +182,7 @@ class PilotControllerTest extends TestUtil {
         .log().body()
         .assertThat()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(equalTo(objectToJsonString(expectedErrorResponse)));
+        .body(equalTo(objectToJsonString(expectedNotFoundErrorResponse)));
 
     verify(pilotServiceMock).getById(reqId);
     verifyNoInteractions(pilotMapperMock);
@@ -204,6 +208,28 @@ class PilotControllerTest extends TestUtil {
 
     verify(pilotMapperMock).requestToDto(pilotRequest);
     verify(pilotMapperMock).dtoToResponse(pilotDto);
+    verify(pilotServiceMock).add(pilotDto);
+  }
+
+  @Test
+  void addPilot_alreadyExists() {
+    final ErrorResponse expectedAlreadyExistsErrorResponse = buildAlreadyExistsErrorResponse();
+    when(pilotMapperMock.requestToDto(pilotRequest)).thenReturn(pilotDto);
+    doThrow(new AlreadyExistsException(expectedAlreadyExistsErrorResponse.getMessage())).when(pilotServiceMock).add(pilotDto);
+
+    given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(objectToJsonString(pilotRequest))
+        .when()
+        .post(TEST_API)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .body(equalTo(objectToJsonString(expectedAlreadyExistsErrorResponse)));
+
+    verify(pilotMapperMock).requestToDto(pilotRequest);
+    verify(pilotMapperMock, times(0)).dtoToResponse(any());
     verify(pilotServiceMock).add(pilotDto);
   }
 

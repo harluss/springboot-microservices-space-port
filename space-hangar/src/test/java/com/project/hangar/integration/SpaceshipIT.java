@@ -76,8 +76,7 @@ class SpaceshipIT extends BaseIT {
         .statusCode(HttpStatus.OK.value())
         .extract()
         .body()
-        .as(new TypeRef<>() {
-        });
+        .as(SpaceshipEntity.class);
 
     assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
   }
@@ -98,8 +97,7 @@ class SpaceshipIT extends BaseIT {
         .header(HttpHeaders.LOCATION, notNullValue())
         .extract()
         .body()
-        .as(new TypeRef<>() {
-        });
+        .as(SpaceshipEntity.class);
 
     final List<SpaceshipEntity> spaceshipsAfter = spaceshipRepository.findAll();
 
@@ -126,8 +124,7 @@ class SpaceshipIT extends BaseIT {
         .statusCode(HttpStatus.OK.value())
         .extract()
         .body()
-        .as(new TypeRef<>() {
-        });
+        .as(SpaceshipEntity.class);
 
     final List<SpaceshipEntity> spaceshipsAfter = spaceshipRepository.findAll();
 

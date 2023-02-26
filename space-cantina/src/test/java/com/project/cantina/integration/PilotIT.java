@@ -78,8 +78,7 @@ class PilotIT extends BaseIT {
         .statusCode(HttpStatus.OK.value())
         .extract()
         .body()
-        .as(new TypeRef<>() {
-        });
+        .as(PilotEntity.class);
 
     assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
   }
@@ -100,8 +99,7 @@ class PilotIT extends BaseIT {
         .header(HttpHeaders.LOCATION, notNullValue())
         .extract()
         .body()
-        .as(new TypeRef<>() {
-        });
+        .as(PilotEntity.class);
 
     final List<PilotEntity> spaceshipsAfter = pilotRepository.findAll();
 
@@ -128,8 +126,7 @@ class PilotIT extends BaseIT {
         .statusCode(HttpStatus.OK.value())
         .extract()
         .body()
-        .as(new TypeRef<>() {
-        });
+        .as(PilotEntity.class);
 
     final List<PilotEntity> spaceshipsAfter = pilotRepository.findAll();
 
