@@ -17,6 +17,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,11 +26,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static com.project.hangar.common.Constants.*;
+import static com.project.hangar.common.Constants.buildDto;
+import static com.project.hangar.common.Constants.buildInvalidRequest;
+import static com.project.hangar.common.Constants.buildNotFoundErrorResponse;
+import static com.project.hangar.common.Constants.buildReqValidationFailedErrorResponse;
+import static com.project.hangar.common.Constants.buildRequest;
+import static com.project.hangar.common.Constants.buildResponse;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(SpaceshipController.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -162,7 +173,8 @@ class SpaceshipControllerTest extends TestUtil {
         .then()
         .log().body()
         .assertThat()
-        .statusCode(HttpStatus.OK.value())
+        .statusCode(HttpStatus.CREATED.value())
+        .header(HttpHeaders.LOCATION, endsWith(TEST_API + "/" + spaceshipResponse.getId()))
         .body(equalTo(objectToJsonString(spaceshipResponse)));
 
     verify(spaceshipMapperMock).requestToDto(spaceshipRequest);

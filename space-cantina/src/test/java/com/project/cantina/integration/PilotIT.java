@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +23,7 @@ import static com.project.cantina.common.Constants.buildRequest;
 import static com.project.cantina.common.Constants.buildUpdateRequest;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -94,7 +96,8 @@ class PilotIT extends BaseIT {
         .then()
         .log().body()
         .assertThat()
-        .statusCode(HttpStatus.OK.value())
+        .statusCode(HttpStatus.CREATED.value())
+        .header(HttpHeaders.LOCATION, notNullValue())
         .extract()
         .body()
         .as(new TypeRef<>() {

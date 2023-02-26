@@ -10,10 +10,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,7 +69,7 @@ public class SpaceshipController {
   @Operation(summary = "Add new spaceship",
       description = "Adds a new spaceship to the hangar",
       responses = {
-          @ApiResponse(responseCode = "200", description = "Successfully added a new spaceship"),
+          @ApiResponse(responseCode = "201", description = "Successfully added a new spaceship"),
           @ApiResponse(responseCode = "400", description = "Request data validation failed")
       })
   @PostMapping
@@ -68,8 +77,9 @@ public class SpaceshipController {
 
     final SpaceshipDto spaceshipDto = spaceshipMapper.requestToDto(spaceshipRequest);
     final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.add(spaceshipDto));
+    final URI location = getResourceLocation(spaceshipResponse);
 
-    return ResponseEntity.ok(spaceshipResponse);
+    return ResponseEntity.created(location).body(spaceshipResponse);
   }
 
   @Operation(summary = "Update spaceship",
@@ -104,5 +114,10 @@ public class SpaceshipController {
     spaceshipService.deleteById(spaceshipId);
 
     return ResponseEntity.noContent().build();
+  }
+
+  private static URI getResourceLocation(final SpaceshipResponse spaceshipResponse) {
+    return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(spaceshipResponse.getId()).toUri();
   }
 }
