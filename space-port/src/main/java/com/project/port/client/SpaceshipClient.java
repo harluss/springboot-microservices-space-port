@@ -1,5 +1,6 @@
 package com.project.port.client;
 
+import com.project.port.config.CustomErrorDecoder;
 import com.project.port.dto.SpaceshipClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import java.util.UUID;
 /**
  * Provides methods for REST calls to Hangar microservice
  */
-@FeignClient(name = "${feign.clients.hangar.name}", path = "${feign.clients.hangar.path}")
+@FeignClient(name = "${feign.clients.hangar.name}", path = "${feign.clients.hangar.path}", configuration = {CustomErrorDecoder.class})
 public interface SpaceshipClient {
 
   /**

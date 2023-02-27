@@ -11,6 +11,8 @@ class GlobalExceptionHandlerTest {
 
   private static final String ERROR_MESSAGE = "Oh no!";
 
+  private static final String GENERIC_ERROR_MESSAGE = "Oops, something went wrong. Please try again later";
+
   private GlobalExceptionHandler globalExceptionHandler;
 
   @BeforeEach
@@ -33,7 +35,7 @@ class GlobalExceptionHandlerTest {
 
     final ResponseEntity<ErrorResponse> errorResponse = globalExceptionHandler.handleUncaught(runtimeException);
 
-    assertExceptionHandledCorrectly(errorResponse, ERROR_MESSAGE, HttpStatus.INTERNAL_SERVER_ERROR);
+    assertExceptionHandledCorrectly(errorResponse, GENERIC_ERROR_MESSAGE, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   private void assertExceptionHandledCorrectly(final ResponseEntity<ErrorResponse> res,

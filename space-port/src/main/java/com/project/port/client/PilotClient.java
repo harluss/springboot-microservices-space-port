@@ -1,5 +1,6 @@
 package com.project.port.client;
 
+import com.project.port.config.CustomErrorDecoder;
 import com.project.port.dto.PilotClientRequest;
 import com.project.port.dto.PilotClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Provides methods for REST calls to Cantina microservice
  */
-@FeignClient(name = "${feign.clients.cantina.name}", path = "${feign.clients.cantina.path}")
+@FeignClient(name = "${feign.clients.cantina.name}", path = "${feign.clients.cantina.path}", configuration = {CustomErrorDecoder.class})
 public interface PilotClient {
 
   /**
