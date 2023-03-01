@@ -1,7 +1,7 @@
 package com.project.port.service;
 
-import com.project.port.client.PilotClient;
-import com.project.port.client.SpaceshipClient;
+import com.project.port.client.PilotClientBase;
+import com.project.port.client.SpaceshipClientBase;
 import com.project.port.dto.PilotClientRequest;
 import com.project.port.dto.PilotClientResponse;
 import com.project.port.dto.PilotDto;
@@ -46,13 +46,13 @@ import static org.mockito.Mockito.when;
 class SpaceshipServiceImplTest {
 
   @Mock
-  private SpaceshipClient spaceshipClientMock;
+  private SpaceshipClientBase spaceshipClientMock;
 
   @Mock
   private SpaceshipMapper spaceshipMapperMock;
 
   @Mock
-  private PilotClient pilotClientMock;
+  private PilotClientBase pilotClientMock;
 
   @Mock
   private PilotMapper pilotMapperMock;
