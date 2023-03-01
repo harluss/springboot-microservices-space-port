@@ -105,7 +105,17 @@ public class Constants {
     return ErrorResponse.builder()
         .status(status.value())
         .error(status.name())
-        .message("Spaceship not found")
+        .message("Pilot not found")
+        .build();
+  }
+
+  public static ErrorResponse buildAlreadyExistsErrorResponse() {
+    final HttpStatus status = HttpStatus.BAD_REQUEST;
+
+    return ErrorResponse.builder()
+        .status(status.value())
+        .error(status.name())
+        .message("Pilot already exists")
         .build();
   }
 

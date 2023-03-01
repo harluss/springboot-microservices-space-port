@@ -14,6 +14,8 @@ public class GlobalExceptionHandler {
 
   private static final String VALIDATION_ERROR_MESSAGE = "Validation error. Check 'errors' field for details";
 
+  private static final String GENERIC_ERROR_MESSAGE = "Oops, something went wrong. Please try again later";
+
   @ExceptionHandler(NotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   protected ResponseEntity<ErrorResponse> handleNotFound(final NotFoundException exception) {
@@ -37,14 +39,13 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   protected ResponseEntity<ErrorResponse> handleUncaught(final Exception exception) {
 
-    log.info(exception);
-    final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+    log.error("EXCEPTION HANDLER 500: {}", exception.getMessage(), exception);
+    final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, GENERIC_ERROR_MESSAGE);
 
     return ResponseEntity.internalServerError().body(errorResponse);
   }
 
   private ErrorResponse buildErrorResponse(final HttpStatus status, final String message) {
-
     return ErrorResponse.builder()
         .status(status.value())
         .error(status.name())

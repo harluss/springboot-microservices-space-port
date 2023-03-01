@@ -53,3 +53,10 @@ spring:
 eureka:
   client:
     enabled: false
+
+feign:
+  clients:
+    hangar:
+      url: http://localhost:${wiremock.server.port:0}
+    cantina:
+      url: http://localhost:${wiremock.server.port:0}

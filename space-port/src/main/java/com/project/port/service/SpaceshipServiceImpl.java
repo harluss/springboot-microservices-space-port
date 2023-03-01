@@ -1,9 +1,10 @@
 package com.project.port.service;
 
-import com.project.port.client.PilotClient;
-import com.project.port.client.SpaceshipClient;
+import com.project.port.client.PilotClientBase;
+import com.project.port.client.SpaceshipClientBase;
 import com.project.port.dto.PilotDto;
 import com.project.port.dto.SpaceshipDto;
+import com.project.port.exception.NotFoundException;
 import com.project.port.mapper.PilotMapper;
 import com.project.port.mapper.SpaceshipMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SpaceshipServiceImpl implements SpaceshipService {
 
-  private final SpaceshipClient spaceshipClient;
+  public static final String NOT_FOUND_MESSAGE = "Spaceship not found";
 
-  private final PilotClient pilotClient;
+  public static final String NOT_FOUND_ID_PROVIDED_MESSAGE = "Spaceship with id {} not found";
+
+  private final SpaceshipClientBase spaceshipClient;
+
+  private final PilotClientBase pilotClient;
 
   private final SpaceshipMapper spaceshipMapper;
 
@@ -49,6 +54,33 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     spaceshipDtos.forEach(spaceship -> spaceship.setCrew(getSpaceshipCrewFromListOfPilots(spaceship.getCrewIds(), pilotDtos)));
 
     return spaceshipDtos;
+  }
+
+  @Override
+  public SpaceshipDto getById(final UUID spaceshipId) {
+
+    final SpaceshipDto spaceshipDto = spaceshipClient.getSpaceshipById(spaceshipId)
+        .map(spaceshipMapper::clientResponseToDto)
+        .orElseThrow(() -> {
+          log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, spaceshipId);
+          throw new NotFoundException(NOT_FOUND_MESSAGE);
+        });
+    log.info("Spaceship with id {} found", spaceshipId);
+
+    final List<UUID> pilotIds = spaceshipDto.getCrewIds();
+
+    if (pilotIds.isEmpty()) {
+      return spaceshipDto;
+    }
+
+    final List<PilotDto> pilotDtos = pilotClient.getPilotsByIds(pilotMapper.idsToClientRequest(pilotIds)).stream()
+        .map(pilotMapper::clientResponseToDto)
+        .toList();
+    log.info("{} Pilots found", pilotDtos.size());
+
+    spaceshipDto.setCrew(getSpaceshipCrewFromListOfPilots(spaceshipDto.getCrewIds(), pilotDtos));
+
+    return spaceshipDto;
   }
 
   private List<UUID> getPilotIdsFromEachSpaceship(final List<SpaceshipDto> spaceshipDtos) {

@@ -19,10 +19,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.project.cantina.common.Constants.*;
+import static com.project.cantina.common.Constants.buildDto;
+import static com.project.cantina.common.Constants.buildEntity;
+import static com.project.cantina.common.Constants.getRandomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -72,22 +79,22 @@ class PilotServiceImplTest {
   @Test
   void getAllByIds() {
     final PilotEntity pilotEntity2 = pilotEntity.toBuilder()
-        .id(getRandomUUID())
+        .id(randomId)
         .name("C3P0")
         .build();
-    final PilotDto pilotDto1 = pilotDto.toBuilder()
+    final PilotDto pilotDto2 = pilotDto.toBuilder()
         .id(pilotEntity2.getId())
         .name(pilotEntity2.getName())
         .build();
     final List<PilotEntity> pilotEntities = List.of(pilotEntity, pilotEntity2);
     final List<UUID> reqPilotIds = List.of(pilotEntity.getId(), pilotEntity2.getId());
     when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);
-    when(pilotMapperMock.entityToDto(pilotEntity2)).thenReturn(pilotDto1);
+    when(pilotMapperMock.entityToDto(pilotEntity2)).thenReturn(pilotDto2);
     when(pilotRepositoryMock.findAllByIdIn(reqPilotIds)).thenReturn(pilotEntities);
 
     final List<PilotDto> actual = pilotService.getAllByIds(reqPilotIds);
 
-    assertThat(actual).containsExactly(pilotDto, pilotDto1);
+    assertThat(actual).containsExactly(pilotDto, pilotDto2);
     verify(pilotMapperMock, times(2)).entityToDto(any(PilotEntity.class));
     verify(pilotRepositoryMock).findAllByIdIn(reqPilotIds);
   }
