@@ -40,20 +40,7 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka
 
-# Adds trace and span IDs to the Log4J2
+# Adds trace and span IDs to Log4J2
 logging:
   pattern:
     level: "%5p [${spring.zipkin.service.name:${spring.application.name:}},%X{traceId},%X{spanId}]"
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: test
-  zipkin:
-    enabled: false
-
-eureka:
-  client:
-    enabled: false

@@ -1,6 +1,5 @@
 server:
   port: 0
-  #  port: 8081
   error:
     whitelabel:
       enabled: false
@@ -35,7 +34,7 @@ springdoc:
   swagger-ui:
     path: /api/docs
 
-# Adds trace and span IDs to the Log4J2
+# Adds trace and span IDs to Log4J2
 logging:
   pattern:
     level: "%5p [${spring.zipkin.service.name:${spring.application.name:}},%X{traceId},%X{spanId}]"
