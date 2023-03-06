@@ -1,7 +1,7 @@
 package com.project.port.service;
 
-import com.project.port.client.PilotClientBase;
-import com.project.port.client.SpaceshipClientBase;
+import com.project.port.client.PilotClient;
+import com.project.port.client.SpaceshipClient;
 import com.project.port.dto.PilotDto;
 import com.project.port.dto.SpaceshipDto;
 import com.project.port.exception.NotFoundException;
@@ -24,9 +24,9 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 
   public static final String NOT_FOUND_ID_PROVIDED_MESSAGE = "Spaceship with id {} not found";
 
-  private final SpaceshipClientBase spaceshipClient;
+  private final SpaceshipClient spaceshipClient;
 
-  private final PilotClientBase pilotClient;
+  private final PilotClient pilotClient;
 
   private final SpaceshipMapper spaceshipMapper;
 

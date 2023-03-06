@@ -19,16 +19,3 @@ eureka:
 logging:
   pattern:
     level: "%5p [${spring.zipkin.service.name:${spring.application.name:}},%X{traceId},%X{spanId}]"
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: test
-  zipkin:
-    enabled: false
-
-eureka:
-  client:
-    enabled: false
