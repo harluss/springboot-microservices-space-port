@@ -1,8 +1,5 @@
 server:
   port: 0
-  error:
-    whitelabel:
-      enabled: false
 
 spring:
   application:
