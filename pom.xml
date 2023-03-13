@@ -21,6 +21,7 @@
     <module>space-port</module>
     <module>service-discovery</module>
     <module>api-gateway</module>
+    <module>cloud-config</module>
   </modules>
 
   <properties>
