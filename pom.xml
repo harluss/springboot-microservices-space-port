@@ -19,7 +19,7 @@
     <module>space-hangar</module>
     <module>space-cantina</module>
     <module>space-port</module>
-    <module>discovery-service</module>
+    <module>service-discovery</module>
     <module>api-gateway</module>
   </modules>
 

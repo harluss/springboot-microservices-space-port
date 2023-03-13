@@ -1,12 +1,9 @@
 server:
   port: 8761
-  error:
-    whitelabel:
-      enabled: false
 
 spring:
   application:
-    name: discovery-service
+    name: service-discovery
   zipkin:
     base-url: ${ZIPKIN_URL:http://localhost:9411}
 
