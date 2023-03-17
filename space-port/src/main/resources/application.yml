@@ -4,15 +4,8 @@ server:
 spring:
   application:
     name: port
-  zipkin:
-    base-url: ${ZIPKIN_URL:http://localhost:9411}
-
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka
-  instance:
-    instance-id: ${spring.application.name}:${random.value}
+  profiles:
+    active: local
 
 feign:
   clients:
@@ -32,10 +25,14 @@ springdoc:
   swagger-ui:
     path: /api/docs
 
-# Adds trace and span IDs to Log4J2
-logging:
-  pattern:
-    level: "%5p [${spring.zipkin.service.name:${spring.application.name:}},%X{traceId},%X{spanId}]"
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+    import:
+      "configserver:"
 
 ---
 
@@ -45,8 +42,10 @@ spring:
       on-profile: test
   zipkin:
     enabled: false
-  # Mocks FeignClients' URLs for IT with Eureka disabled
   cloud:
+    config:
+      enabled: false
+    # Mocks FeignClients' URLs for IT with Eureka disabled
     discovery:
       client:
         simple:

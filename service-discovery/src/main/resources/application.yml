@@ -4,15 +4,8 @@ server:
 spring:
   application:
     name: service-discovery
-  zipkin:
-    base-url: ${ZIPKIN_URL:http://localhost:9411}
 
 eureka:
   client:
     fetch-registry: false
     register-with-eureka: false
-
-# Adds trace and span IDs to the Log4J 2
-logging:
-  pattern:
-    level: "%5p [${spring.zipkin.service.name:${spring.application.name:}},%X{traceId},%X{spanId}]"
