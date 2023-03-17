@@ -133,6 +133,7 @@ class PilotIT extends BaseIT {
         .contains(toBeUpdated)
         .doesNotContain(actual);
     assertThat(spaceshipsAfter)
+        .hasSameSizeAs(pilotsBefore)
         .doesNotContain(toBeUpdated)
         .contains(actual);
   }

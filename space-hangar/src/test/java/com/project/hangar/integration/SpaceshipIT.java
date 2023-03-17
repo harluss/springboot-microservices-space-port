@@ -131,6 +131,7 @@ class SpaceshipIT extends BaseIT {
         .contains(toBeUpdated)
         .doesNotContain(actual);
     assertThat(spaceshipsAfter)
+        .hasSameSizeAs(spaceshipsBefore)
         .doesNotContain(toBeUpdated)
         .contains(actual);
   }

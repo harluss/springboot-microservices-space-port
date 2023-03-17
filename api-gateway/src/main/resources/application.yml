@@ -1,14 +1,11 @@
 server:
   port: 8080
-  error:
-    whitelabel:
-      enabled: false
 
 spring:
   application:
     name: api-gateway
-  zipkin:
-    base-url: ${ZIPKIN_URL:http://localhost:9411}
+  profiles:
+    active: local
   cloud:
     gateway:
       routes:
@@ -35,12 +32,11 @@ spring:
           predicates:
             - Path=/eureka/**
 
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka
+---
 
-# Adds trace and span IDs to Log4J2
-logging:
-  pattern:
-    level: "%5p [${spring.zipkin.service.name:${spring.application.name:}},%X{traceId},%X{spanId}]"
+spring:
+  config:
+    activate:
+      on-profile: local
+    import:
+      "configserver:"
