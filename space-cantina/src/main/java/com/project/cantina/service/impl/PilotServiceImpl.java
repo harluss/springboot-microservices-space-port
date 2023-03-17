@@ -1,4 +1,4 @@
-package com.project.cantina.service;
+package com.project.cantina.service.impl;
 
 import com.project.cantina.dto.PilotDto;
 import com.project.cantina.entity.PilotEntity;
@@ -6,6 +6,7 @@ import com.project.cantina.exception.AlreadyExistsException;
 import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.repository.PilotRepository;
+import com.project.cantina.service.PilotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,17 @@ public class PilotServiceImpl implements PilotService {
   public List<PilotDto> getAllByIds(final List<UUID> pilotIds) {
 
     final List<PilotDto> pilotDtos = pilotRepository.findAllByIdIn(pilotIds).stream()
+        .map(pilotMapper::entityToDto)
+        .toList();
+    log.info("{} Pilots found", pilotDtos.size());
+
+    return pilotDtos;
+  }
+
+  @Override
+  public List<PilotDto> getAllByNames(final List<String> pilotNames) {
+
+    final List<PilotDto> pilotDtos = pilotRepository.findAllByNameIn(pilotNames).stream()
         .map(pilotMapper::entityToDto)
         .toList();
     log.info("{} Pilots found", pilotDtos.size());

@@ -4,6 +4,7 @@ import com.project.cantina.dto.PilotDto;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.entity.PilotEntity;
+import com.project.cantina.mapper.impl.PilotMapperImpl;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

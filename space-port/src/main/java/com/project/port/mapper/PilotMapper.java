@@ -1,9 +1,10 @@
 package com.project.port.mapper;
 
-import com.project.port.dto.PilotClientRequest;
-import com.project.port.dto.PilotClientResponse;
-import com.project.port.dto.PilotDto;
-import com.project.port.dto.PilotResponse;
+import com.project.port.dto.pilot.AddPilotRequest;
+import com.project.port.dto.pilot.PilotClientRequest;
+import com.project.port.dto.pilot.PilotClientResponse;
+import com.project.port.dto.pilot.PilotDto;
+import com.project.port.dto.pilot.PilotResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,4 +37,12 @@ public interface PilotMapper {
    * @return pilot response to a client
    */
   PilotClientRequest idsToClientRequest(List<UUID> ids);
+
+  /**
+   * Converts add pilot request into a pilot DTO
+   *
+   * @param addPilotRequest add pilot request containing details of new pilot
+   * @return pilot DTO
+   */
+  PilotDto addRequestToDto(AddPilotRequest addPilotRequest);
 }

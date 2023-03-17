@@ -14,4 +14,6 @@ public interface PilotRepository extends JpaRepository<PilotEntity, UUID> {
   List<PilotEntity> findAllByIdIn(List<UUID> ids);
 
   Optional<PilotEntity> findByName(String name);
+
+  List<PilotEntity> findAllByNameIn(List<String> names);
 }

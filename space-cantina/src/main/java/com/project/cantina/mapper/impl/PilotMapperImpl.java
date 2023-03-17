@@ -1,10 +1,11 @@
-package com.project.cantina.mapper;
+package com.project.cantina.mapper.impl;
 
 import com.project.cantina.dto.PilotDto;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.dto.PilotUpdateRequest;
 import com.project.cantina.entity.PilotEntity;
+import com.project.cantina.mapper.PilotMapper;
 import org.springframework.stereotype.Component;
 
 @Component

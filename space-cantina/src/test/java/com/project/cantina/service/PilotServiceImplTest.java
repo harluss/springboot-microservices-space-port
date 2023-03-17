@@ -6,6 +6,7 @@ import com.project.cantina.exception.AlreadyExistsException;
 import com.project.cantina.exception.NotFoundException;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.repository.PilotRepository;
+import com.project.cantina.service.impl.PilotServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,6 +98,20 @@ class PilotServiceImplTest {
     assertThat(actual).containsExactly(pilotDto, pilotDto2);
     verify(pilotMapperMock, times(2)).entityToDto(any(PilotEntity.class));
     verify(pilotRepositoryMock).findAllByIdIn(reqPilotIds);
+  }
+
+  @Test
+  void getAllByNames() {
+    final List<PilotEntity> pilotEntities = List.of(pilotEntity);
+    final List<String> pilotNames = List.of(pilotEntity.getName());
+    when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);
+    when(pilotRepositoryMock.findAllByNameIn(pilotNames)).thenReturn(pilotEntities);
+
+    final List<PilotDto> actual = pilotService.getAllByNames(pilotNames);
+
+    assertThat(actual).containsExactly(pilotDto);
+    verify(pilotMapperMock).entityToDto(pilotEntity);
+    verify(pilotRepositoryMock).findAllByNameIn(pilotNames);
   }
 
   @Test

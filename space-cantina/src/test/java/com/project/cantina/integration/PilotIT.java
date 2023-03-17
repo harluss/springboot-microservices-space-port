@@ -1,6 +1,8 @@
 package com.project.cantina.integration;
 
 import com.project.cantina.common.BaseIT;
+import com.project.cantina.dto.PilotIdsRequest;
+import com.project.cantina.dto.PilotNamesRequest;
 import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotUpdateRequest;
 import com.project.cantina.entity.PilotEntity;
@@ -28,6 +30,10 @@ import static org.hamcrest.Matchers.notNullValue;
 class PilotIT extends BaseIT {
 
   private static final String TEST_API = "/api/v1/pilots";
+
+  private static final String TEST_API_IDS = "/api/v1/pilots/ids";
+
+  private static final String TEST_API_NAMES = "/api/v1/pilots/names";
 
   private static final String TEST_API_WITH_ID = "/api/v1/pilots/{id}";
 
@@ -61,6 +67,56 @@ class PilotIT extends BaseIT {
         });
 
     assertThat(actual).hasSize(pilotsBefore.size());
+  }
+
+  @Test
+  void getPilotsByIds_happyPath() {
+    final PilotEntity pilotEntity = pilotsBefore.get(0);
+    final PilotIdsRequest request = PilotIdsRequest.builder()
+        .pilotIds(List.of(pilotEntity.getId()))
+        .build();
+
+    final List<PilotEntity> actual = given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(objectToJsonString(request))
+        .when()
+        .post(TEST_API_IDS)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .body()
+        .as(new TypeRef<>() {
+        });
+
+    assertThat(actual).hasSize(request.getPilotIds().size())
+        .contains(pilotEntity);
+  }
+
+  @Test
+  void getPilotsByNames_happyPath() {
+    final PilotEntity pilotEntity = pilotsBefore.get(0);
+    final PilotNamesRequest request = PilotNamesRequest.builder()
+        .pilotNames(List.of(pilotEntity.getName()))
+        .build();
+
+    final List<PilotEntity> actual = given()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(objectToJsonString(request))
+        .when()
+        .post(TEST_API_NAMES)
+        .then()
+        .log().body()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .body()
+        .as(new TypeRef<>() {
+        });
+
+    assertThat(actual).hasSize(request.getPilotNames().size())
+        .contains(pilotEntity);
   }
 
   @Test

@@ -27,6 +27,14 @@ public interface PilotService {
   List<PilotDto> getAllByIds(List<UUID> pilotIds);
 
   /**
+   * Returns list of pilots based on provided list of names
+   *
+   * @param pilotNames list of pilot names
+   * @return list of pilot DTOs
+   */
+  List<PilotDto> getAllByNames(List<String> pilotNames);
+
+  /**
    * Returns pilot based on provided Id
    *
    * @param pilotId pilot Id
