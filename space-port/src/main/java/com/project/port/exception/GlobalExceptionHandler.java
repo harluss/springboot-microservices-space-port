@@ -25,6 +25,15 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
   }
 
+  @ExceptionHandler(PilotExistsException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  protected ResponseEntity<ErrorResponse> handlePilotExists(final PilotExistsException exception) {
+
+    final ErrorResponse errorResponse = buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception) {

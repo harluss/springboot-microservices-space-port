@@ -30,6 +30,15 @@ class GlobalExceptionHandlerTest {
   }
 
   @Test
+  void handlePilotExists() {
+    final PilotExistsException pilotExistsException = new PilotExistsException(ERROR_MESSAGE);
+
+    final ResponseEntity<ErrorResponse> errorResponse = globalExceptionHandler.handlePilotExists(pilotExistsException);
+
+    assertExceptionHandledCorrectly(errorResponse, ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
   void handleUncaught() {
     final RuntimeException runtimeException = new RuntimeException(ERROR_MESSAGE);
 
