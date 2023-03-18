@@ -11,7 +11,7 @@ import java.util.List;
 @Value
 @Builder
 @Jacksonized
-public class PilotUpdateRequest {
+public class UpdatePilotRequest {
 
   @NotBlank
   @Size(max = 150)

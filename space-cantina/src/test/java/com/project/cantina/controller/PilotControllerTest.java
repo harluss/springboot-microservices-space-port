@@ -1,11 +1,10 @@
 package com.project.cantina.controller;
 
 import com.project.cantina.common.TestUtil;
+import com.project.cantina.dto.AddPilotRequest;
 import com.project.cantina.dto.PilotDto;
-import com.project.cantina.dto.PilotIdsRequest;
-import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
-import com.project.cantina.dto.PilotUpdateRequest;
+import com.project.cantina.dto.UpdatePilotRequest;
 import com.project.cantina.exception.AlreadyExistsException;
 import com.project.cantina.exception.ErrorResponse;
 import com.project.cantina.exception.NotFoundException;
@@ -35,7 +34,6 @@ import static com.project.cantina.common.Constants.buildDto;
 import static com.project.cantina.common.Constants.buildInvalidRequest;
 import static com.project.cantina.common.Constants.buildInvalidUpdateRequest;
 import static com.project.cantina.common.Constants.buildNotFoundErrorResponse;
-import static com.project.cantina.common.Constants.buildPilotIdsRequest;
 import static com.project.cantina.common.Constants.buildReqValidationFailedErrorResponse;
 import static com.project.cantina.common.Constants.buildRequest;
 import static com.project.cantina.common.Constants.buildResponse;
@@ -62,8 +60,6 @@ class PilotControllerTest extends TestUtil {
 
   private static final String TEST_API_WITH_ID = "/api/v1/pilots/{id}";
 
-  private static final String TEST_API_CREW = "/api/v1/pilots/crew";
-
   @Autowired
   private MockMvc mockMvc;
 
@@ -77,11 +73,9 @@ class PilotControllerTest extends TestUtil {
 
   private PilotDto pilotDto;
 
-  private PilotRequest pilotRequest;
+  private AddPilotRequest addPilotRequest;
 
-  private PilotUpdateRequest pilotUpdateRequest;
-
-  private PilotIdsRequest pilotIdsRequest;
+  private UpdatePilotRequest updatePilotRequest;
 
   private ErrorResponse expectedNotFoundErrorResponse;
 
@@ -90,9 +84,8 @@ class PilotControllerTest extends TestUtil {
     RestAssuredMockMvc.mockMvc(mockMvc);
     pilotResponse = buildResponse();
     pilotDto = buildDto();
-    pilotRequest = buildRequest();
-    pilotUpdateRequest = buildUpdateRequest();
-    pilotIdsRequest = buildPilotIdsRequest();
+    addPilotRequest = buildRequest();
+    updatePilotRequest = buildUpdateRequest();
     expectedNotFoundErrorResponse = buildNotFoundErrorResponse();
   }
 
@@ -137,26 +130,6 @@ class PilotControllerTest extends TestUtil {
   }
 
   @Test
-  void getPilotsByIds() {
-    when(pilotServiceMock.getAllByIds(pilotIdsRequest.getPilotIds())).thenReturn(List.of(pilotDto));
-    when(pilotMapperMock.dtoToResponse(pilotDto)).thenReturn(pilotResponse);
-
-    given()
-        .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(pilotIdsRequest))
-        .when()
-        .post(TEST_API_CREW)
-        .then()
-        .log().body()
-        .assertThat()
-        .statusCode(HttpStatus.OK.value())
-        .body(equalTo(objectToJsonString(List.of(pilotDto))));
-
-    verify(pilotServiceMock).getAllByIds(pilotIdsRequest.getPilotIds());
-    verify(pilotMapperMock).dtoToResponse(pilotDto);
-  }
-
-  @Test
   void getPilotById() {
     final UUID reqId = pilotResponse.getId();
     when(pilotServiceMock.getById(reqId)).thenReturn(pilotDto);
@@ -195,13 +168,13 @@ class PilotControllerTest extends TestUtil {
 
   @Test
   void addPilot() {
-    when(pilotMapperMock.requestToDto(pilotRequest)).thenReturn(pilotDto);
+    when(pilotMapperMock.addRequestToDto(addPilotRequest)).thenReturn(pilotDto);
     when(pilotServiceMock.add(pilotDto)).thenReturn(pilotDto);
     when(pilotMapperMock.dtoToResponse(pilotDto)).thenReturn(pilotResponse);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(pilotRequest))
+        .body(objectToJsonString(addPilotRequest))
         .when()
         .post(TEST_API)
         .then()
@@ -211,7 +184,7 @@ class PilotControllerTest extends TestUtil {
         .header(HttpHeaders.LOCATION, endsWith(TEST_API + "/" + pilotResponse.getId()))
         .body(equalTo(objectToJsonString(pilotResponse)));
 
-    verify(pilotMapperMock).requestToDto(pilotRequest);
+    verify(pilotMapperMock).addRequestToDto(addPilotRequest);
     verify(pilotMapperMock).dtoToResponse(pilotDto);
     verify(pilotServiceMock).add(pilotDto);
   }
@@ -219,12 +192,12 @@ class PilotControllerTest extends TestUtil {
   @Test
   void addPilot_alreadyExists() {
     final ErrorResponse expectedAlreadyExistsErrorResponse = buildAlreadyExistsErrorResponse();
-    when(pilotMapperMock.requestToDto(pilotRequest)).thenReturn(pilotDto);
+    when(pilotMapperMock.addRequestToDto(addPilotRequest)).thenReturn(pilotDto);
     doThrow(new AlreadyExistsException(expectedAlreadyExistsErrorResponse.getMessage())).when(pilotServiceMock).add(pilotDto);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(pilotRequest))
+        .body(objectToJsonString(addPilotRequest))
         .when()
         .post(TEST_API)
         .then()
@@ -233,19 +206,19 @@ class PilotControllerTest extends TestUtil {
         .statusCode(HttpStatus.BAD_REQUEST.value())
         .body(equalTo(objectToJsonString(expectedAlreadyExistsErrorResponse)));
 
-    verify(pilotMapperMock).requestToDto(pilotRequest);
+    verify(pilotMapperMock).addRequestToDto(addPilotRequest);
     verify(pilotMapperMock, times(0)).dtoToResponse(any());
     verify(pilotServiceMock).add(pilotDto);
   }
 
   @Test
   void addPilot_invalidRequestBody() {
-    final PilotRequest invalidPilotRequest = buildInvalidRequest();
+    final AddPilotRequest invalidAddPilotRequest = buildInvalidRequest();
     final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
 
     final String responseBody = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(invalidPilotRequest))
+        .body(objectToJsonString(invalidAddPilotRequest))
         .when()
         .post(TEST_API)
         .then()
@@ -266,13 +239,13 @@ class PilotControllerTest extends TestUtil {
   @Test
   void updatePilotById() {
     final UUID reqId = pilotResponse.getId();
-    when(pilotMapperMock.updateRequestToDto(pilotUpdateRequest)).thenReturn(pilotDto);
+    when(pilotMapperMock.updateRequestToDto(updatePilotRequest)).thenReturn(pilotDto);
     when(pilotServiceMock.updateById(pilotDto, reqId)).thenReturn(pilotDto);
     when(pilotMapperMock.dtoToResponse(pilotDto)).thenReturn(pilotResponse);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(pilotUpdateRequest))
+        .body(objectToJsonString(updatePilotRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
@@ -281,7 +254,7 @@ class PilotControllerTest extends TestUtil {
         .statusCode(HttpStatus.OK.value())
         .body(equalTo(objectToJsonString(pilotResponse)));
 
-    verify(pilotMapperMock).updateRequestToDto(pilotUpdateRequest);
+    verify(pilotMapperMock).updateRequestToDto(updatePilotRequest);
     verify(pilotMapperMock).dtoToResponse(pilotDto);
     verify(pilotServiceMock).updateById(pilotDto, reqId);
   }
@@ -290,13 +263,13 @@ class PilotControllerTest extends TestUtil {
   void updatePilotById_notFound() {
     final UUID reqId = getRandomUUID();
     final ErrorResponse expectedErrorResponse = buildNotFoundErrorResponse();
-    when(pilotMapperMock.updateRequestToDto(pilotUpdateRequest)).thenReturn(pilotDto);
+    when(pilotMapperMock.updateRequestToDto(updatePilotRequest)).thenReturn(pilotDto);
     doThrow(new NotFoundException(expectedErrorResponse.getMessage()))
         .when(pilotServiceMock).updateById(pilotDto, reqId);
 
     given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(pilotUpdateRequest))
+        .body(objectToJsonString(updatePilotRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()
@@ -305,19 +278,19 @@ class PilotControllerTest extends TestUtil {
         .statusCode(HttpStatus.NOT_FOUND.value())
         .body(equalTo(objectToJsonString(expectedErrorResponse)));
 
-    verify(pilotMapperMock).updateRequestToDto(pilotUpdateRequest);
+    verify(pilotMapperMock).updateRequestToDto(updatePilotRequest);
     verify(pilotServiceMock).updateById(pilotDto, reqId);
   }
 
   @Test
   void updatePilotById_invalidRequestBody() {
     final UUID reqId = pilotResponse.getId();
-    final PilotUpdateRequest invalidPilotUpdateRequest = buildInvalidUpdateRequest();
+    final UpdatePilotRequest invalidUpdatePilotRequest = buildInvalidUpdateRequest();
     final ErrorResponse expectedErrorResponse = buildReqValidationFailedErrorResponse();
 
     final String responseBody = given()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(objectToJsonString(invalidPilotUpdateRequest))
+        .body(objectToJsonString(invalidUpdatePilotRequest))
         .when()
         .put(TEST_API_WITH_ID, reqId)
         .then()

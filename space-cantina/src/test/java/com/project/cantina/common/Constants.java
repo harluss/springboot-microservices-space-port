@@ -1,10 +1,9 @@
 package com.project.cantina.common;
 
+import com.project.cantina.dto.AddPilotRequest;
 import com.project.cantina.dto.PilotDto;
-import com.project.cantina.dto.PilotIdsRequest;
-import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
-import com.project.cantina.dto.PilotUpdateRequest;
+import com.project.cantina.dto.UpdatePilotRequest;
 import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.exception.ErrorResponse;
 import lombok.experimental.UtilityClass;
@@ -18,8 +17,6 @@ import java.util.UUID;
 public class Constants {
 
   private static final UUID ID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-
-  private static final UUID ID2 = UUID.fromString("a5eb9b26-3c8e-4f04-8d52-a43871fcc54e");
 
   private static final String NAME = "Darth Vader";
 
@@ -61,8 +58,8 @@ public class Constants {
         .build();
   }
 
-  public static PilotRequest buildRequest() {
-    return PilotRequest.builder()
+  public static AddPilotRequest buildRequest() {
+    return AddPilotRequest.builder()
         .name(NAME)
         .species(SPECIES)
         .profession(PROFESSION)
@@ -70,8 +67,8 @@ public class Constants {
         .build();
   }
 
-  public static PilotUpdateRequest buildUpdateRequest() {
-    return PilotUpdateRequest.builder()
+  public static UpdatePilotRequest buildUpdateRequest() {
+    return UpdatePilotRequest.builder()
         .species(SPECIES)
         .profession(UPDATED_PROFESSION)
         .weapons(Collections.emptyList())
@@ -82,8 +79,8 @@ public class Constants {
     return UUID.randomUUID();
   }
 
-  public static PilotRequest buildInvalidRequest() {
-    return PilotRequest.builder()
+  public static AddPilotRequest buildInvalidRequest() {
+    return AddPilotRequest.builder()
         .name(NAME)
         .species(null)
         .profession("")
@@ -91,8 +88,8 @@ public class Constants {
         .build();
   }
 
-  public static PilotUpdateRequest buildInvalidUpdateRequest() {
-    return PilotUpdateRequest.builder()
+  public static UpdatePilotRequest buildInvalidUpdateRequest() {
+    return UpdatePilotRequest.builder()
         .species(null)
         .profession("")
         .weapons(List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"))
@@ -132,11 +129,5 @@ public class Constants {
     errorResponse.addValidationError("weapons", "size must be between 0 and 10");
 
     return errorResponse;
-  }
-
-  public static PilotIdsRequest buildPilotIdsRequest() {
-    return PilotIdsRequest.builder()
-        .pilotIds(List.of(ID, ID2))
-        .build();
   }
 }

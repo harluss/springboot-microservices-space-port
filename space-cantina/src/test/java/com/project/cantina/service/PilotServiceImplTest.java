@@ -78,43 +78,6 @@ class PilotServiceImplTest {
   }
 
   @Test
-  void getAllByIds() {
-    final PilotEntity pilotEntity2 = pilotEntity.toBuilder()
-        .id(randomId)
-        .name("C3P0")
-        .build();
-    final PilotDto pilotDto2 = pilotDto.toBuilder()
-        .id(pilotEntity2.getId())
-        .name(pilotEntity2.getName())
-        .build();
-    final List<PilotEntity> pilotEntities = List.of(pilotEntity, pilotEntity2);
-    final List<UUID> reqPilotIds = List.of(pilotEntity.getId(), pilotEntity2.getId());
-    when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);
-    when(pilotMapperMock.entityToDto(pilotEntity2)).thenReturn(pilotDto2);
-    when(pilotRepositoryMock.findAllByIdIn(reqPilotIds)).thenReturn(pilotEntities);
-
-    final List<PilotDto> actual = pilotService.getAllByIds(reqPilotIds);
-
-    assertThat(actual).containsExactly(pilotDto, pilotDto2);
-    verify(pilotMapperMock, times(2)).entityToDto(any(PilotEntity.class));
-    verify(pilotRepositoryMock).findAllByIdIn(reqPilotIds);
-  }
-
-  @Test
-  void getAllByNames() {
-    final List<PilotEntity> pilotEntities = List.of(pilotEntity);
-    final List<String> pilotNames = List.of(pilotEntity.getName());
-    when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);
-    when(pilotRepositoryMock.findAllByNameIn(pilotNames)).thenReturn(pilotEntities);
-
-    final List<PilotDto> actual = pilotService.getAllByNames(pilotNames);
-
-    assertThat(actual).containsExactly(pilotDto);
-    verify(pilotMapperMock).entityToDto(pilotEntity);
-    verify(pilotRepositoryMock).findAllByNameIn(pilotNames);
-  }
-
-  @Test
   void getById() {
     when(pilotRepositoryMock.findById(pilotDto.getId())).thenReturn(Optional.of(pilotEntity));
     when(pilotMapperMock.entityToDto(pilotEntity)).thenReturn(pilotDto);

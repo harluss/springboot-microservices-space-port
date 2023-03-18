@@ -1,10 +1,9 @@
 package com.project.cantina.controller;
 
+import com.project.cantina.dto.AddPilotRequest;
 import com.project.cantina.dto.PilotDto;
-import com.project.cantina.dto.PilotIdsRequest;
-import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
-import com.project.cantina.dto.PilotUpdateRequest;
+import com.project.cantina.dto.UpdatePilotRequest;
 import com.project.cantina.mapper.PilotMapper;
 import com.project.cantina.service.PilotService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,21 +52,6 @@ public class PilotController {
     return ResponseEntity.ok(pilotResponses);
   }
 
-  @Operation(summary = "Get all pilots by Ids",
-      description = "Retrieves all pilots based on given Ids",
-      responses = {
-          @ApiResponse(responseCode = "200", description = "Successfully retrieved list of pilots")
-      })
-  @PostMapping("/crew")
-  public ResponseEntity<List<PilotResponse>> getPilotsByIds(@Valid @RequestBody final PilotIdsRequest pilotIdsRequest) {
-
-    final List<PilotResponse> pilotResponses = pilotService.getAllByIds(pilotIdsRequest.getPilotIds()).stream()
-        .map(pilotMapper::dtoToResponse)
-        .toList();
-
-    return ResponseEntity.ok(pilotResponses);
-  }
-
   @Operation(summary = "Get pilot by Id",
       description = "Retrieves a single pilot based on given Id",
       responses = {
@@ -89,9 +73,9 @@ public class PilotController {
           @ApiResponse(responseCode = "400", description = "Request data validation failed")
       })
   @PostMapping
-  public ResponseEntity<PilotResponse> addPilot(@Valid @RequestBody final PilotRequest pilotRequest) {
+  public ResponseEntity<PilotResponse> addPilot(@Valid @RequestBody final AddPilotRequest addPilotRequest) {
 
-    final PilotDto pilotDto = pilotMapper.requestToDto(pilotRequest);
+    final PilotDto pilotDto = pilotMapper.addRequestToDto(addPilotRequest);
     final PilotResponse pilotResponse = pilotMapper.dtoToResponse(pilotService.add(pilotDto));
     final URI location = getResourceLocation(pilotResponse);
 
@@ -108,10 +92,10 @@ public class PilotController {
   @PutMapping("{id}")
   public ResponseEntity<PilotResponse> updatePilotById(
       @NotBlank @PathVariable("id") final UUID pilotId,
-      @Valid @RequestBody final PilotUpdateRequest pilotUpdateRequest
+      @Valid @RequestBody final UpdatePilotRequest updatePilotRequest
   ) {
 
-    final PilotDto pilotDtoUpdate = pilotMapper.updateRequestToDto(pilotUpdateRequest);
+    final PilotDto pilotDtoUpdate = pilotMapper.updateRequestToDto(updatePilotRequest);
     final PilotResponse updatedPilotResponse = pilotMapper.dtoToResponse(pilotService.updateById(pilotDtoUpdate, pilotId));
 
     return ResponseEntity.ok(updatedPilotResponse);

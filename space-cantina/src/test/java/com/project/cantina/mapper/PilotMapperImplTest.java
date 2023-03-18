@@ -1,7 +1,7 @@
 package com.project.cantina.mapper;
 
+import com.project.cantina.dto.AddPilotRequest;
 import com.project.cantina.dto.PilotDto;
-import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
 import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.mapper.impl.PilotMapperImpl;
@@ -62,12 +62,12 @@ class PilotMapperImplTest {
 
   @Test
   void requestToDto() {
-    final PilotRequest request = buildRequest();
+    final AddPilotRequest request = buildRequest();
     final PilotDto expected = buildDto().toBuilder()
         .id(null)
         .build();
 
-    final PilotDto actual = pilotMapper.requestToDto(request);
+    final PilotDto actual = pilotMapper.addRequestToDto(request);
 
     AssertionsForClassTypes.assertThat(actual).isEqualTo(expected);
   }

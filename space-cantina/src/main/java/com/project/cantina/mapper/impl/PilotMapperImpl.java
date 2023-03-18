@@ -1,9 +1,9 @@
 package com.project.cantina.mapper.impl;
 
+import com.project.cantina.dto.AddPilotRequest;
 import com.project.cantina.dto.PilotDto;
-import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
-import com.project.cantina.dto.PilotUpdateRequest;
+import com.project.cantina.dto.UpdatePilotRequest;
 import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.mapper.PilotMapper;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ public class PilotMapperImpl implements PilotMapper {
   }
 
   @Override
-  public PilotDto requestToDto(final PilotRequest request) {
+  public PilotDto addRequestToDto(final AddPilotRequest request) {
     return PilotDto.builder()
         .name(request.getName())
         .species(request.getSpecies())
@@ -54,7 +54,7 @@ public class PilotMapperImpl implements PilotMapper {
   }
 
   @Override
-  public PilotDto updateRequestToDto(final PilotUpdateRequest request) {
+  public PilotDto updateRequestToDto(final UpdatePilotRequest request) {
     return PilotDto.builder()
         .species(request.getSpecies())
         .profession(request.getProfession())
