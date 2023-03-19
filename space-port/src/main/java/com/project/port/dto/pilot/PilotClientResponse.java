@@ -1,14 +1,16 @@
-package com.project.port.dto;
+package com.project.port.dto.pilot;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Value
 @Builder(toBuilder = true)
-public class PilotDto {
+@Jacksonized
+public class PilotClientResponse {
 
   private UUID id;
 

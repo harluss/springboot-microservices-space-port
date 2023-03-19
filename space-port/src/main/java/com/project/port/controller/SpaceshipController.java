@@ -1,23 +1,32 @@
 package com.project.port.controller;
 
-import com.project.port.dto.SpaceshipResponse;
+import com.project.port.dto.spaceship.AddSpaceshipRequest;
+import com.project.port.dto.spaceship.SpaceshipDto;
+import com.project.port.dto.spaceship.SpaceshipResponse;
 import com.project.port.mapper.SpaceshipMapper;
 import com.project.port.service.SpaceshipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+@Log4j2
 @CrossOrigin(origins = "${cors.enable.api-gateway.base-url}")
 @Tag(name = "spaceships", description = "spaceships operations")
 @RestController
@@ -57,5 +66,26 @@ public class SpaceshipController {
     final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.getById(spaceshipId));
 
     return ResponseEntity.ok(spaceshipResponse);
+  }
+
+  @Operation(summary = "Add new spaceship with crew",
+      description = "Adds a new spaceship to the hangar and its crew to the cantina",
+      responses = {
+          @ApiResponse(responseCode = "201", description = "Successfully added a new spaceship"),
+          @ApiResponse(responseCode = "400", description = "Request data validation failed")
+      })
+  @PostMapping
+  public ResponseEntity<SpaceshipResponse> addSpaceship(@Valid @RequestBody final AddSpaceshipRequest addSpaceshipRequest) {
+
+    final SpaceshipDto spaceshipDto = spaceshipMapper.addRequestToDto(addSpaceshipRequest);
+    final SpaceshipResponse spaceshipResponse = spaceshipMapper.dtoToResponse(spaceshipService.add(spaceshipDto));
+    final URI location = getResourceLocation(spaceshipResponse);
+
+    return ResponseEntity.created(location).body(spaceshipResponse);
+  }
+
+  private static URI getResourceLocation(final SpaceshipResponse spaceshipResponse) {
+    return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(spaceshipResponse.getId()).toUri();
   }
 }

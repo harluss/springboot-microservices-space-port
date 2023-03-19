@@ -1,12 +1,14 @@
 package com.project.port.client;
 
 import com.project.port.config.CustomErrorDecoder;
-import com.project.port.dto.PilotClientRequest;
-import com.project.port.dto.PilotClientResponse;
+import com.project.port.dto.pilot.AddPilotClientRequest;
+import com.project.port.dto.pilot.PilotClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -17,11 +19,19 @@ import java.util.List;
 public interface PilotClient {
 
   /**
-   * Makes a POST call to a Cantina microservice to retrieve a list of pilots based on provided list of pilot Ids
+   * Makes a GET call to Cantina microservice to retrieve a list of pilots
    *
-   * @param pilotClientRequest pilot client request containing list of pilot Ids
-   * @return list of pilot responses from a client
+   * @return list of pilots from a client
    */
-  @PostMapping("/crew")
-  List<PilotClientResponse> getPilotsByIds(@RequestBody PilotClientRequest pilotClientRequest);
+  @GetMapping
+  List<PilotClientResponse> getPilots();
+
+  /**
+   * Makes a POST call to Cantina microservice to add new pilot
+   *
+   * @param addPilotClientRequest pilot client request containing details of new pilot
+   * @return newly added pilot
+   */
+  @PostMapping
+  PilotClientResponse addPilot(@Valid @RequestBody final AddPilotClientRequest addPilotClientRequest);
 }

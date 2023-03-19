@@ -5,6 +5,7 @@ import com.project.hangar.entity.SpaceshipEntity;
 import com.project.hangar.exception.NotFoundException;
 import com.project.hangar.mapper.SpaceshipMapper;
 import com.project.hangar.repository.SpaceshipRepository;
+import com.project.hangar.service.impl.SpaceshipServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.project.hangar.common.Constants.*;
+import static com.project.hangar.common.Constants.buildDto;
+import static com.project.hangar.common.Constants.buildEntity;
+import static com.project.hangar.common.Constants.getRandomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)

@@ -1,15 +1,18 @@
-package com.project.port.dto;
+package com.project.port.dto.spaceship;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.port.dto.pilot.PilotResponse;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 import java.util.UUID;
 
-@Data
-@Builder(toBuilder = true)
-public class SpaceshipDto {
+@Value
+@Builder
+@Jacksonized
+public class SpaceshipResponse {
 
   private UUID id;
 
@@ -22,9 +25,7 @@ public class SpaceshipDto {
 
   private Integer payload;
 
-  private List<UUID> crewIds;
-
-  private List<PilotDto> crew;
+  private List<PilotResponse> crew;
 
   private List<String> armament;
 }

@@ -1,4 +1,4 @@
-package com.project.port.dto;
+package com.project.port.dto.spaceship;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -11,20 +11,18 @@ import java.util.UUID;
 @Value
 @Builder
 @Jacksonized
-public class SpaceshipResponse {
-
-  private UUID id;
+public class AddSpaceshipClientRequest {
 
   private String name;
 
   @JsonProperty("class")
   private String classType;
 
-  private Integer maxSpeed;
-
   private Integer payload;
 
-  private List<PilotResponse> crew;
+  private Integer maxSpeed;
+
+  private List<UUID> crewIds;
 
   private List<String> armament;
 }

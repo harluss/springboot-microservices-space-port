@@ -2,14 +2,18 @@ package com.project.port.service;
 
 import com.project.port.client.PilotClient;
 import com.project.port.client.SpaceshipClient;
-import com.project.port.dto.PilotClientRequest;
-import com.project.port.dto.PilotClientResponse;
-import com.project.port.dto.PilotDto;
-import com.project.port.dto.SpaceshipClientResponse;
-import com.project.port.dto.SpaceshipDto;
+import com.project.port.dto.pilot.AddPilotClientRequest;
+import com.project.port.dto.pilot.PilotClientResponse;
+import com.project.port.dto.pilot.PilotDto;
+import com.project.port.dto.spaceship.AddSpaceshipClientRequest;
+import com.project.port.dto.spaceship.SpaceshipClientResponse;
+import com.project.port.dto.spaceship.SpaceshipDto;
+import com.project.port.exception.AddPilotException;
 import com.project.port.exception.NotFoundException;
+import com.project.port.exception.PilotExistsException;
 import com.project.port.mapper.PilotMapper;
 import com.project.port.mapper.SpaceshipMapper;
+import com.project.port.service.impl.SpaceshipServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +28,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.project.port.common.Constant.buildPilotClientRequest;
+import static com.project.port.common.Constant.buildAddPilotClientRequest;
+import static com.project.port.common.Constant.buildAddSpaceshipClientRequest;
 import static com.project.port.common.Constant.buildPilotClientResponse;
 import static com.project.port.common.Constant.buildPilotDto;
 import static com.project.port.common.Constant.buildSpaceshipClientResponse;
@@ -33,6 +38,7 @@ import static com.project.port.common.Constant.buildSpaceshipDto;
 import static com.project.port.common.Constant.buildSpaceshipDtoWithNoCrewDetails;
 import static com.project.port.common.Constant.buildSpaceshipDtoWithNoCrewDetailsAndCrewIds;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
@@ -69,9 +75,11 @@ class SpaceshipServiceImplTest {
 
   private SpaceshipClientResponse spaceshipClientResponseWithNoCrewIds;
 
-  private PilotClientRequest pilotClientRequest;
+  private AddSpaceshipClientRequest addSpaceshipClientRequest;
 
   private PilotClientResponse pilotClientResponse;
+
+  private AddPilotClientRequest addPilotClientRequest;
 
   private PilotDto pilotDto;
 
@@ -81,11 +89,12 @@ class SpaceshipServiceImplTest {
     spaceshipDto = buildSpaceshipDto();
     spaceshipDtoWithNoCrewDetails = buildSpaceshipDtoWithNoCrewDetails();
     spaceshipClientResponse = buildSpaceshipClientResponse();
-    pilotClientRequest = buildPilotClientRequest();
     pilotClientResponse = buildPilotClientResponse();
+    addPilotClientRequest = buildAddPilotClientRequest();
     pilotDto = buildPilotDto();
     spaceshipDtoWithNoCrewDetailsAndCrewIds = buildSpaceshipDtoWithNoCrewDetailsAndCrewIds();
     spaceshipClientResponseWithNoCrewIds = buildSpaceshipClientResponseWithNoCrewIds();
+    addSpaceshipClientRequest = buildAddSpaceshipClientRequest();
   }
 
   @AfterEach
@@ -97,8 +106,7 @@ class SpaceshipServiceImplTest {
   void getAll() {
     when(spaceshipClientMock.getSpaceships()).thenReturn(List.of(spaceshipClientResponse));
     when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponse)).thenReturn(spaceshipDtoWithNoCrewDetails);
-    when(pilotMapperMock.idsToClientRequest(spaceshipDtoWithNoCrewDetails.getCrewIds())).thenReturn(pilotClientRequest);
-    when(pilotClientMock.getPilotsByIds(pilotClientRequest)).thenReturn(List.of(pilotClientResponse));
+    when(pilotClientMock.getPilots()).thenReturn(List.of(pilotClientResponse));
     when(pilotMapperMock.clientResponseToDto(pilotClientResponse)).thenReturn(pilotDto);
 
     final List<SpaceshipDto> actual = spaceshipService.getAll();
@@ -108,8 +116,7 @@ class SpaceshipServiceImplTest {
         .contains(spaceshipDto);
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponse);
     verify(spaceshipClientMock).getSpaceships();
-    verify(pilotMapperMock).idsToClientRequest(spaceshipDto.getCrewIds());
-    verify(pilotClientMock).getPilotsByIds(pilotClientRequest);
+    verify(pilotClientMock).getPilots();
     verify(pilotMapperMock).clientResponseToDto(pilotClientResponse);
   }
 
@@ -137,7 +144,7 @@ class SpaceshipServiceImplTest {
     assertThat(actual)
         .hasSize(1)
         .contains(spaceshipDtoWithNoCrewDetailsAndCrewIds);
-    assertThat(actual.get(0).getCrew()).isEmpty();
+    assertThat(actual.get(0).getCrew()).isNullOrEmpty();
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponseWithNoCrewIds);
     verify(spaceshipClientMock).getSpaceships();
     verifyNoInteractions(pilotClientMock);
@@ -148,8 +155,7 @@ class SpaceshipServiceImplTest {
   void getAll_noPilotsReturnedFromClient() {
     when(spaceshipClientMock.getSpaceships()).thenReturn(List.of(spaceshipClientResponse));
     when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponse)).thenReturn(spaceshipDtoWithNoCrewDetails);
-    when(pilotMapperMock.idsToClientRequest(spaceshipDtoWithNoCrewDetails.getCrewIds())).thenReturn(pilotClientRequest);
-    when(pilotClientMock.getPilotsByIds(pilotClientRequest)).thenReturn(Collections.emptyList());
+    when(pilotClientMock.getPilots()).thenReturn(Collections.emptyList());
 
     final List<SpaceshipDto> actual = spaceshipService.getAll();
 
@@ -159,8 +165,7 @@ class SpaceshipServiceImplTest {
     assertThat(actual.get(0).getCrew()).isEmpty();
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponse);
     verify(spaceshipClientMock).getSpaceships();
-    verify(pilotMapperMock).idsToClientRequest(spaceshipDto.getCrewIds());
-    verify(pilotClientMock).getPilotsByIds(pilotClientRequest);
+    verify(pilotClientMock).getPilots();
     verify(pilotMapperMock, times(0)).clientResponseToDto(any());
   }
 
@@ -169,8 +174,7 @@ class SpaceshipServiceImplTest {
     final UUID reqId = spaceshipDtoWithNoCrewDetails.getId();
     when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.of(spaceshipClientResponse));
     when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponse)).thenReturn(spaceshipDtoWithNoCrewDetails);
-    when(pilotMapperMock.idsToClientRequest(spaceshipDtoWithNoCrewDetails.getCrewIds())).thenReturn(pilotClientRequest);
-    when(pilotClientMock.getPilotsByIds(pilotClientRequest)).thenReturn(List.of(pilotClientResponse));
+    when(pilotClientMock.getPilots()).thenReturn(List.of(pilotClientResponse));
     when(pilotMapperMock.clientResponseToDto(pilotClientResponse)).thenReturn(pilotDto);
 
     final SpaceshipDto actual = spaceshipService.getById(reqId);
@@ -178,8 +182,7 @@ class SpaceshipServiceImplTest {
     assertThat(actual).isEqualTo(spaceshipDto);
     verify(spaceshipClientMock).getSpaceshipById(reqId);
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponse);
-    verify(pilotMapperMock).idsToClientRequest(spaceshipDtoWithNoCrewDetails.getCrewIds());
-    verify(pilotClientMock).getPilotsByIds(pilotClientRequest);
+    verify(pilotClientMock).getPilots();
     verify(pilotMapperMock).clientResponseToDto(pilotClientResponse);
   }
 
@@ -206,7 +209,7 @@ class SpaceshipServiceImplTest {
     final SpaceshipDto actual = spaceshipService.getById(reqId);
 
     assertThat(actual).isEqualTo(spaceshipDtoWithNoCrewDetailsAndCrewIds);
-    assertThat(actual.getCrew()).isEmpty();
+    assertThat(actual.getCrew()).isNullOrEmpty();
     verify(spaceshipClientMock).getSpaceshipById(reqId);
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponseWithNoCrewIds);
     verifyNoInteractions(pilotClientMock);
@@ -218,8 +221,7 @@ class SpaceshipServiceImplTest {
     final UUID reqId = spaceshipDtoWithNoCrewDetails.getId();
     when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.of(spaceshipClientResponse));
     when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponse)).thenReturn(spaceshipDtoWithNoCrewDetails);
-    when(pilotMapperMock.idsToClientRequest(spaceshipDtoWithNoCrewDetails.getCrewIds())).thenReturn(pilotClientRequest);
-    when(pilotClientMock.getPilotsByIds(pilotClientRequest)).thenReturn(Collections.emptyList());
+    when(pilotClientMock.getPilots()).thenReturn(Collections.emptyList());
 
     final SpaceshipDto actual = spaceshipService.getById(reqId);
 
@@ -227,8 +229,65 @@ class SpaceshipServiceImplTest {
     assertThat(actual.getCrew()).isEmpty();
     verify(spaceshipClientMock).getSpaceshipById(reqId);
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponse);
-    verify(pilotMapperMock).idsToClientRequest(spaceshipDto.getCrewIds());
-    verify(pilotClientMock).getPilotsByIds(pilotClientRequest);
+    verify(pilotClientMock).getPilots();
     verify(pilotMapperMock, times(0)).clientResponseToDto(any());
+  }
+
+  @Test
+  void add() {
+    final PilotDto savedPilotDto = pilotDto.toBuilder().name("C3P0").build();
+    final SpaceshipDto spaceshipDtoWithNoCrewIds = spaceshipDto.toBuilder().crewIds(null).build();
+    when(pilotClientMock.getPilots()).thenReturn(Collections.emptyList());
+    when(pilotMapperMock.dtoToClientAddRequest(pilotDto)).thenReturn(addPilotClientRequest);
+    when(pilotClientMock.addPilot(addPilotClientRequest)).thenReturn(pilotClientResponse);
+    when(pilotMapperMock.clientResponseToDto(pilotClientResponse)).thenReturn(savedPilotDto);
+    when(spaceshipMapperMock.dtoToClientAddRequest(spaceshipDto)).thenReturn(addSpaceshipClientRequest);
+    when(spaceshipClientMock.addSpaceship(addSpaceshipClientRequest)).thenReturn(spaceshipClientResponse);
+    when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponse)).thenReturn(spaceshipDto);
+
+    final SpaceshipDto actual = spaceshipService.add(spaceshipDtoWithNoCrewIds);
+
+    assertThat(actual).isEqualTo(spaceshipDto);
+    assertThat(actual.getCrew()).containsExactly(savedPilotDto);
+    assertThat(actual.getCrewIds()).containsExactly(savedPilotDto.getId());
+    verify(pilotClientMock).getPilots();
+    verify(pilotClientMock).addPilot(addPilotClientRequest);
+    verify(pilotMapperMock).dtoToClientAddRequest(pilotDto);
+    verify(pilotMapperMock).clientResponseToDto(pilotClientResponse);
+    verify(spaceshipClientMock).addSpaceship(addSpaceshipClientRequest);
+    verify(spaceshipMapperMock).dtoToClientAddRequest(spaceshipDtoWithNoCrewIds);
+    verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponse);
+  }
+
+  @Test
+  void add_pilotsExist() {
+    when(pilotClientMock.getPilots()).thenReturn(List.of(pilotClientResponse));
+
+    assertThatThrownBy(() -> spaceshipService.add(spaceshipDto))
+        .isInstanceOf(PilotExistsException.class)
+        .hasMessageContaining(spaceshipDto.getCrew().get(0).getName());
+
+    verify(pilotClientMock).getPilots();
+    verify(pilotClientMock, times(0)).addPilot(any());
+    verifyNoInteractions(pilotMapperMock);
+    verifyNoInteractions(spaceshipMapperMock);
+    verifyNoInteractions(spaceshipClientMock);
+  }
+
+  @Test
+  void add_noPilotsSaved() {
+    when(pilotClientMock.getPilots()).thenReturn(Collections.emptyList());
+    when(pilotMapperMock.dtoToClientAddRequest(pilotDto)).thenReturn(addPilotClientRequest);
+    when(pilotClientMock.addPilot(addPilotClientRequest)).thenReturn(null);
+
+    assertThatThrownBy(() -> spaceshipService.add(spaceshipDto))
+        .isInstanceOf(AddPilotException.class);
+
+    verify(pilotClientMock).getPilots();
+    verify(pilotClientMock).addPilot(addPilotClientRequest);
+    verify(pilotMapperMock).dtoToClientAddRequest(pilotDto);
+    verify(pilotMapperMock, times(0)).clientResponseToDto(any());
+    verifyNoInteractions(spaceshipMapperMock);
+    verifyNoInteractions(spaceshipClientMock);
   }
 }

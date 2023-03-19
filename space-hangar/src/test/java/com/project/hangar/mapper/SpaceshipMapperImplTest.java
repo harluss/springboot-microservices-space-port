@@ -4,10 +4,14 @@ import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.dto.SpaceshipResponse;
 import com.project.hangar.entity.SpaceshipEntity;
+import com.project.hangar.mapper.impl.SpaceshipMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.project.hangar.common.Constants.*;
+import static com.project.hangar.common.Constants.buildDto;
+import static com.project.hangar.common.Constants.buildEntity;
+import static com.project.hangar.common.Constants.buildRequest;
+import static com.project.hangar.common.Constants.buildResponse;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class SpaceshipMapperImplTest {

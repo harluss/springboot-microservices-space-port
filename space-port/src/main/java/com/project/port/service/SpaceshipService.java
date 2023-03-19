@@ -1,6 +1,6 @@
 package com.project.port.service;
 
-import com.project.port.dto.SpaceshipDto;
+import com.project.port.dto.spaceship.SpaceshipDto;
 import com.project.port.exception.NotFoundException;
 
 import java.util.List;
@@ -26,4 +26,12 @@ public interface SpaceshipService {
    * @throws NotFoundException when spaceship with provided Id is not found
    */
   SpaceshipDto getById(final UUID spaceshipId);
+
+  /**
+   * Adds new spaceship based on provided spaceship DTO
+   *
+   * @param spaceshipDto spaceship DTO
+   * @return spaceship DTO of added spaceship with Id included
+   */
+  SpaceshipDto add(SpaceshipDto spaceshipDto);
 }

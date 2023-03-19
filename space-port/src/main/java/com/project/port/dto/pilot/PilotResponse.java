@@ -10,7 +10,15 @@ import java.util.UUID;
 @Value
 @Builder
 @Jacksonized
-public class GetByIdsPilotClientRequest {
+public class PilotResponse {
 
-  private List<UUID> pilotIds;
+  private UUID id;
+
+  private String name;
+
+  private String species;
+
+  private String profession;
+
+  private List<String> weapons;
 }

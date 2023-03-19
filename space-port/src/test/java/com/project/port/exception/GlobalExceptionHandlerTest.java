@@ -39,6 +39,15 @@ class GlobalExceptionHandlerTest {
   }
 
   @Test
+  void handleAddPilot() {
+    final AddPilotException addPilotException = new AddPilotException(ERROR_MESSAGE);
+
+    final ResponseEntity<ErrorResponse> errorResponse = globalExceptionHandler.handleAddPilot(addPilotException);
+
+    assertExceptionHandledCorrectly(errorResponse, ERROR_MESSAGE, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @Test
   void handleUncaught() {
     final RuntimeException runtimeException = new RuntimeException(ERROR_MESSAGE);
 

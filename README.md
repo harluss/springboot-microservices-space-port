@@ -7,8 +7,6 @@ Microservices Architecture Assignment 2023
 - [ ] description
 - [ ] requirements
 - [ ] Add rest of CRUD to Space Port
-- [ ] Add IT to Space Port
-- [ ] Add Spring Cloud Config
 - [ ] Add GitHub Action job to run `mvn clean verify` on commit and PR
 - [ ] Add auth with JWT
 
@@ -42,11 +40,12 @@ Microservices Architecture Assignment 2023
 - Global exception handling
 - Custom mapper for DTOs
 - Unit tests with Junit5 and REST-assured
-- Integration tests with Testcontainers
+- Integration tests with Testcontainers and WireMock
 - Swagger documentation
 - Service Discovery with Eureka Service
 - API Gateway
 - Tracing with Sleuth and Zipkin
+- Cloud Config
 
 ### API Gateway
 
@@ -82,22 +81,24 @@ http://localhost:9411/zipkin
 
 #### API
 
-Pilot APIs exposed at:
+Port APIs exposed at:
 
 ```
-http://localhost:8083/api/v1/spaceships
+http://localhost:<random_port>/api/v1/spaceships
 ```
 
 Swagger UI available at:
 
 ```
-http://localhost:8083/api/docs
+http://localhost:<random_port>/api/docs
 ```
 
 Available endpoints:
 
 ```
 GET     /api/v1/spaceships
+GET     /api/v1/spaceships/{id}
+POST    /api/v1/spaceships
 ```
 
 #### Spaceship JSON schema
@@ -135,13 +136,13 @@ GET     /api/v1/spaceships
 Spaceship APIs exposed at:
 
 ```
-http://localhost:8082/api/v1/spaceships
+http://localhost:<random_port>/api/v1/spaceships
 ```
 
 Swagger UI available at:
 
 ```
-http://localhost:8082/api/docs
+http://localhost:<random_port>/api/docs
 ```
 
 Available endpoints:
@@ -180,13 +181,13 @@ DELETE  /api/v1/spaceships/{id}
 Pilot APIs exposed at:
 
 ```
-http://localhost:8081/api/v1/pilots
+http://localhost:<random_port>/api/v1/pilots
 ```
 
 Swagger UI available at:
 
 ```
-http://localhost:8081/api/docs
+http://localhost:<random_port>/api/docs
 ```
 
 Available endpoints:
@@ -195,7 +196,6 @@ Available endpoints:
 GET     /api/v1/pilots
 GET     /api/v1/pilots/{id}
 POST    /api/v1/pilots
-POST    /api/v1/pilots/crew
 PUT     /api/v1/pilots/{id}
 DELETE  /api/v1/pilots/{id}
 ```
