@@ -1,27 +1,30 @@
 package com.project.port.service.impl;
 
-import com.project.port.client.PilotClient;
-import com.project.port.client.SpaceshipClient;
-import com.project.port.dto.pilot.PilotClientResponse;
-import com.project.port.dto.pilot.PilotDto;
-import com.project.port.dto.spaceship.SpaceshipClientResponse;
-import com.project.port.dto.spaceship.SpaceshipDto;
-import com.project.port.exception.AddPilotException;
-import com.project.port.exception.NotFoundException;
-import com.project.port.exception.PilotExistsException;
-import com.project.port.mapper.PilotMapper;
-import com.project.port.mapper.SpaceshipMapper;
-import com.project.port.service.SpaceshipService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
+import static java.util.Objects.isNull;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
+import org.springframework.stereotype.Service;
+
+import com.project.port.client.PilotClient;
+import com.project.port.client.SpaceshipClient;
+import com.project.port.dto.pilot.PilotClientResponse;
+import com.project.port.dto.pilot.PilotDto;
+import com.project.port.dto.spaceship.SpaceshipClientResponse;
+import com.project.port.dto.spaceship.SpaceshipDto;
+import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
+import com.project.port.exception.AddPilotException;
+import com.project.port.exception.NotFoundException;
+import com.project.port.exception.PilotExistsException;
+import com.project.port.mapper.PilotMapper;
+import com.project.port.mapper.SpaceshipMapper;
+import com.project.port.service.SpaceshipService;
 
 @Log4j2
 @Service
@@ -47,7 +50,9 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   @Override
   public List<SpaceshipDto> getAll() {
 
-    final List<SpaceshipDto> spaceshipDtos = spaceshipClient.getSpaceships().stream()
+    final List<SpaceshipDto> spaceshipDtos = spaceshipClient
+        .getSpaceships()
+        .stream()
         .map(spaceshipMapper::clientResponseToDto)
         .toList();
     log.info("{} Spaceships found", spaceshipDtos.size());
@@ -58,7 +63,9 @@ public class SpaceshipServiceImpl implements SpaceshipService {
       return spaceshipDtos;
     }
 
-    final List<PilotDto> pilotDtos = pilotClient.getPilots().stream()
+    final List<PilotDto> pilotDtos = pilotClient
+        .getPilots()
+        .stream()
         .filter(p -> pilotIds.contains(p.getId()))
         .map(pilotMapper::clientResponseToDto)
         .toList();
@@ -72,7 +79,8 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   @Override
   public SpaceshipDto getById(final UUID spaceshipId) {
 
-    final SpaceshipDto spaceshipDto = spaceshipClient.getSpaceshipById(spaceshipId)
+    final SpaceshipDto spaceshipDto = spaceshipClient
+        .getSpaceshipById(spaceshipId)
         .map(spaceshipMapper::clientResponseToDto)
         .orElseThrow(() -> {
           log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, spaceshipId);
@@ -86,7 +94,9 @@ public class SpaceshipServiceImpl implements SpaceshipService {
       return spaceshipDto;
     }
 
-    final List<PilotDto> pilotDtos = pilotClient.getPilots().stream()
+    final List<PilotDto> pilotDtos = pilotClient
+        .getPilots()
+        .stream()
         .filter(p -> pilotIds.contains(p.getId()))
         .map(pilotMapper::clientResponseToDto)
         .toList();
@@ -100,11 +110,11 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   @Override
   public SpaceshipDto add(final SpaceshipDto spaceshipDto) {
 
-    final List<String> pilotNames = spaceshipDto.getCrew().stream()
-        .map(PilotDto::getName)
-        .toList();
+    final List<String> pilotNames = spaceshipDto.getCrew().stream().map(PilotDto::getName).toList();
 
-    final List<String> existingNames = pilotClient.getPilots().stream()
+    final List<String> existingNames = pilotClient
+        .getPilots()
+        .stream()
         .map(PilotClientResponse::getName)
         .filter(pilotNames::contains)
         .toList();
@@ -114,7 +124,9 @@ public class SpaceshipServiceImpl implements SpaceshipService {
       throw new PilotExistsException(PILOTS_EXIST_ERROR_MESSAGE + existingNames);
     }
 
-    final List<PilotDto> savedPilotDtos = spaceshipDto.getCrew().stream()
+    final List<PilotDto> savedPilotDtos = spaceshipDto
+        .getCrew()
+        .stream()
         .map(pilotMapper::dtoToClientAddRequest)
         .map(pilotClient::addPilot)
         .filter(Objects::nonNull)
@@ -126,13 +138,12 @@ public class SpaceshipServiceImpl implements SpaceshipService {
       throw new AddPilotException(PILOTS_ADD_ERROR_MESSAGE);
     }
 
-    final List<UUID> savedPilotIds = savedPilotDtos.stream()
-        .map(PilotDto::getId)
-        .toList();
+    final List<UUID> savedPilotIds = savedPilotDtos.stream().map(PilotDto::getId).toList();
 
     spaceshipDto.setCrewIds(savedPilotIds);
 
-    final SpaceshipClientResponse savedSpaceship = spaceshipClient.addSpaceship(spaceshipMapper.dtoToClientAddRequest(spaceshipDto));
+    final SpaceshipClientResponse savedSpaceship = spaceshipClient.addSpaceship(
+        spaceshipMapper.dtoToClientAddRequest(spaceshipDto));
     final SpaceshipDto savedSpaceshipDto = spaceshipMapper.clientResponseToDto(savedSpaceship);
 
     savedSpaceshipDto.setCrew(savedPilotDtos);
@@ -140,8 +151,31 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     return savedSpaceshipDto;
   }
 
+  @Override
+  public SpaceshipDto updateById(final SpaceshipDto updateSpaceshipDto, final UUID updateSpaceshipId) {
+
+    final SpaceshipDto spaceshipToBeUpdated = spaceshipClient
+        .getSpaceshipById(updateSpaceshipId)
+        .map(spaceshipMapper::clientResponseToDto)
+        .orElseThrow(() -> {
+          log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, updateSpaceshipId);
+          throw new NotFoundException(NOT_FOUND_MESSAGE);
+        });
+
+    spaceshipMapper.updateDtoWithDto(spaceshipToBeUpdated, updateSpaceshipDto);
+    final UpdateSpaceshipClientRequest updateSpaceshipClientRequest = spaceshipMapper.dtoToClientUpdateRequest(
+        spaceshipToBeUpdated);
+    final SpaceshipClientResponse updatedSpaceshipClientResponse = spaceshipClient.updateSpaceshipById(
+        updateSpaceshipId, updateSpaceshipClientRequest);
+    final SpaceshipDto updatedSpaceshipDto = spaceshipMapper.clientResponseToDto(updatedSpaceshipClientResponse);
+    log.info("Spaceship with id {} updated: {}", updatedSpaceshipDto.getId(), updatedSpaceshipDto);
+
+    return updatedSpaceshipDto;
+  }
+
   private List<UUID> getPilotIdsFromEachSpaceship(final List<SpaceshipDto> spaceshipDtos) {
-    return spaceshipDtos.stream()
+    return spaceshipDtos
+        .stream()
         .map(SpaceshipDto::getCrewIds)
         .filter(Objects::nonNull)
         .flatMap(Collection::stream)
@@ -149,8 +183,6 @@ public class SpaceshipServiceImpl implements SpaceshipService {
   }
 
   private List<PilotDto> getSpaceshipCrewFromListOfPilots(final List<UUID> ids, final List<PilotDto> pilotDtos) {
-    return pilotDtos.stream()
-        .filter(pilot -> ids.contains(pilot.getId()))
-        .toList();
+    return pilotDtos.stream().filter(pilot -> ids.contains(pilot.getId())).toList();
   }
 }

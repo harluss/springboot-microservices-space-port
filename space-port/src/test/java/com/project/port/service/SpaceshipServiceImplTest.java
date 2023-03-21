@@ -1,33 +1,5 @@
 package com.project.port.service;
 
-import com.project.port.client.PilotClient;
-import com.project.port.client.SpaceshipClient;
-import com.project.port.dto.pilot.AddPilotClientRequest;
-import com.project.port.dto.pilot.PilotClientResponse;
-import com.project.port.dto.pilot.PilotDto;
-import com.project.port.dto.spaceship.AddSpaceshipClientRequest;
-import com.project.port.dto.spaceship.SpaceshipClientResponse;
-import com.project.port.dto.spaceship.SpaceshipDto;
-import com.project.port.exception.AddPilotException;
-import com.project.port.exception.NotFoundException;
-import com.project.port.exception.PilotExistsException;
-import com.project.port.mapper.PilotMapper;
-import com.project.port.mapper.SpaceshipMapper;
-import com.project.port.service.impl.SpaceshipServiceImpl;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import static com.project.port.common.Constant.buildAddPilotClientRequest;
 import static com.project.port.common.Constant.buildAddSpaceshipClientRequest;
 import static com.project.port.common.Constant.buildPilotClientResponse;
@@ -37,6 +9,9 @@ import static com.project.port.common.Constant.buildSpaceshipClientResponseWithN
 import static com.project.port.common.Constant.buildSpaceshipDto;
 import static com.project.port.common.Constant.buildSpaceshipDtoWithNoCrewDetails;
 import static com.project.port.common.Constant.buildSpaceshipDtoWithNoCrewDetailsAndCrewIds;
+import static com.project.port.common.Constant.buildUpdateSpaceshipClientRequest;
+import static com.project.port.common.Constant.buildUpdateSpaceshipDtoWithNoId;
+import static com.project.port.common.Constant.buildUpdateSpaceshipRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,6 +21,37 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
+import com.project.port.client.PilotClient;
+import com.project.port.client.SpaceshipClient;
+import com.project.port.dto.pilot.AddPilotClientRequest;
+import com.project.port.dto.pilot.PilotClientResponse;
+import com.project.port.dto.pilot.PilotDto;
+import com.project.port.dto.spaceship.AddSpaceshipClientRequest;
+import com.project.port.dto.spaceship.SpaceshipClientResponse;
+import com.project.port.dto.spaceship.SpaceshipDto;
+import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
+import com.project.port.dto.spaceship.UpdateSpaceshipRequest;
+import com.project.port.exception.AddPilotException;
+import com.project.port.exception.NotFoundException;
+import com.project.port.exception.PilotExistsException;
+import com.project.port.mapper.PilotMapper;
+import com.project.port.mapper.SpaceshipMapper;
+import com.project.port.service.impl.SpaceshipServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -77,6 +83,12 @@ class SpaceshipServiceImplTest {
 
   private AddSpaceshipClientRequest addSpaceshipClientRequest;
 
+  private UpdateSpaceshipRequest updateSpaceshipRequest;
+
+  private UpdateSpaceshipClientRequest updateSpaceshipClientRequest;
+
+  private SpaceshipDto updateSpaceshipDto;
+
   private PilotClientResponse pilotClientResponse;
 
   private AddPilotClientRequest addPilotClientRequest;
@@ -85,7 +97,8 @@ class SpaceshipServiceImplTest {
 
   @BeforeEach
   void setUp() {
-    spaceshipService = new SpaceshipServiceImpl(spaceshipClientMock, pilotClientMock, spaceshipMapperMock, pilotMapperMock);
+    spaceshipService = new SpaceshipServiceImpl(spaceshipClientMock, pilotClientMock, spaceshipMapperMock,
+        pilotMapperMock);
     spaceshipDto = buildSpaceshipDto();
     spaceshipDtoWithNoCrewDetails = buildSpaceshipDtoWithNoCrewDetails();
     spaceshipClientResponse = buildSpaceshipClientResponse();
@@ -95,6 +108,9 @@ class SpaceshipServiceImplTest {
     spaceshipDtoWithNoCrewDetailsAndCrewIds = buildSpaceshipDtoWithNoCrewDetailsAndCrewIds();
     spaceshipClientResponseWithNoCrewIds = buildSpaceshipClientResponseWithNoCrewIds();
     addSpaceshipClientRequest = buildAddSpaceshipClientRequest();
+    updateSpaceshipRequest = buildUpdateSpaceshipRequest();
+    updateSpaceshipDto = buildUpdateSpaceshipDtoWithNoId();
+    updateSpaceshipClientRequest = buildUpdateSpaceshipClientRequest();
   }
 
   @AfterEach
@@ -111,9 +127,7 @@ class SpaceshipServiceImplTest {
 
     final List<SpaceshipDto> actual = spaceshipService.getAll();
 
-    assertThat(actual)
-        .hasSize(1)
-        .contains(spaceshipDto);
+    assertThat(actual).hasSize(1).contains(spaceshipDto);
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponse);
     verify(spaceshipClientMock).getSpaceships();
     verify(pilotClientMock).getPilots();
@@ -136,14 +150,12 @@ class SpaceshipServiceImplTest {
   @Test
   void getAll_spaceshipsHaveNoPilots() {
     when(spaceshipClientMock.getSpaceships()).thenReturn(List.of(spaceshipClientResponseWithNoCrewIds));
-    when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponseWithNoCrewIds))
-        .thenReturn(spaceshipDtoWithNoCrewDetailsAndCrewIds);
+    when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponseWithNoCrewIds)).thenReturn(
+        spaceshipDtoWithNoCrewDetailsAndCrewIds);
 
     final List<SpaceshipDto> actual = spaceshipService.getAll();
 
-    assertThat(actual)
-        .hasSize(1)
-        .contains(spaceshipDtoWithNoCrewDetailsAndCrewIds);
+    assertThat(actual).hasSize(1).contains(spaceshipDtoWithNoCrewDetailsAndCrewIds);
     assertThat(actual.get(0).getCrew()).isNullOrEmpty();
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponseWithNoCrewIds);
     verify(spaceshipClientMock).getSpaceships();
@@ -159,9 +171,7 @@ class SpaceshipServiceImplTest {
 
     final List<SpaceshipDto> actual = spaceshipService.getAll();
 
-    assertThat(actual)
-        .hasSize(1)
-        .contains(spaceshipDtoWithNoCrewDetails);
+    assertThat(actual).hasSize(1).contains(spaceshipDtoWithNoCrewDetails);
     assertThat(actual.get(0).getCrew()).isEmpty();
     verify(spaceshipMapperMock).clientResponseToDto(spaceshipClientResponse);
     verify(spaceshipClientMock).getSpaceships();
@@ -202,9 +212,10 @@ class SpaceshipServiceImplTest {
   @Test
   void getById_spaceshipHasNoPilots() {
     final UUID reqId = spaceshipDtoWithNoCrewDetailsAndCrewIds.getId();
-    when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.ofNullable(spaceshipClientResponseWithNoCrewIds));
-    when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponseWithNoCrewIds))
-        .thenReturn(spaceshipDtoWithNoCrewDetailsAndCrewIds);
+    when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(
+        Optional.ofNullable(spaceshipClientResponseWithNoCrewIds));
+    when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponseWithNoCrewIds)).thenReturn(
+        spaceshipDtoWithNoCrewDetailsAndCrewIds);
 
     final SpaceshipDto actual = spaceshipService.getById(reqId);
 
@@ -280,8 +291,7 @@ class SpaceshipServiceImplTest {
     when(pilotMapperMock.dtoToClientAddRequest(pilotDto)).thenReturn(addPilotClientRequest);
     when(pilotClientMock.addPilot(addPilotClientRequest)).thenReturn(null);
 
-    assertThatThrownBy(() -> spaceshipService.add(spaceshipDto))
-        .isInstanceOf(AddPilotException.class);
+    assertThatThrownBy(() -> spaceshipService.add(spaceshipDto)).isInstanceOf(AddPilotException.class);
 
     verify(pilotClientMock).getPilots();
     verify(pilotClientMock).addPilot(addPilotClientRequest);
@@ -289,5 +299,42 @@ class SpaceshipServiceImplTest {
     verify(pilotMapperMock, times(0)).clientResponseToDto(any());
     verifyNoInteractions(spaceshipMapperMock);
     verifyNoInteractions(spaceshipClientMock);
+  }
+
+  @Test
+  void updateById() {
+    final UUID reqId = spaceshipDto.getId();
+    when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.of(spaceshipClientResponse));
+    when(spaceshipMapperMock.clientResponseToDto(spaceshipClientResponse))
+        .thenReturn(spaceshipDto)
+        .thenReturn(updateSpaceshipDto);
+    when(spaceshipMapperMock.dtoToClientUpdateRequest(spaceshipDto)).thenReturn(updateSpaceshipClientRequest);
+    when(spaceshipClientMock.updateSpaceshipById(reqId, updateSpaceshipClientRequest)).thenReturn(
+        spaceshipClientResponse);
+
+    final SpaceshipDto actual = spaceshipService.updateById(updateSpaceshipDto, reqId);
+
+    System.out.println(">>> " + actual);
+    System.out.println(">>> " + updateSpaceshipDto);
+
+    assertThat(actual).isEqualTo(updateSpaceshipDto);
+    verify(spaceshipClientMock).getSpaceshipById(reqId);
+    verify(spaceshipClientMock).updateSpaceshipById(reqId, updateSpaceshipClientRequest);
+    verify(spaceshipMapperMock, times(2)).clientResponseToDto(spaceshipClientResponse);
+    verify(spaceshipMapperMock).updateDtoWithDto(spaceshipDto, updateSpaceshipDto);
+    verify(spaceshipMapperMock).dtoToClientUpdateRequest(spaceshipDto);
+  }
+
+  @Test
+  void updateById_notFound() {
+    final UUID spaceshipToBeUpdatedId = spaceshipDto.getId();
+    when(spaceshipClientMock.getSpaceshipById(spaceshipToBeUpdatedId)).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> spaceshipService.updateById(updateSpaceshipDto, spaceshipToBeUpdatedId)).isInstanceOf(
+        NotFoundException.class);
+
+    verify(spaceshipClientMock).getSpaceshipById(spaceshipToBeUpdatedId);
+    verify(spaceshipClientMock, times(0)).updateSpaceshipById(any(), any());
+    verifyNoInteractions(spaceshipMapperMock);
   }
 }

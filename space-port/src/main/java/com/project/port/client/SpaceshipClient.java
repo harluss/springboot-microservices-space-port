@@ -3,10 +3,12 @@ package com.project.port.client;
 import com.project.port.config.CustomErrorDecoder;
 import com.project.port.dto.spaceship.AddSpaceshipClientRequest;
 import com.project.port.dto.spaceship.SpaceshipClientResponse;
+import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
@@ -47,4 +49,17 @@ public interface SpaceshipClient {
    */
   @PostMapping
   SpaceshipClientResponse addSpaceship(@Valid @RequestBody final AddSpaceshipClientRequest addSpaceshipClientRequest);
+
+  /**
+   * Makes a PUT request to Hangar microservice to updated existing spaceship
+   *
+   * @param spaceshipId                  spaceship id of spaceship to be updated
+   * @param updateSpaceshipClientRequest update spaceship request with updated details
+   * @return updated spaceship
+   */
+  @PutMapping("{id}")
+  SpaceshipClientResponse updateSpaceshipById(
+      @NotBlank @PathVariable("id") final UUID spaceshipId,
+      @Valid @RequestBody final UpdateSpaceshipClientRequest updateSpaceshipClientRequest
+  );
 }

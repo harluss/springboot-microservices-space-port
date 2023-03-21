@@ -34,4 +34,14 @@ public interface SpaceshipService {
    * @return spaceship DTO of added spaceship with Id included
    */
   SpaceshipDto add(SpaceshipDto spaceshipDto);
+
+  /**
+   * Updates spaceship based on provided Id and spaceship DTO
+   *
+   * @param spaceshipDto spaceship DTO
+   * @param spaceshipId  spaceship Id
+   * @return spaceship DTO of updated spaceship
+   * @throws NotFoundException when pilot with provided Id is not found
+   */
+  SpaceshipDto updateById(SpaceshipDto spaceshipDto, UUID spaceshipId);
 }

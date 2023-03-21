@@ -1,5 +1,11 @@
 package com.project.port.common;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+
 import com.project.port.dto.pilot.AddPilotClientRequest;
 import com.project.port.dto.pilot.AddPilotRequest;
 import com.project.port.dto.pilot.PilotClientResponse;
@@ -10,12 +16,10 @@ import com.project.port.dto.spaceship.AddSpaceshipRequest;
 import com.project.port.dto.spaceship.SpaceshipClientResponse;
 import com.project.port.dto.spaceship.SpaceshipDto;
 import com.project.port.dto.spaceship.SpaceshipResponse;
+import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
+import com.project.port.dto.spaceship.UpdateSpaceshipRequest;
+import com.project.port.dto.spaceship.UpdateSpaceshipResponse;
 import com.project.port.exception.ErrorResponse;
-import org.springframework.http.HttpStatus;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 public class Constant {
 
@@ -30,6 +34,16 @@ public class Constant {
   private static final int SPACESHIP_MAX_SPEED = 1200;
 
   private static final List<String> SPACESHIP_ARMAMENT = List.of("Laser cannons");
+
+  private static final String UPDATE_SPACESHIP_NAME = "Tie Fighter V2";
+
+  private static final String UPDATE_SPACESHIP_CLASS_TYPE = "Experimental Starfighter";
+
+  private static final int UPDATE_SPACESHIP_PAYLOAD = 100;
+
+  private static final int UPDATE_SPACESHIP_MAX_SPEED = 2000;
+
+  private static final List<String> UPDATE_SPACESHIP_ARMAMENT = List.of("Laser cannons", "Plasma bombs");
 
   private static final String PILOT_NAME = "Darth Vader";
 
@@ -48,7 +62,8 @@ public class Constant {
   public static SpaceshipDto buildSpaceshipDto() {
     final PilotDto pilotDto = buildPilotDto();
 
-    return SpaceshipDto.builder()
+    return SpaceshipDto
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -63,7 +78,8 @@ public class Constant {
   public static SpaceshipDto buildSpaceshipDtoWithNoCrewIds() {
     final PilotDto pilotDto = buildPilotDto();
 
-    return SpaceshipDto.builder()
+    return SpaceshipDto
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -76,7 +92,8 @@ public class Constant {
   }
 
   public static SpaceshipDto buildSpaceshipDtoWithNoCrewDetails() {
-    return SpaceshipDto.builder()
+    return SpaceshipDto
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -89,7 +106,8 @@ public class Constant {
   }
 
   public static SpaceshipDto buildSpaceshipDtoWithNoCrewDetailsAndCrewIds() {
-    return SpaceshipDto.builder()
+    return SpaceshipDto
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -104,7 +122,8 @@ public class Constant {
   public static SpaceshipResponse buildSpaceshipResponse() {
     final PilotResponse pilotResponse = buildPilotResponse();
 
-    return SpaceshipResponse.builder()
+    return SpaceshipResponse
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -118,7 +137,8 @@ public class Constant {
   public static SpaceshipResponse buildAddSpaceshipResponse() {
     final PilotResponse addPilotResponse = buildAddPilotResponse();
 
-    return SpaceshipResponse.builder()
+    return SpaceshipResponse
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -132,7 +152,8 @@ public class Constant {
   public static AddSpaceshipRequest buildAddSpaceshipRequest() {
     final AddPilotRequest addPilotRequest = buildAddPilotRequest();
 
-    return AddSpaceshipRequest.builder()
+    return AddSpaceshipRequest
+        .builder()
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
         .crew(List.of(addPilotRequest))
@@ -143,7 +164,8 @@ public class Constant {
   }
 
   public static SpaceshipClientResponse buildSpaceshipClientResponse() {
-    return SpaceshipClientResponse.builder()
+    return SpaceshipClientResponse
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -155,7 +177,8 @@ public class Constant {
   }
 
   public static SpaceshipClientResponse buildSpaceshipClientResponseWithNoCrewIds() {
-    return SpaceshipClientResponse.builder()
+    return SpaceshipClientResponse
+        .builder()
         .id(ID)
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
@@ -167,7 +190,8 @@ public class Constant {
   }
 
   public static AddSpaceshipClientRequest buildAddSpaceshipClientRequest() {
-    return AddSpaceshipClientRequest.builder()
+    return AddSpaceshipClientRequest
+        .builder()
         .name(SPACESHIP_NAME)
         .classType(SPACESHIP_CLASS_TYPE)
         .maxSpeed(SPACESHIP_MAX_SPEED)
@@ -177,8 +201,98 @@ public class Constant {
         .build();
   }
 
+  public static UpdateSpaceshipRequest buildUpdateSpaceshipRequest() {
+    return UpdateSpaceshipRequest
+        .builder()
+        .name(UPDATE_SPACESHIP_NAME)
+        .classType(UPDATE_SPACESHIP_CLASS_TYPE)
+        .payload(UPDATE_SPACESHIP_PAYLOAD)
+        .maxSpeed(UPDATE_SPACESHIP_MAX_SPEED)
+        .armament(UPDATE_SPACESHIP_ARMAMENT)
+        .build();
+  }
+
+  public static SpaceshipDto buildUpdateSpaceshipDtoWithNoCrewIds() {
+    return SpaceshipDto
+        .builder()
+        .name(UPDATE_SPACESHIP_NAME)
+        .classType(UPDATE_SPACESHIP_CLASS_TYPE)
+        .payload(UPDATE_SPACESHIP_PAYLOAD)
+        .maxSpeed(UPDATE_SPACESHIP_MAX_SPEED)
+        .crewIds(null)
+        .crew(null)
+        .armament(UPDATE_SPACESHIP_ARMAMENT)
+        .build();
+  }
+
+  public static SpaceshipDto buildUpdateSpaceshipDtoWithNoId() {
+    return SpaceshipDto
+        .builder()
+        .name(UPDATE_SPACESHIP_NAME)
+        .classType(UPDATE_SPACESHIP_CLASS_TYPE)
+        .payload(UPDATE_SPACESHIP_PAYLOAD)
+        .maxSpeed(UPDATE_SPACESHIP_MAX_SPEED)
+        .crewIds(List.of(ID))
+        .crew(null)
+        .armament(UPDATE_SPACESHIP_ARMAMENT)
+        .build();
+  }
+
+  public static SpaceshipDto buildUpdateSpaceshipDto() {
+    return SpaceshipDto
+        .builder()
+        .id(ID)
+        .name(UPDATE_SPACESHIP_NAME)
+        .classType(UPDATE_SPACESHIP_CLASS_TYPE)
+        .payload(UPDATE_SPACESHIP_PAYLOAD)
+        .maxSpeed(UPDATE_SPACESHIP_MAX_SPEED)
+        .crewIds(List.of(ID))
+        .crew(null)
+        .armament(UPDATE_SPACESHIP_ARMAMENT)
+        .build();
+  }
+
+  public static UpdateSpaceshipClientRequest buildUpdateSpaceshipClientRequest() {
+    return UpdateSpaceshipClientRequest
+        .builder()
+        .name(UPDATE_SPACESHIP_NAME)
+        .classType(UPDATE_SPACESHIP_CLASS_TYPE)
+        .payload(UPDATE_SPACESHIP_PAYLOAD)
+        .maxSpeed(UPDATE_SPACESHIP_MAX_SPEED)
+        .armament(UPDATE_SPACESHIP_ARMAMENT)
+        .crewIds(List.of(ID))
+        .build();
+  }
+
+  public static SpaceshipClientResponse buildUpdateSpaceshipClientResponse() {
+    return SpaceshipClientResponse
+        .builder()
+        .id(ID)
+        .name(UPDATE_SPACESHIP_NAME)
+        .classType(UPDATE_SPACESHIP_CLASS_TYPE)
+        .payload(UPDATE_SPACESHIP_PAYLOAD)
+        .maxSpeed(UPDATE_SPACESHIP_MAX_SPEED)
+        .armament(UPDATE_SPACESHIP_ARMAMENT)
+        .crewIds(List.of(ID))
+        .build();
+  }
+
+  public static UpdateSpaceshipResponse buildUpdateSpaceshipResponse() {
+    return UpdateSpaceshipResponse
+        .builder()
+        .id(ID)
+        .name(UPDATE_SPACESHIP_NAME)
+        .classType(UPDATE_SPACESHIP_CLASS_TYPE)
+        .payload(UPDATE_SPACESHIP_PAYLOAD)
+        .maxSpeed(UPDATE_SPACESHIP_MAX_SPEED)
+        .armament(UPDATE_SPACESHIP_ARMAMENT)
+        .crewIds(List.of(ID))
+        .build();
+  }
+
   public static PilotClientResponse buildPilotClientResponse() {
-    return PilotClientResponse.builder()
+    return PilotClientResponse
+        .builder()
         .id(ID)
         .name(PILOT_NAME)
         .species(PILOT_SPECIES)
@@ -188,7 +302,8 @@ public class Constant {
   }
 
   public static PilotClientResponse buildAddPilotClientResponse() {
-    return PilotClientResponse.builder()
+    return PilotClientResponse
+        .builder()
         .id(ID)
         .name(NEW_PILOT_NAME)
         .species(PILOT_SPECIES)
@@ -198,7 +313,8 @@ public class Constant {
   }
 
   public static PilotDto buildPilotDto() {
-    return PilotDto.builder()
+    return PilotDto
+        .builder()
         .id(ID)
         .name(PILOT_NAME)
         .species(PILOT_SPECIES)
@@ -208,7 +324,8 @@ public class Constant {
   }
 
   public static PilotResponse buildPilotResponse() {
-    return PilotResponse.builder()
+    return PilotResponse
+        .builder()
         .id(ID)
         .name(PILOT_NAME)
         .species(PILOT_SPECIES)
@@ -218,7 +335,8 @@ public class Constant {
   }
 
   public static PilotDto buildAddPilotDto() {
-    return PilotDto.builder()
+    return PilotDto
+        .builder()
         .id(null)
         .name(NEW_PILOT_NAME)
         .species(PILOT_SPECIES)
@@ -228,7 +346,8 @@ public class Constant {
   }
 
   public static PilotResponse buildAddPilotResponse() {
-    return PilotResponse.builder()
+    return PilotResponse
+        .builder()
         .id(ID)
         .name(NEW_PILOT_NAME)
         .species(PILOT_SPECIES)
@@ -238,7 +357,8 @@ public class Constant {
   }
 
   public static AddPilotRequest buildAddPilotRequest() {
-    return AddPilotRequest.builder()
+    return AddPilotRequest
+        .builder()
         .name(NEW_PILOT_NAME)
         .species(PILOT_SPECIES)
         .profession(PILOT_PROFESSION)
@@ -247,7 +367,8 @@ public class Constant {
   }
 
   public static AddPilotClientRequest buildAddPilotClientRequest() {
-    return AddPilotClientRequest.builder()
+    return AddPilotClientRequest
+        .builder()
         .name(NEW_PILOT_NAME)
         .species(PILOT_SPECIES)
         .profession(PILOT_PROFESSION)
@@ -256,14 +377,16 @@ public class Constant {
   }
 
   public static AddSpaceshipRequest buildInvalidAddSpaceshipRequest() {
-    final AddPilotRequest invalidAddPilotRequest = AddPilotRequest.builder()
+    final AddPilotRequest invalidAddPilotRequest = AddPilotRequest
+        .builder()
         .name(null)
         .species("")
         .profession(PILOT_PROFESSION)
         .weapons(PILOT_WEAPONS)
         .build();
 
-    return AddSpaceshipRequest.builder()
+    return AddSpaceshipRequest
+        .builder()
         .name(null)
         .payload(20000)
         .classType(" ")
@@ -273,9 +396,21 @@ public class Constant {
         .build();
   }
 
-  public static ErrorResponse buildReqValidationFailedErrorResponse() {
+  public static UpdateSpaceshipResponse buildInvalidUpdateSpaceshipRequest() {
+    return UpdateSpaceshipResponse
+        .builder()
+        .name(null)
+        .payload(20000)
+        .classType(" ")
+        .maxSpeed(20000)
+        .armament(List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"))
+        .build();
+  }
+
+  public static ErrorResponse buildAddValidationFailedErrorResponse() {
     final HttpStatus status = HttpStatus.BAD_REQUEST;
-    final ErrorResponse errorResponse = ErrorResponse.builder()
+    final ErrorResponse errorResponse = ErrorResponse
+        .builder()
         .status(status.value())
         .error(status.name())
         .message("Validation error. Check 'errors' field for details")
@@ -292,23 +427,33 @@ public class Constant {
     return errorResponse;
   }
 
+  public static ErrorResponse buildUpdateValidationFailedErrorResponse() {
+    final HttpStatus status = HttpStatus.BAD_REQUEST;
+    final ErrorResponse errorResponse = ErrorResponse
+        .builder()
+        .status(status.value())
+        .error(status.name())
+        .message("Validation error. Check 'errors' field for details")
+        .build();
+
+    errorResponse.addValidationError("payload", "must be less than or equal to 10000");
+    errorResponse.addValidationError("classType", "must not be blank");
+    errorResponse.addValidationError("name", "must not be blank");
+    errorResponse.addValidationError("armament", "size must be between 0 and 10");
+    errorResponse.addValidationError("maxSpeed", "must be less than or equal to 10000");
+
+    return errorResponse;
+  }
+
   public static ErrorResponse buildNotFoundErrorResponse() {
     final HttpStatus status = HttpStatus.NOT_FOUND;
 
-    return ErrorResponse.builder()
-        .status(status.value())
-        .error(status.name())
-        .message(SPACESHIP_NOT_FOUND)
-        .build();
+    return ErrorResponse.builder().status(status.value()).error(status.name()).message(SPACESHIP_NOT_FOUND).build();
   }
 
   public static ErrorResponse buildPilotExistsErrorResponse() {
     final HttpStatus status = HttpStatus.BAD_REQUEST;
 
-    return ErrorResponse.builder()
-        .status(status.value())
-        .error(status.name())
-        .message(PILOT_EXISTS)
-        .build();
+    return ErrorResponse.builder().status(status.value()).error(status.name()).message(PILOT_EXISTS).build();
   }
 }
