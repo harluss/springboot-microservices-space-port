@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,6 +98,17 @@ public class SpaceshipController {
         spaceshipService.updateById(updateSpaceshipDto, spaceshipId));
 
     return ResponseEntity.ok(updatedSpaceshipResponse);
+  }
+
+  @Operation(summary = "Delete spaceship and its crew", description = "Deletes existing spaceship based on given Id", responses = {
+      @ApiResponse(responseCode = "204", description = "Successfully deleted the requested spaceship and its crew"),
+      @ApiResponse(responseCode = "404", description = "Could not find the requested spaceship") })
+  @DeleteMapping("{id}")
+  public ResponseEntity<Void> deleteSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId) {
+
+    spaceshipService.deleteById(spaceshipId);
+
+    return ResponseEntity.noContent().build();
   }
 
   private static URI getResourceLocation(final SpaceshipResponse spaceshipResponse) {

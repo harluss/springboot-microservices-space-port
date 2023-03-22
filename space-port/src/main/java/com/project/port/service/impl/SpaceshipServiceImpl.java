@@ -173,6 +173,31 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     return updatedSpaceshipDto;
   }
 
+  @Override
+  public void deleteById(final UUID spaceshipId) {
+
+    final SpaceshipClientResponse spaceshipClientResponse = spaceshipClient
+        .getSpaceshipById(spaceshipId)
+        .orElseThrow(() -> {
+          log.info(NOT_FOUND_ID_PROVIDED_MESSAGE, spaceshipId);
+          throw new NotFoundException(NOT_FOUND_MESSAGE);
+        });
+
+    spaceshipClient.deleteSpaceshipById(spaceshipId);
+    log.info("Spaceship with id {} deleted", spaceshipId);
+
+    final List<UUID> pilotIds = spaceshipClientResponse.getCrewIds();
+
+    if (isNull(pilotIds) || pilotIds.isEmpty()) {
+      return;
+    }
+
+    pilotIds.forEach(id -> {
+      pilotClient.deletePilotById(id);
+      log.info("Pilot with id {} deleted", id);
+    });
+  }
+
   private List<UUID> getPilotIdsFromEachSpaceship(final List<SpaceshipDto> spaceshipDtos) {
     return spaceshipDtos
         .stream()

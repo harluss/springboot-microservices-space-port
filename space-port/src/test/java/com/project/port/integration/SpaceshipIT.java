@@ -126,4 +126,21 @@ public class SpaceshipIT extends BaseMockIT {
         .body(equalTo(objectToJsonString(updateSpaceshipResponse)));
   }
 
+  @Test
+  void deleteSpaceshipById_happyPath() {
+    stubForGetSpaceshipById();
+    stubForDeleteSpaceship();
+    stubForDeletePilot();
+    final UUID reqId = spaceshipResponse.getId();
+
+    given()
+        .when()
+        .delete(TEST_API_WITH_ID, reqId)
+        .then()
+        .log()
+        .body()
+        .assertThat()
+        .statusCode(HttpStatus.NO_CONTENT.value());
+  }
+
 }

@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -344,5 +345,41 @@ class SpaceshipControllerTest extends TestUtil {
         .isEqualTo(expectedUpdateValidationErrorResponse);
     verifyNoInteractions(spaceshipMapperMock);
     verifyNoInteractions(spaceshipServiceMock);
+  }
+
+  @Test
+  void deleteSpaceshipById() {
+    final UUID reqId = spaceshipResponse.getId();
+
+    given()
+        .when()
+        .delete(TEST_API_WITH_ID, reqId)
+        .then()
+        .log()
+        .body()
+        .assertThat()
+        .statusCode(HttpStatus.NO_CONTENT.value());
+
+    verify(spaceshipServiceMock).deleteById(reqId);
+  }
+
+  @Test
+  void deleteSpaceshipById_notFound() {
+    final UUID reqId = spaceshipResponse.getId();
+    doThrow(new NotFoundException(expectedNotFoundErrorResponse.getMessage()))
+        .when(spaceshipServiceMock)
+        .deleteById(reqId);
+
+    given()
+        .when()
+        .delete(TEST_API_WITH_ID, reqId)
+        .then()
+        .log()
+        .body()
+        .assertThat()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body(equalTo(objectToJsonString(expectedNotFoundErrorResponse)));
+
+    verify(spaceshipServiceMock).deleteById(reqId);
   }
 }

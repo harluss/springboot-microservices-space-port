@@ -1,8 +1,10 @@
 package com.project.port.common;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.created;
+import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.noContent;
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
@@ -35,11 +37,13 @@ import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
 @AutoConfigureWireMock(port = 0)
 public class BaseMockIT extends TestUtil {
 
-  private final String SPACESHIPS_CLIENT_API = "/api/v1/spaceships";
+  private static final String SPACESHIPS_CLIENT_API = "/api/v1/spaceships";
 
   private static final String SPACESHIPS_CLIENT_API_WITH_ID_PATTERN = "/api/v1/spaceships/([a-zA-Z0-9/-]*)";
 
-  private final String PILOTS_CLIENT_API = "/api/v1/pilots";
+  private static final String PILOTS_CLIENT_API = "/api/v1/pilots";
+
+  private static final String PILOTS_CLIENT_API_WITH_ID_PATTERN = "/api/v1/pilots/([a-zA-Z0-9/-]*)";
 
   protected void stubForGetAllSpaceships() {
     final SpaceshipClientResponse spaceshipClientResponse = buildSpaceshipClientResponse();
@@ -96,5 +100,13 @@ public class BaseMockIT extends TestUtil {
         .willReturn(created()
             .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .withBody(objectToJsonString(addPilotClientResponse))));
+  }
+
+  protected void stubForDeleteSpaceship() {
+    stubFor(delete(urlPathMatching(SPACESHIPS_CLIENT_API_WITH_ID_PATTERN)).willReturn(noContent()));
+  }
+
+  protected void stubForDeletePilot() {
+    stubFor(delete(urlPathMatching(PILOTS_CLIENT_API_WITH_ID_PATTERN)).willReturn(noContent()));
   }
 }

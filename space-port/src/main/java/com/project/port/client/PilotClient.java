@@ -1,21 +1,27 @@
 package com.project.port.client;
 
-import com.project.port.config.CustomErrorDecoder;
-import com.project.port.dto.pilot.AddPilotClientRequest;
-import com.project.port.dto.pilot.PilotClientResponse;
+import java.util.List;
+import java.util.UUID;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
-import java.util.List;
+import com.project.port.config.CustomErrorDecoder;
+import com.project.port.dto.pilot.AddPilotClientRequest;
+import com.project.port.dto.pilot.PilotClientResponse;
 
 /**
  * Client used for calling Space Cantina microservice.
  */
-@FeignClient(name = "${feign.clients.cantina.name}", path = "${feign.clients.cantina.path}",
-    configuration = {CustomErrorDecoder.class})
+@FeignClient(name = "${feign.clients.cantina.name}", path = "${feign.clients.cantina.path}", configuration = {
+    CustomErrorDecoder.class })
 public interface PilotClient {
 
   /**
@@ -34,4 +40,12 @@ public interface PilotClient {
    */
   @PostMapping
   PilotClientResponse addPilot(@Valid @RequestBody final AddPilotClientRequest addPilotClientRequest);
+
+  /**
+   * Makes a DELETE request to Cantina microservice to delete existing pilot by provided Id
+   *
+   * @param pilotId pilot id
+   */
+  @DeleteMapping("{id}")
+  void deletePilotById(@NotBlank @PathVariable("id") final UUID pilotId);
 }

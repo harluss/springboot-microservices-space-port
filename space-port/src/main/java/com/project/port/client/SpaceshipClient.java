@@ -1,27 +1,30 @@
 package com.project.port.client;
 
-import com.project.port.config.CustomErrorDecoder;
-import com.project.port.dto.spaceship.AddSpaceshipClientRequest;
-import com.project.port.dto.spaceship.SpaceshipClientResponse;
-import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import com.project.port.config.CustomErrorDecoder;
+import com.project.port.dto.spaceship.AddSpaceshipClientRequest;
+import com.project.port.dto.spaceship.SpaceshipClientResponse;
+import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
 
 /**
  * Client used for calling Space Hangar microservice.
  */
-@FeignClient(name = "${feign.clients.hangar.name}", path = "${feign.clients.hangar.path}",
-    configuration = {CustomErrorDecoder.class})
+@FeignClient(name = "${feign.clients.hangar.name}", path = "${feign.clients.hangar.path}", configuration = {
+    CustomErrorDecoder.class })
 public interface SpaceshipClient {
 
   /**
@@ -58,8 +61,14 @@ public interface SpaceshipClient {
    * @return updated spaceship
    */
   @PutMapping("{id}")
-  SpaceshipClientResponse updateSpaceshipById(
-      @NotBlank @PathVariable("id") final UUID spaceshipId,
-      @Valid @RequestBody final UpdateSpaceshipClientRequest updateSpaceshipClientRequest
-  );
+  SpaceshipClientResponse updateSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId,
+      @Valid @RequestBody final UpdateSpaceshipClientRequest updateSpaceshipClientRequest);
+
+  /**
+   * Makes a DELETE request to Hangar microservice to delete existing spaceship by provided Id
+   *
+   * @param spaceshipId spaceship id
+   */
+  @DeleteMapping("{id}")
+  void deleteSpaceshipById(@NotBlank @PathVariable("id") final UUID spaceshipId);
 }

@@ -11,7 +11,6 @@ import static com.project.port.common.Constant.buildSpaceshipDtoWithNoCrewDetail
 import static com.project.port.common.Constant.buildSpaceshipDtoWithNoCrewDetailsAndCrewIds;
 import static com.project.port.common.Constant.buildUpdateSpaceshipClientRequest;
 import static com.project.port.common.Constant.buildUpdateSpaceshipDtoWithNoId;
-import static com.project.port.common.Constant.buildUpdateSpaceshipRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,7 +44,6 @@ import com.project.port.dto.spaceship.AddSpaceshipClientRequest;
 import com.project.port.dto.spaceship.SpaceshipClientResponse;
 import com.project.port.dto.spaceship.SpaceshipDto;
 import com.project.port.dto.spaceship.UpdateSpaceshipClientRequest;
-import com.project.port.dto.spaceship.UpdateSpaceshipRequest;
 import com.project.port.exception.AddPilotException;
 import com.project.port.exception.NotFoundException;
 import com.project.port.exception.PilotExistsException;
@@ -83,8 +81,6 @@ class SpaceshipServiceImplTest {
 
   private AddSpaceshipClientRequest addSpaceshipClientRequest;
 
-  private UpdateSpaceshipRequest updateSpaceshipRequest;
-
   private UpdateSpaceshipClientRequest updateSpaceshipClientRequest;
 
   private SpaceshipDto updateSpaceshipDto;
@@ -108,7 +104,6 @@ class SpaceshipServiceImplTest {
     spaceshipDtoWithNoCrewDetailsAndCrewIds = buildSpaceshipDtoWithNoCrewDetailsAndCrewIds();
     spaceshipClientResponseWithNoCrewIds = buildSpaceshipClientResponseWithNoCrewIds();
     addSpaceshipClientRequest = buildAddSpaceshipClientRequest();
-    updateSpaceshipRequest = buildUpdateSpaceshipRequest();
     updateSpaceshipDto = buildUpdateSpaceshipDtoWithNoId();
     updateSpaceshipClientRequest = buildUpdateSpaceshipClientRequest();
   }
@@ -327,14 +322,50 @@ class SpaceshipServiceImplTest {
 
   @Test
   void updateById_notFound() {
-    final UUID spaceshipToBeUpdatedId = spaceshipDto.getId();
-    when(spaceshipClientMock.getSpaceshipById(spaceshipToBeUpdatedId)).thenReturn(Optional.empty());
+    final UUID reqId = spaceshipDto.getId();
+    when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> spaceshipService.updateById(updateSpaceshipDto, spaceshipToBeUpdatedId)).isInstanceOf(
+    assertThatThrownBy(() -> spaceshipService.updateById(updateSpaceshipDto, reqId)).isInstanceOf(
         NotFoundException.class);
 
-    verify(spaceshipClientMock).getSpaceshipById(spaceshipToBeUpdatedId);
+    verify(spaceshipClientMock).getSpaceshipById(reqId);
     verify(spaceshipClientMock, times(0)).updateSpaceshipById(any(), any());
     verifyNoInteractions(spaceshipMapperMock);
+  }
+
+  @Test
+  void deleteById() {
+    final UUID reqId = spaceshipDto.getId();
+    when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.of(spaceshipClientResponse));
+
+    spaceshipService.deleteById(reqId);
+
+    verify(spaceshipClientMock).getSpaceshipById(reqId);
+    verify(spaceshipClientMock).deleteSpaceshipById(reqId);
+    verify(pilotClientMock, times(spaceshipDto.getCrewIds().size())).deletePilotById(any());
+  }
+
+  @Test
+  void deleteById_notFound() {
+    final UUID reqId = spaceshipDto.getId();
+    when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> spaceshipService.deleteById(reqId)).isInstanceOf(NotFoundException.class);
+
+    verify(spaceshipClientMock).getSpaceshipById(reqId);
+    verify(spaceshipClientMock, times(0)).deleteSpaceshipById(any());
+    verify(pilotClientMock, times(0)).deletePilotById(any());
+  }
+
+  @Test
+  void deleteById_noPilots() {
+    final UUID reqId = spaceshipDto.getId();
+    when(spaceshipClientMock.getSpaceshipById(reqId)).thenReturn(Optional.of(spaceshipClientResponseWithNoCrewIds));
+
+    spaceshipService.deleteById(reqId);
+
+    verify(spaceshipClientMock).getSpaceshipById(reqId);
+    verify(spaceshipClientMock).deleteSpaceshipById(reqId);
+    verify(pilotClientMock, times(0)).deletePilotById(any());
   }
 }
