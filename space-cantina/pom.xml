@@ -12,8 +12,6 @@
   <artifactId>space-cantina</artifactId>
 
   <dependencies>
-    <!-- CVE-2016-1000027 | org.springframework:spring-web (spring-web-5.3.24.jar) | fixed in 6.0.0 |
-potentially false flag: https://github.com/spring-projects/spring-framework/issues/24434#issuecomment-744519525 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -66,7 +64,6 @@ potentially false flag: https://github.com/spring-projects/spring-framework/issu
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-ui</artifactId>
-      <version>${springdoc-openapi-ui.version}</version>
     </dependency>
 
     <dependency>

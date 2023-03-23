@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.8</version>
+    <version>2.7.10</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -29,10 +29,10 @@
     <hibernate-types-55.version>2.21.1</hibernate-types-55.version>
     <spring-cloud-dependencies.version>2021.0.5</spring-cloud-dependencies.version>
     <spring-mock-mvc.version>5.3.0</spring-mock-mvc.version>
-    <springdoc-openapi-ui.version>1.6.14</springdoc-openapi-ui.version>
+    <springdoc-openapi-ui.version>1.6.15</springdoc-openapi-ui.version>
     <testcontainers.version>1.17.6</testcontainers.version>
     <!-- Fix for snakeyaml:1.30 CVE-2022-25857. Can be removed once Spring Boot version is bumped to 3.0.0+ -->
-    <snakeyaml.version>1.33</snakeyaml.version>
+    <snakeyaml.version>2.0</snakeyaml.version>
     <!-- plugins -->
     <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
@@ -67,6 +67,12 @@
         <groupId>com.vladmihalcea</groupId>
         <artifactId>hibernate-types-55</artifactId>
         <version>${hibernate-types-55.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>${springdoc-openapi-ui.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
