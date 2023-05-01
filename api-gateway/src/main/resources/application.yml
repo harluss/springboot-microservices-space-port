@@ -12,25 +12,33 @@ spring:
         - id: port
           uri: lb://PORT
           predicates:
-            - Path=/api/**
-        - id: port-swagger
-          uri: lb://PORT
-          predicates:
-            - Path=/swagger-ui/**,/v3/api-docs/**
-        - id: zipkin
-          uri: ${ZIPKIN_URL:http://localhost:9411}
-          predicates:
-            - Path=/zipkin/**
-        - id: eureka
-          uri: ${EUREKA_URL:http://localhost:8761}
-          predicates:
-            - Path=/eureka
-          filters:
-            - SetPath=/
-        - id: eureka-static-resources
-          uri: ${EUREKA_URL:http://localhost:8761}
-          predicates:
-            - Path=/eureka/**
+            - Path=/api/v1/spaceships/**
+        # comment the above out and use the below instead when using swagger ui
+        #    - Path=/api/**
+        # swagger ui accessible when auth is disabled
+        #        - id: port-swagger
+        #          uri: lb://PORT
+        #          predicates:
+        #            - Path=/swagger-ui/**,/v3/api-docs/**
+        # zipkin ui accessible when auth is disabled
+        #        - id: zipkin
+        #          uri: ${ZIPKIN_URL:http://localhost:9411}
+        #          predicates:
+        #            - Path=/zipkin/**
+        # eureka ui accessible when auth is disabled
+        #        - id: eureka
+        #          uri: ${EUREKA_URL:http://localhost:8761}
+        #          predicates:
+        #            - Path=/eureka
+        #          filters:
+        #            - SetPath=/
+        #        - id: eureka-static-resources
+        #          uri: ${EUREKA_URL:http://localhost:8761}
+        #          predicates:
+        #            - Path=/eureka/**
+jwt:
+  secret: 9faa372517ac1d389758d3750fc07acf00f542277f26fec1ce4593e93f64e338
+  expires-in: 10
 
 ---
 
