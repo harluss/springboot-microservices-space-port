@@ -1,10 +1,11 @@
-package com.project.hangar.service;
+package com.project.hangar.service.impl;
 
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.entity.SpaceshipEntity;
 import com.project.hangar.exception.NotFoundException;
 import com.project.hangar.mapper.SpaceshipMapper;
 import com.project.hangar.repository.SpaceshipRepository;
+import com.project.hangar.service.SpaceshipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

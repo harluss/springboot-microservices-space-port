@@ -1,9 +1,10 @@
-package com.project.hangar.mapper;
+package com.project.hangar.mapper.impl;
 
 import com.project.hangar.dto.SpaceshipDto;
 import com.project.hangar.dto.SpaceshipRequest;
 import com.project.hangar.dto.SpaceshipResponse;
 import com.project.hangar.entity.SpaceshipEntity;
+import com.project.hangar.mapper.SpaceshipMapper;
 import org.springframework.stereotype.Component;
 
 @Component

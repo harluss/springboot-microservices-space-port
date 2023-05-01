@@ -1,10 +1,10 @@
 package com.project.hangar.service;
 
-import com.project.hangar.dto.SpaceshipDto;
-import com.project.hangar.exception.NotFoundException;
-
 import java.util.List;
 import java.util.UUID;
+
+import com.project.hangar.dto.SpaceshipDto;
+import com.project.hangar.exception.NotFoundException;
 
 /**
  * Provides methods for performing different operations on Spaceship objects.
@@ -19,11 +19,11 @@ public interface SpaceshipService {
   List<SpaceshipDto> getAll();
 
   /**
-   * Returns spaceship based on provided Id
+   * Returns spaceship based on provided id
    *
-   * @param spaceshipId spaceship Id
+   * @param spaceshipId spaceship id
    * @return spaceship DTO
-   * @throws NotFoundException when spaceship with provided Id is not found
+   * @throws NotFoundException when spaceship with provided id is not found
    */
   SpaceshipDto getById(final UUID spaceshipId);
 
@@ -31,25 +31,25 @@ public interface SpaceshipService {
    * Adds new spaceship based on provided spaceship DTO
    *
    * @param spaceshipDto spaceship DTO
-   * @return spaceship DTO of added spaceship with Id included
+   * @return spaceship DTO of added spaceship with id included
    */
   SpaceshipDto add(SpaceshipDto spaceshipDto);
 
   /**
-   * Updates spaceship based on provided Id and spaceship DTO
+   * Updates spaceship based on provided id and spaceship DTO
    *
    * @param spaceshipDto spaceship DTO
-   * @param spaceshipId  spaceship Id
+   * @param spaceshipId  spaceship id
    * @return spaceship DTO of updated spaceship
-   * @throws NotFoundException when pilot with provided Id is not found
+   * @throws NotFoundException when pilot with provided id is not found
    */
   SpaceshipDto updateById(SpaceshipDto spaceshipDto, UUID spaceshipId);
 
   /**
-   * Deletes spaceship based on provided Id
+   * Deletes spaceship based on provided id
    *
-   * @param spaceshipId spaceship Id
-   * @throws NotFoundException when pilot with provided Id is not found
+   * @param spaceshipId spaceship id
+   * @throws NotFoundException when spaceship with provided id is not found
    */
   void deleteById(final UUID spaceshipId);
 }

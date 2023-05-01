@@ -1,10 +1,10 @@
 package com.project.cantina.service;
 
-import com.project.cantina.dto.PilotDto;
-import com.project.cantina.exception.NotFoundException;
-
 import java.util.List;
 import java.util.UUID;
+
+import com.project.cantina.dto.PilotDto;
+import com.project.cantina.exception.NotFoundException;
 
 /**
  * Provides methods for performing different operations on Pilot objects.
@@ -19,19 +19,11 @@ public interface PilotService {
   List<PilotDto> getAll();
 
   /**
-   * Returns list of pilots based on provided list of Ids
+   * Returns pilot based on provided id
    *
-   * @param pilotIds list of pilot Ids
-   * @return list of pilot DTOs
-   */
-  List<PilotDto> getAllByIds(List<UUID> pilotIds);
-
-  /**
-   * Returns pilot based on provided Id
-   *
-   * @param pilotId pilot Id
+   * @param pilotId pilot id
    * @return pilot DTO
-   * @throws NotFoundException when pilot with provided Id is not found
+   * @throws NotFoundException when pilot with provided id is not found
    */
   PilotDto getById(UUID pilotId);
 
@@ -39,25 +31,25 @@ public interface PilotService {
    * Adds new pilot based on provided pilot DTO
    *
    * @param pilotDto pilot DTO
-   * @return pilot DTO of added pilot with Id included
+   * @return pilot DTO of added pilot with id included
    */
   PilotDto add(PilotDto pilotDto);
 
   /**
-   * Updates pilot based on provided Id and pilot DTO
+   * Updates pilot based on provided id and pilot DTO
    *
    * @param pilotDto pilot DTO
-   * @param pilotId  pilot Id
+   * @param pilotId  pilot id
    * @return pilot DTO of updated pilot
-   * @throws NotFoundException when pilot with provided Id is not found
+   * @throws NotFoundException when pilot with provided id is not found
    */
   PilotDto updateById(PilotDto pilotDto, UUID pilotId);
 
   /**
-   * Deletes pilot based on provided Id
+   * Deletes pilot based on provided id
    *
-   * @param pilotId pilot Id
-   * @throws NotFoundException when pilot with provided Id is not found
+   * @param pilotId pilot id
+   * @throws NotFoundException when pilot with provided id is not found
    */
   void deleteById(final UUID pilotId);
 }

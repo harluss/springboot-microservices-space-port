@@ -1,16 +1,20 @@
 package com.project.port.mapper;
 
-import com.project.port.dto.PilotClientRequest;
-import com.project.port.dto.PilotClientResponse;
-import com.project.port.dto.PilotDto;
-import com.project.port.dto.PilotResponse;
+import com.project.port.dto.pilot.AddPilotClientRequest;
+import com.project.port.dto.pilot.AddPilotRequest;
+import com.project.port.dto.pilot.PilotClientResponse;
+import com.project.port.dto.pilot.PilotDto;
+import com.project.port.dto.pilot.PilotResponse;
+import com.project.port.mapper.impl.PilotMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.UUID;
-
-import static com.project.port.common.Constant.*;
+import static com.project.port.common.Constant.buildAddPilotClientRequest;
+import static com.project.port.common.Constant.buildAddPilotDto;
+import static com.project.port.common.Constant.buildAddPilotRequest;
+import static com.project.port.common.Constant.buildPilotClientResponse;
+import static com.project.port.common.Constant.buildPilotDto;
+import static com.project.port.common.Constant.buildPilotResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PilotMapperImplTest {
@@ -43,11 +47,21 @@ class PilotMapperImplTest {
   }
 
   @Test
-  void idsToClientRequest() {
-    final PilotClientRequest expected = buildPilotClientRequest();
-    final List<UUID> ids = expected.getPilotIds();
+  void addRequestToDto() {
+    final AddPilotRequest request = buildAddPilotRequest();
+    final PilotDto expected = buildAddPilotDto();
 
-    final PilotClientRequest actual = pilotMapper.idsToClientRequest(ids);
+    final PilotDto actual = pilotMapper.addRequestToDto(request);
+
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void dtoToClientAddRequest() {
+    final PilotDto dto = buildAddPilotDto();
+    final AddPilotClientRequest expected = buildAddPilotClientRequest();
+
+    final AddPilotClientRequest actual = pilotMapper.dtoToClientAddRequest(dto);
 
     assertThat(actual).isEqualTo(expected);
   }

@@ -1,9 +1,9 @@
 package com.project.cantina.mapper;
 
+import com.project.cantina.dto.AddPilotRequest;
 import com.project.cantina.dto.PilotDto;
-import com.project.cantina.dto.PilotRequest;
 import com.project.cantina.dto.PilotResponse;
-import com.project.cantina.dto.PilotUpdateRequest;
+import com.project.cantina.dto.UpdatePilotRequest;
 import com.project.cantina.entity.PilotEntity;
 
 /**
@@ -41,7 +41,7 @@ public interface PilotMapper {
    * @param request pilot request to be converted from
    * @return pilot DTO
    */
-  PilotDto requestToDto(PilotRequest request);
+  PilotDto addRequestToDto(AddPilotRequest request);
 
   /**
    * Converts pilot update request to pilot DTO
@@ -49,7 +49,7 @@ public interface PilotMapper {
    * @param request pilot update request to be converted from
    * @return pilot DTO
    */
-  PilotDto updateRequestToDto(PilotUpdateRequest request);
+  PilotDto updateRequestToDto(UpdatePilotRequest request);
 
   /**
    * Updates pilot entity with values from pilot DTO

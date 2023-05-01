@@ -1,8 +1,8 @@
 package com.project.cantina.integration;
 
 import com.project.cantina.common.BaseIT;
-import com.project.cantina.dto.PilotRequest;
-import com.project.cantina.dto.PilotUpdateRequest;
+import com.project.cantina.dto.AddPilotRequest;
+import com.project.cantina.dto.UpdatePilotRequest;
 import com.project.cantina.entity.PilotEntity;
 import com.project.cantina.repository.PilotRepository;
 import io.restassured.common.mapper.TypeRef;
@@ -83,7 +83,7 @@ class PilotIT extends BaseIT {
 
   @Test
   void addPilot_happyPath() {
-    final PilotRequest request = buildRequest();
+    final AddPilotRequest request = buildRequest();
 
     final PilotEntity actual = given()
         .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +110,7 @@ class PilotIT extends BaseIT {
 
   @Test
   void updatePilotById_happyPath() {
-    final PilotUpdateRequest request = buildUpdateRequest();
+    final UpdatePilotRequest request = buildUpdateRequest();
     final PilotEntity toBeUpdated = pilotsBefore.get(0);
 
     final PilotEntity actual = given()

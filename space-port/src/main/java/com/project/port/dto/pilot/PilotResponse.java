@@ -1,4 +1,4 @@
-package com.project.port.dto;
+package com.project.port.dto.pilot;
 
 import lombok.Builder;
 import lombok.Value;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Value
 @Builder
 @Jacksonized
-public class PilotClientResponse {
+public class PilotResponse {
 
   private UUID id;
 
